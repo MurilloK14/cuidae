@@ -12,14 +12,14 @@ export function HowItWorks({ onOpenAssistant }: HowItWorksProps) {
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
           {/* Left Side Content */}
           <div className="w-full lg:w-1/2 space-y-8">
-            <div className="space-y-4">
-              <span className="text-xs font-semibold tracking-wider text-[#091426] uppercase flex items-center gap-1">
+            <div className="mb-12">
+              <span className="text-xs font-semibold tracking-wider text-[#091426] uppercase flex items-center gap-1 mb-6">
                 SIMPLES, <span className="text-[#0ea5e9]">RÁPIDO</span> E EFICIENTE
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-[#091426]">
+              <h2 className="text-3xl sm:text-4xl font-bold text-[#091426] tracking-[-0.02em] mb-4">
                 Como funciona?
               </h2>
-              <p className="text-gray-600 text-lg leading-relaxed">
+              <p className="text-gray-600 text-lg leading-relaxed max-w-lg">
                 Nossa IA se conecta diretamente com os sistemas dos hospitais da cidade, reunindo informações em tempo real para te oferecer o melhor atendimento.
               </p>
             </div>
@@ -73,12 +73,22 @@ export function HowItWorks({ onOpenAssistant }: HowItWorksProps) {
 
           {/* Right Side: Phone Mockup */}
           <div className="w-full lg:w-1/2 relative flex justify-center items-center mt-12 lg:mt-0">
+            <style>{`
+              @keyframes float-gentle {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-12px); }
+              }
+              .animate-float-gentle {
+                animation: float-gentle 6s ease-in-out infinite;
+              }
+            `}</style>
+
             {/* Background decoration */}
             <div className="absolute w-[120%] h-[120%] bg-gradient-to-tr from-[#0ea5e9]/5 to-transparent rounded-full blur-3xl -z-10" />
 
-            <div className="relative w-full max-w-[320px]">
+            <div className="relative w-full max-w-[320px] animate-float-gentle">
               {/* Floating Cards */}
-              <div className="absolute -left-4 sm:-left-32 top-10 z-20 bg-white p-3 rounded-xl shadow-lg border border-gray-100 animate-[bounce_4s_ease-in-out_infinite]">
+              <div className="absolute -left-4 sm:-left-32 top-10 z-20 bg-white p-3 rounded-xl shadow-[0_12px_24px_-8px_rgba(0,0,0,0.15)] border border-gray-100 animate-[bounce_4s_ease-in-out_infinite]">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
                     <Building2 size={20} />
@@ -90,7 +100,7 @@ export function HowItWorks({ onOpenAssistant }: HowItWorksProps) {
                 </div>
               </div>
 
-              <div className="absolute -left-2 sm:-left-24 bottom-24 z-20 bg-white p-3 rounded-xl shadow-lg border border-gray-100 animate-[bounce_5s_ease-in-out_infinite_reverse]">
+              <div className="absolute -left-2 sm:-left-24 bottom-24 z-20 bg-white p-3 rounded-xl shadow-[0_12px_24px_-8px_rgba(0,0,0,0.15)] border border-gray-100 animate-[bounce_5s_ease-in-out_infinite_reverse]">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
                     <Building2 size={20} />
@@ -102,7 +112,7 @@ export function HowItWorks({ onOpenAssistant }: HowItWorksProps) {
                 </div>
               </div>
 
-              <div className="absolute -right-4 sm:-right-20 top-1/2 -translate-y-1/2 z-20 bg-white p-3 rounded-xl shadow-lg border border-gray-100 animate-[bounce_4.5s_ease-in-out_infinite]">
+              <div className="absolute -right-4 sm:-right-20 top-1/2 -translate-y-1/2 z-20 bg-white p-3 rounded-xl shadow-[0_12px_24px_-8px_rgba(0,0,0,0.15)] border border-gray-100 animate-[bounce_4.5s_ease-in-out_infinite]">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-rose-50 text-rose-600 rounded-lg">
                     <MapPin size={20} />
@@ -115,7 +125,7 @@ export function HowItWorks({ onOpenAssistant }: HowItWorksProps) {
               </div>
 
               {/* Phone Frame */}
-              <div className="relative rounded-[2.5rem] bg-gray-900 p-3 shadow-2xl border-gray-800 border-4">
+              <div className="relative rounded-[2.5rem] bg-gray-900 p-3 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.25)] border-gray-800 border-4">
                 {/* Phone Notch */}
                 <div className="absolute top-0 inset-x-0 h-6 flex justify-center z-10">
                   <div className="w-1/3 h-full bg-gray-900 rounded-b-xl"></div>

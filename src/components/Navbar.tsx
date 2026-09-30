@@ -77,14 +77,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
                 <a
                   key={link.id}
                   href={link.href}
-                  className={`transition-colors hover:text-[#2b85ff] relative py-1 ${
+                  className={`transition-colors duration-200 hover:text-[#2b85ff] relative py-1 group ${
                     isActive ? "text-slate-900 font-semibold" : "text-slate-600"
                   }`}
                 >
                   {link.label}
-                  {isActive && (
-                    <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2b85ff] rounded-full" />
-                  )}
+                  <span className={`absolute -bottom-1 left-0 h-[2px] bg-[#2b85ff] rounded-full transition-all duration-300 ${isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-30'}`} />
                 </a>
               );
             })}
@@ -94,10 +92,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
           <div className="hidden sm:flex items-center">
             <button
               onClick={() => onOpenAssistant?.("Quero acessar o sistema")}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#091426] hover:bg-[#15233c] text-white text-sm font-medium transition-all duration-200 shadow-sm hover:shadow hover:-translate-y-0.5 active:translate-y-0"
+              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#091426] hover:bg-[#1a2c4e] text-white text-sm font-medium transition-all duration-300 shadow-[0_4px_12px_-4px_rgba(9,20,38,0.4)] hover:shadow-[0_8px_16px_-6px_rgba(9,20,38,0.5)] hover:-translate-y-0.5 active:translate-y-0"
             >
               <span>Acessar o sistema</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
             </button>
           </div>
 

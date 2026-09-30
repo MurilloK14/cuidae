@@ -24,21 +24,21 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAssistant }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Left Side */}
-          <div className="lg:col-span-7 flex flex-col items-start text-left">
+          <div className="lg:col-span-7 flex flex-col items-start text-left animate-fade-in-up opacity-0" style={{ animationDelay: "0.1s" }}>
             {/* Small Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-bold tracking-wider mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-xs font-bold tracking-wider mb-8">
               INTELIGÊNCIA ARTIFICIAL A SERVIÇO DA SUA SAÚDE
             </div>
             
             {/* Heading */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.1] tracking-tight mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.1] tracking-[-0.03em] mb-8">
               Conectando você<br />
               aos hospitais da cidade<br />
               <span className="text-[#2b85ff]">com o poder da IA.</span>
             </h1>
             
             {/* Paragraph */}
-            <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl leading-relaxed">
+            <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl leading-relaxed">
               Nossa plataforma usa inteligência artificial para integrar os hospitais da sua cidade, facilitando o acesso a atendimentos, exames, leitos e orientações médicas. Mais agilidade, menos burocracia e saúde para todos.
             </p>
             
@@ -46,7 +46,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAssistant }) => {
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
               <button
                 onClick={() => onOpenAssistant?.("Quero começar a usar o sistema agora")}
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#091426] hover:bg-[#15233c] text-white font-medium transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#091426] hover:bg-[#1a2c4e] text-white font-medium transition-all duration-300 shadow-[0_8px_20px_-8px_rgba(9,20,38,0.5)] hover:shadow-[0_12px_24px_-8px_rgba(9,20,38,0.6)] hover:-translate-y-0.5"
               >
                 <span>Começar agora</span>
                 <ArrowRight className="w-5 h-5" />
@@ -54,7 +54,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAssistant }) => {
               
               <a
                 href="#como-funciona"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white border-2 border-slate-200 hover:border-slate-300 text-slate-700 font-medium transition-all duration-200 hover:bg-slate-50"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-medium transition-all duration-300 hover:bg-slate-50 shadow-sm"
               >
                 Saiba como funciona
               </a>
@@ -62,9 +62,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAssistant }) => {
           </div>
 
           {/* Right Side */}
-          <div className="lg:col-span-5 relative mt-10 lg:mt-0">
+          <div className="lg:col-span-5 relative mt-16 lg:mt-0">
             {/* Main Image Container */}
-            <div className="relative rounded-3xl overflow-hidden aspect-[4/5] sm:aspect-[3/4] shadow-2xl border border-slate-100/50">
+            <div className="relative rounded-3xl overflow-hidden aspect-[4/5] sm:aspect-[3/4] shadow-[0_20px_40px_-12px_rgba(0,0,0,0.15)] border border-slate-100/50 transition-transform duration-500 hover:scale-[1.01]">
               <Image
                 src="/images/doctor_hero.jpg"
                 alt="Profissional de Saúde"
@@ -77,7 +77,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAssistant }) => {
             </div>
 
             {/* Floating Chatbot Card (Left) */}
-            <div className="absolute top-1/4 -left-4 sm:-left-12 lg:-left-20 w-[280px] sm:w-[320px] bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-100 overflow-hidden transform transition-transform hover:scale-[1.02] z-10">
+            <div className="absolute top-1/4 -left-4 sm:-left-12 lg:-left-20 w-[280px] sm:w-[320px] bg-white rounded-2xl shadow-[0_16px_32px_-12px_rgba(0,0,0,0.15)] border border-slate-100 overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] z-10">
               <div className="p-4 bg-slate-50 border-b border-slate-100 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#2b85ff]/10 flex items-center justify-center shrink-0">
                   <Bot className="w-5 h-5 text-[#2b85ff]" />
