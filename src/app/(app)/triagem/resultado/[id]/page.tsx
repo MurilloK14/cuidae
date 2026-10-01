@@ -10,14 +10,9 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
     notFound()
   }
 
-  // getTriagemResultado returns triagem with nested triagem_resultados (array or object)
-  const resultadoRaw = Array.isArray(triagem.triagem_resultados)
-    ? triagem.triagem_resultados[0]
-    : triagem.triagem_resultados
-
-  const urgencia = resultadoRaw?.nivel_urgencia || 'verde'
-  const recomendacao = resultadoRaw?.recomendacao || 'esperar'
-  const explicacao = resultadoRaw?.explicacao || 'Consulte um profissional de saúde para mais orientações.'
+  const urgencia = triagem.nivel_urgencia || 'verde'
+  const recomendacao = triagem.recomendacao || 'esperar'
+  const explicacao = triagem.explicacao || 'Consulte um profissional de saúde para mais orientações.'
 
   const isVerde = urgencia === 'verde'
   const isAmarelo = urgencia === 'amarelo'

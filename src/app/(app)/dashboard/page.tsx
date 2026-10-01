@@ -52,18 +52,10 @@ export default async function DashboardPage() {
   const primeiroNome = nome.split(' ')[0];
   const camada = profile?.camada || 'gratuita';
 
-  // Fetch triagens with results
+  // Fetch triagens
   const { data: triagens } = await supabase
     .from('triagens')
-    .select(`
-      id,
-      sintoma_principal,
-      created_at,
-      triagem_resultados (
-        nivel_urgencia,
-        recomendacao
-      )
-    `)
+    .select('id, sintoma_principal, nivel_urgencia, recomendacao, created_at')
     .eq('user_id', user!.id)
     .order('created_at', { ascending: false })
     .limit(5);
@@ -74,9 +66,9 @@ export default async function DashboardPage() {
     .from('lembretes')
     .select('*')
     .eq('user_id', user!.id)
-    .eq('concluido', false)
-    .gte('data_lembrete', today)
-    .order('data_lembrete', { ascending: true })
+    .neq('status', 'concluido')
+    .gte('data_agendada', today)
+    .order('data_agendada', { ascending: true })
     .limit(5);
 
   // Use mock reminders if no real ones exist
@@ -87,15 +79,15 @@ export default async function DashboardPage() {
           id: 'mock-1',
           tipo: 'vacina',
           descricao: 'Vacina da gripe — Campanha 2026',
-          data_lembrete: '2026-10-15',
-          concluido: false,
+          data_agendada: '2026-10-15',
+          status: 'pendente',
         },
         {
           id: 'mock-2',
           tipo: 'consulta',
           descricao: 'Check-up anual recomendado',
-          data_lembrete: '2026-11-01',
-          concluido: false,
+          data_agendada: '2026-11-01',
+          status: 'pendente',
         },
       ];
 
@@ -183,12 +175,9 @@ export default async function DashboardPage() {
           ) : (
             <div className="divide-y divide-slate-50">
               {triagens.map((triagem: any) => {
-                const resultado = Array.isArray(triagem.triagem_resultados)
-                  ? triagem.triagem_resultados[0]
-                  : triagem.triagem_resultados;
-                const urgencia = resultado?.nivel_urgencia || 'verde';
+                const urgencia = triagem.nivel_urgencia || 'verde';
                 const config = urgenciaConfig[urgencia] || urgenciaConfig.verde;
-                const recomendacao = resultado?.recomendacao || 'esperar';
+                const recomendacao = triagem.recomendacao || 'esperar';
 
                 return (
                   <Link
@@ -235,7 +224,7 @@ export default async function DashboardPage() {
                       {lembrete.descricao}
                     </p>
                     <p className="text-xs text-slate-400 mt-0.5">
-                      {formatDate(lembrete.data_lembrete)}
+                      {formatDate(lembrete.data_agendada || lembrete.data_lembrete || lembrete.created_at)}
                     </p>
                   </div>
                 </div>

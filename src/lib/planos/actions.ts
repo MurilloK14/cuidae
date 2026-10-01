@@ -52,9 +52,8 @@ export async function processPayment(formData: FormData) {
 
     await supabase.from('assinaturas').insert({
       user_id: user.id,
-      plano,
       status: 'ativa',
-      preco_centavos,
+      valor_mensalidade_centavos: preco_centavos,
     })
 
     return { success: true, plano }
