@@ -90,13 +90,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
 
           {/* Right Action */}
           <div className="hidden sm:flex items-center">
-            <button
-              onClick={() => onOpenAssistant?.("Quero acessar o sistema")}
+            <a
+              href="/login"
               className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#091426] hover:bg-[#1a2c4e] text-white text-sm font-medium transition-all duration-300 shadow-[0_4px_12px_-4px_rgba(9,20,38,0.4)] hover:shadow-[0_8px_16px_-6px_rgba(9,20,38,0.5)] hover:-translate-y-0.5 active:translate-y-0"
             >
               <span>Acessar o sistema</span>
               <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-            </button>
+            </a>
           </div>
 
           {/* Mobile Hamburger Button */}
@@ -129,16 +129,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
               </a>
             ))}
             <div className="pt-2">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenAssistant?.("Quero acessar o sistema");
-                }}
+              <a
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
                 className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[#091426] text-white text-sm font-medium shadow-sm"
               >
                 <span>Acessar o sistema</span>
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </a>
             </div>
           </div>
         )}
