@@ -204,16 +204,12 @@ export async function requestPasswordReset(formData: AuthInput): Promise<AuthAct
     return { error: 'Por favor, informe seu e-mail.', success: false }
   }
 
-  let origin = process.env.NEXT_PUBLIC_SITE_URL || ''
-  if (!origin) {
-    try {
-      const headersList = headers()
-      const host = headersList.get('host')
-      const proto = headersList.get('x-forwarded-proto') || 'http'
-      origin = headersList.get('origin') || (host ? `${proto}://${host}` : 'http://localhost:3000')
-    } catch {
-      origin = 'http://localhost:3000'
-    }
+  // Prevenção contra Host Header Poisoning (OWASP A01:2021)
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/$/, '')
+  const origin = siteUrl || 'http://localhost:3000'
+
+  if (process.env.NODE_ENV === 'production' && !siteUrl) {
+    console.warn('[SEGURANÇA] NEXT_PUBLIC_SITE_URL não configurada em produção. Usando fallback.')
   }
 
   const redirectTo = `${origin}/redefinir-senha`

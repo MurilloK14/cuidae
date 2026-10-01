@@ -1,6 +1,7 @@
 -- ==============================================================================
--- SAÚDEPRA TODOS - SCHEMA DO BANCO DE DADOS (PostgreSQL / Supabase) v2
--- Script idempotente: limpa definições antigas de desenvolvimento e recria tudo.
+-- SAÚDEPRA TODOS - SCHEMA DO BANCO DE DADOS (PostgreSQL / Supabase) v2 - HARDENED
+-- Script idempotente: limpa definições antigas de desenvolvimento e recria tudo
+-- com Row Level Security (RLS) endurecido e políticas de proteção de dados sensíveis.
 -- ==============================================================================
 
 -- 1. EXTENSÕES
@@ -53,7 +54,7 @@ do $$ begin
 exception when duplicate_object then null; end $$;
 
 -- ------------------------------------------------------------------------------
--- 4. TABELA: PROFILES (Preserva tabela de perfis caso já existam cadastros)
+-- 4. TABELA: PROFILES (Preserva dados cadastrais caso já tenha criado conta)
 -- ------------------------------------------------------------------------------
 create table if not exists public.profiles (
   id uuid references auth.users(id) on delete cascade primary key,
@@ -175,9 +176,11 @@ create table public.lembretes (
 );
 
 -- ------------------------------------------------------------------------------
--- 12. VIEW ANALÍTICA: MAPAS DE ALERTA DE SAÚDE (100% Anonimizada - LGPD)
+-- 12. VIEW ANALÍTICA: MAPAS DE ALERTA DE SAÚDE (security_invoker = true)
 -- ------------------------------------------------------------------------------
-create view public.view_alertas_epidemiologicos as
+create view public.view_alertas_epidemiologicos
+with (security_invoker = true)
+as
 select
   date_trunc('day', t.created_at) as data_referencia,
   t.cidade_snapshot as cidade,
@@ -218,7 +221,7 @@ alter table public.unidades_saude enable row level security;
 alter table public.secretarias_saude enable row level security;
 alter table public.clinicas_planos enable row level security;
 
--- PROFILES (Drop policy if exists para evitar erros de duplicidade)
+-- PROFILES: Paciente gerencia seu próprio perfil
 drop policy if exists "Pacientes gerenciam proprio perfil" on public.profiles;
 drop policy if exists "Usuários podem ver seu próprio perfil" on public.profiles;
 drop policy if exists "Usuários podem atualizar seu próprio perfil" on public.profiles;
@@ -227,35 +230,67 @@ drop policy if exists "Usuários podem inserir seu próprio perfil" on public.pr
 create policy "Pacientes gerenciam proprio perfil"
   on public.profiles for all using (auth.uid() = id) with check (auth.uid() = id);
 
--- TRIAGENS
+-- PROTEÇÃO DE PRIVILÉGIOS (Impede que o usuário comum altere "camada" via DevTools/REST direto)
+create or replace function public.proibir_alteracao_camada_direta()
+returns trigger as $$
+begin
+  -- Se o cliente autenticado tentar alterar camada sem ser via RPC/service_role
+  if new.camada is distinct from old.camada and auth.role() = 'authenticated' then
+    -- Permite apenas se a transação estiver marcada pela RPC segura
+    if current_setting('saude.autorizar_troca_plano', true) is distinct from 'true' then
+      raise exception 'Alteração direta da coluna camada não é permitida pelo cliente.';
+    end if;
+  end if;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists tr_proibir_alteracao_camada on public.profiles;
+create trigger tr_proibir_alteracao_camada
+  before update on public.profiles
+  for each row execute function public.proibir_alteracao_camada_direta();
+
+-- RPC SEGURA PARA ATUALIZAÇÃO DE PLANO (chamada pelo backend de pagamento / Server Actions)
+create or replace function public.atualizar_plano_usuario(novo_plano public.camada_tipo)
+returns void as $$
+begin
+  perform set_config('saude.autorizar_troca_plano', 'true', true);
+  update public.profiles
+  set camada = novo_plano, updated_at = now()
+  where id = auth.uid();
+end;
+$$ language plpgsql security definer;
+
+-- TRIAGENS: Pacientes veem e criam apenas suas próprias triagens
 create policy "Pacientes gerenciam proprias triagens"
   on public.triagens for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
--- TELECONSULTAS
+-- TELECONSULTAS: Paciente vê suas próprias consultas
 create policy "Pacientes veem proprias teleconsultas"
   on public.teleconsultas for select using (auth.uid() = user_id);
 
--- ASSINATURAS
+-- ASSINATURAS: Paciente vê suas assinaturas
 create policy "Pacientes veem proprias assinaturas"
   on public.assinaturas for select using (auth.uid() = user_id);
 
 create policy "Pacientes criam assinaturas"
   on public.assinaturas for insert with check (auth.uid() = user_id);
 
--- LEMBRETES
+-- LEMBRETES: Paciente gerencia seus próprios lembretes
 create policy "Pacientes gerenciam proprios lembretes"
   on public.lembretes for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
--- UNIDADES DE SAÚDE
+-- UNIDADES DE SAÚDE: Consulta pública para usuários autenticados
 create policy "Usuarios autenticados consultam unidades"
   on public.unidades_saude for select to authenticated using (true);
 
--- CLÍNICAS E PLANOS PARCEIROS
+-- CLÍNICAS E PLANOS PARCEIROS: Consulta pública para usuários autenticados
 create policy "Usuarios autenticados consultam clinicas"
   on public.clinicas_planos for select to authenticated using (true);
 
 -- ------------------------------------------------------------------------------
--- 15. STORAGE BUCKET: triagem-fotos
+-- 15. STORAGE BUCKET: triagem-fotos (HARDENED - LGPD Dados Pessoais Sensíveis)
+-- Cada paciente só tem acesso de upload e leitura à sua própria pasta no bucket!
 -- ------------------------------------------------------------------------------
 insert into storage.buckets (id, name, public)
 values ('triagem-fotos', 'triagem-fotos', false)
@@ -265,14 +300,24 @@ drop policy if exists "Upload autenticado de fotos de triagem" on storage.object
 drop policy if exists "Leitura autenticada de fotos de triagem" on storage.objects;
 drop policy if exists "Usuários autenticados podem fazer upload de fotos de triagem" on storage.objects;
 drop policy if exists "Usuários podem ver fotos de triagem no bucket" on storage.objects;
+drop policy if exists "Upload na propria pasta" on storage.objects;
+drop policy if exists "Leitura apenas da propria pasta" on storage.objects;
 
-create policy "Upload autenticado de fotos de triagem"
+-- Upload restrito à pasta cujo nome é o UUID do próprio usuário
+create policy "Upload na propria pasta"
   on storage.objects for insert to authenticated
-  with check (bucket_id = 'triagem-fotos' and auth.role() = 'authenticated');
+  with check (
+    bucket_id = 'triagem-fotos' 
+    and (storage.foldername(name))[1] = auth.uid()::text
+  );
 
-create policy "Leitura autenticada de fotos de triagem"
+-- Leitura restrita à pasta do próprio usuário (impede enumeração de fotos de outros pacientes)
+create policy "Leitura apenas da propria pasta"
   on storage.objects for select to authenticated
-  using (bucket_id = 'triagem-fotos');
+  using (
+    bucket_id = 'triagem-fotos' 
+    and (storage.foldername(name))[1] = auth.uid()::text
+  );
 
 -- ------------------------------------------------------------------------------
 -- 16. DADOS DE SEED INICIAIS

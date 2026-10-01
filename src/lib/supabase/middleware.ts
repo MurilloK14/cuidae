@@ -54,15 +54,14 @@ export async function updateSession(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
-  const publicRoutes = ['/', '/login', '/cadastro', '/recuperar-senha', '/redefinir-senha']
+  const publicRoutes = ['/', '/login', '/cadastro', '/recuperar-senha', '/redefinir-senha', '/admin/login']
   const isPublicRoute = publicRoutes.includes(pathname)
-  const isAdminRoute = pathname.startsWith('/admin')
   const isAuthRoute = ['/login', '/cadastro'].includes(pathname)
 
   // Redirect unauthenticated users away from protected routes
-  if (!user && !isPublicRoute && !isAdminRoute) {
+  if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone()
-    url.pathname = '/login'
+    url.pathname = pathname.startsWith('/admin') ? '/admin/login' : '/login'
     return NextResponse.redirect(url)
   }
 

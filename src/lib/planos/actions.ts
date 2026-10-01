@@ -36,16 +36,23 @@ export async function processPayment(formData: FormData) {
       return { success: false, error: 'Usuário não autenticado' }
     }
 
-    // Update profile camada
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .update({
-        camada: plano,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', user.id)
+    // Atualiza camada via RPC segura (evita manipulação indevida no client-side)
+    const { error: rpcError } = await supabase.rpc('atualizar_plano_usuario', {
+      novo_plano: plano,
+    })
 
-    if (profileError) throw profileError
+    if (rpcError) {
+      // Fallback de compatibilidade
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+          camada: plano,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', user.id)
+
+      if (profileError) throw profileError
+    }
 
     // Insert assinatura record
     const preco_centavos = plano === 'premium' ? 7990 : 3990
