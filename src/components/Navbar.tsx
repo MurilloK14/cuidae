@@ -89,12 +89,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
           </nav>
 
           {/* Right Action */}
-          <div className="hidden sm:flex items-center">
+          <div className="hidden sm:flex items-center gap-3">
             <a
               href="/login"
+              className="text-sm font-semibold text-slate-700 hover:text-[#2b85ff] px-3 py-2 rounded-lg transition-colors"
+            >
+              Entrar
+            </a>
+            <a
+              href="/cadastro"
               className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#091426] hover:bg-[#1a2c4e] text-white text-sm font-medium transition-all duration-300 shadow-[0_4px_12px_-4px_rgba(9,20,38,0.4)] hover:shadow-[0_8px_16px_-6px_rgba(9,20,38,0.5)] hover:-translate-y-0.5 active:translate-y-0"
             >
-              <span>Acessar o sistema</span>
+              <span>Cadastre-se grátis</span>
               <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
             </a>
           </div>
@@ -128,13 +134,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
                 {link.label}
               </a>
             ))}
-            <div className="pt-2">
+            <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
               <a
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[#091426] text-white text-sm font-medium shadow-sm"
+                className="w-full flex items-center justify-center py-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-colors"
               >
-                <span>Acessar o sistema</span>
+                Fazer Login
+              </a>
+              <a
+                href="/cadastro"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-[#091426] text-white text-sm font-medium shadow-sm"
+              >
+                <span>Cadastre-se grátis</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { User, Mail, Lock, Phone, MapPin, Calendar, Eye, EyeOff, ChevronDown } from 'lucide-react';
 import { signUp } from '@/lib/auth/actions';
+import { GoogleButton } from '@/components/GoogleButton';
 
 const STATES = [
   'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
@@ -149,6 +150,22 @@ export default function CadastroPage() {
             {errors.form}
           </div>
         )}
+
+        {/* Google Signup */}
+        <div className="mb-6">
+          <GoogleButton label="Cadastrar com o Google" />
+        </div>
+
+        <div className="relative mb-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-slate-200" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white px-3 text-slate-400 font-medium tracking-wider">
+              ou preencha com seus dados
+            </span>
+          </div>
+        </div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           

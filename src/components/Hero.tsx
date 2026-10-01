@@ -44,13 +44,13 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAssistant }) => {
             
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-              <button
-                onClick={() => onOpenAssistant?.("Quero começar a usar o sistema agora")}
+              <a
+                href="/cadastro"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#091426] hover:bg-[#1a2c4e] text-white font-medium transition-all duration-300 shadow-[0_8px_20px_-8px_rgba(9,20,38,0.5)] hover:shadow-[0_12px_24px_-8px_rgba(9,20,38,0.6)] hover:-translate-y-0.5"
               >
                 <span>Começar agora</span>
                 <ArrowRight className="w-5 h-5" />
-              </button>
+              </a>
               
               <a
                 href="#como-funciona"
