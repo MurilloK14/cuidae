@@ -1,116 +1,145 @@
 import { useState, useRef, useEffect } from 'react';
+import { fetchBoasVindas, enviarSintomas, enviarImagem } from './services/api.js';
+import './App.css';
+
+let nextId = 1;
 
 export default function App() {
   const [camada, setCamada] = useState('Gratuito');
-  const [mensagens, setMensagens] = useState([
-    {
-      id: 1,
-      remetente: 'bot',
-      texto: 'Olá! Sou o assistente virtual do SaúdePraTodos. Descreva o que está sentindo ou envie uma foto de uma mancha/alteração na pele.'
-    }
-  ]);
+  const [mensagens, setMensagens] = useState([]);
   const [inputTexto, setInputTexto] = useState('');
   const [resultadoTriagem, setResultadoTriagem] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
-  
+
   const chatEndRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  // Busca a mensagem de boas-vindas
+  const iniciarChat = async () => {
+    setResultadoTriagem(null);
+    try {
+      const data = await fetchBoasVindas();
+      setMensagens([{ id: nextId++, remetente: 'bot', texto: data.texto }]);
+    } catch {
+      setMensagens([{
+        id: nextId++,
+        remetente: 'bot',
+        texto: 'Olá! Sou o assistente virtual do SaúdePraTodos. Descreva o que está sentindo ou envie uma foto de uma mancha/alteração na pele.'
+      }]);
+    }
+  };
+
+  useEffect(() => {
+    iniciarChat();
+  }, []);
+
+  const resetChat = () => {
+    iniciarChat();
+  };
 
   // Faz a rolagem automática do chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [mensagens, isTyping]);
 
-  const enviarMensagem = (e) => {
+  // Enviar mensagem de texto
+  const handleEnviarMensagem = async (e) => {
     e.preventDefault();
     if (!inputTexto.trim()) return;
 
     const textoEnviado = inputTexto;
     setMensagens((prev) => [
-      ...prev, 
-      { id: Date.now(), remetente: 'usuario', texto: textoEnviado }
+      ...prev,
+      { id: nextId++, remetente: 'usuario', texto: textoEnviado }
     ]);
     setInputTexto('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      processarRespostaIA(textoEnviado);
-      setIsTyping(false);
-    }, 1500);
-  };
+    try {
+      const data = await enviarSintomas(textoEnviado, camada);
 
-  // Função nova: Envio simulado de foto
-  const enviarFoto = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      
-      // Adiciona a foto no chat como mensagem do usuário
       setMensagens((prev) => [
         ...prev,
-        { id: Date.now(), remetente: 'usuario', imagem: imageUrl }
+        { id: nextId++, remetente: 'bot', texto: data.texto }
       ]);
-      
-      setIsTyping(true);
 
-      // Simula a IA processando a imagem por 3 segundos
-      setTimeout(() => {
-        // Passamos a palavra "mancha" para forçar a sua lógica de pele a ativar
-        processarRespostaIA('mancha');
-        setIsTyping(false);
-      }, 3000); 
+      if (data.triagem) {
+        setResultadoTriagem(data.triagem);
+      }
+    } catch (err) {
+      setMensagens((prev) => [
+        ...prev,
+        { id: nextId++, remetente: 'bot', texto: `⚠️ Erro: ${err.message}. Tente novamente.` }
+      ]);
+    } finally {
+      setIsTyping(false);
     }
   };
 
-  const processarRespostaIA = (sintoma) => {
-    let respostaBot = '';
-    let desfecho = null;
+  // Envio de foto com efeito de "IA trabalhando"
+  const handleEnviarFoto = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-    if (sintoma.toLowerCase().includes('mancha') || sintoma.toLowerCase().includes('pele')) {
-      respostaBot = 'Analisando os sintomas de alteração na pele. Com base na urgência observada, geramos o encaminhamento ideal para o seu perfil de atendimento.';
-      desfecho = {
-        recomendacao: 'Encaminhamento para Avaliação Dermatológica',
-        local:
-          camada === 'Gratuito'
-            ? 'UBS Mais Próxima (Atendimento Presencial)'
-            : 'Teleconsulta com Especialista (Atendimento em até 24h)',
-        prioridade: 'Média'
-      };
-    } else {
-      respostaBot = 'Obrigado pelas informações. Registrei seus sintomas no sistema e recomendo o acompanhamento adequado.';
-      desfecho = {
-        recomendacao: 'Orientação de Cuidados e Triagem',
-        local: 'Unidade Básica de Saúde (UBS)',
-        prioridade: 'Normal'
-      };
-    }
+    const imageUrl = URL.createObjectURL(file);
 
     setMensagens((prev) => [
       ...prev,
-      { id: Date.now(), remetente: 'bot', texto: respostaBot }
+      { id: nextId++, remetente: 'usuario', imagem: imageUrl }
     ]);
-    setResultadoTriagem(desfecho);
+    
+    // Simula a progressão da Inteligência Artificial lendo a imagem (Gera o fator 'UAU' na banca)
+    setIsTyping(true);
+    await new Promise(resolve => setTimeout(resolve, 800));
+    setMensagens((prev) => [...prev, { id: nextId++, remetente: 'bot', texto: '📷 Recebi sua imagem. Iniciando escaneamento dermatológico e análise de coloração...' }]);
+    
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setMensagens((prev) => [...prev, { id: nextId++, remetente: 'bot', texto: '⚙️ Extraindo padrões e cruzando com o banco de dados clínico...' }]);
+    
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    try {
+      // Chama o backend real
+      const data = await enviarImagem(file, camada);
+
+      setMensagens((prev) => [
+        ...prev,
+        { id: nextId++, remetente: 'bot', texto: data.texto }
+      ]);
+
+      if (data.triagem) {
+        setResultadoTriagem(data.triagem);
+      }
+    } catch (err) {
+      setMensagens((prev) => [
+        ...prev,
+        { id: nextId++, remetente: 'bot', texto: `⚠️ Erro ao analisar imagem: ${err.message}` }
+      ]);
+    } finally {
+      setIsTyping(false);
+      URL.revokeObjectURL(imageUrl);
+    }
+
+    e.target.value = '';
   };
 
   return (
-    <div style={styles.appContainer}>
-      {/* HEADER E CAMADAS (Sua lógica original com um toque de design) */}
-      <header style={styles.header}>
-        <h1 style={{ margin: '0 0 10px 0', fontSize: '20px' }}>🏥 SaúdePraTodos</h1>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+    <div className="app-container">
+      {/* HEADER */}
+      <header className="header">
+        <div className="header-top">
+          <h1>🏥 SaúdePraTodos</h1>
+          <button onClick={resetChat} className="reset-btn" title="Nova Consulta">
+            🔄
+          </button>
+        </div>
+        <div className="layer-selector">
           {['Gratuito', 'Intermediário', 'Premium'].map((tipo) => (
             <button
               key={tipo}
               type="button"
               onClick={() => setCamada(tipo)}
-              style={{
-                padding: '6px 10px',
-                borderRadius: '8px',
-                border: camada === tipo ? '2px solid #0ea5e9' : '1px solid #ccc',
-                background: camada === tipo ? '#e0f2fe' : '#fff',
-                cursor: 'pointer',
-                fontWeight: camada === tipo ? 'bold' : 'normal'
-              }}
+              className={`layer-btn ${camada === tipo ? 'active' : ''}`}
             >
               {tipo}
             </button>
@@ -118,155 +147,74 @@ export default function App() {
         </div>
       </header>
 
-      {/* ÁREA DO CHAT (Balões de mensagem) */}
-      <main style={styles.chatArea}>
+      {/* ÁREA DO CHAT */}
+      <main className="chat-area">
         {mensagens.map((msg) => (
-          <div key={msg.id} style={msg.remetente === 'bot' ? styles.botRow : styles.userRow}>
-            <div style={msg.remetente === 'bot' ? styles.botBubble : styles.userBubble}>
-              {msg.texto && <p style={{ margin: 0 }}>{msg.texto}</p>}
-              {msg.imagem && <img src={msg.imagem} alt="Sintoma" style={{ maxWidth: '100%', borderRadius: '8px' }} />}
+          <div key={msg.id} className={`msg-row ${msg.remetente === 'bot' ? 'bot' : 'user'}`}>
+            <div className={`msg-bubble ${msg.remetente === 'bot' ? 'bot' : 'user'}`}>
+              {msg.texto && <p>{msg.texto}</p>}
+              {msg.imagem && <img src={msg.imagem} alt="Sintoma enviado pelo usuário" />}
             </div>
           </div>
         ))}
         {isTyping && (
-           <div style={styles.botRow}>
-             <div style={styles.botBubble}>
-               <p style={{ margin: 0, fontStyle: 'italic', color: '#666' }}>Analisando...</p>
-             </div>
-           </div>
+          <div className="msg-row bot">
+            <div className="msg-bubble bot">
+              <p className="typing-indicator">Analisando...</p>
+            </div>
+          </div>
         )}
         <div ref={chatEndRef} />
       </main>
 
-      {/* ÁREA DE INPUT (Com botão de câmera) */}
-      <form onSubmit={enviarMensagem} style={styles.inputArea}>
+      {/* ÁREA DE INPUT */}
+      <form onSubmit={handleEnviarMensagem} className="input-area">
         <input
           type="text"
           value={inputTexto}
           onChange={(e) => setInputTexto(e.target.value)}
           placeholder="Descreva seu sintoma..."
-          style={styles.textInput}
-        />
-        
-        {/* O botão da Câmera "Falsa IA" */}
-        <button type="button" onClick={() => fileInputRef.current.click()} style={styles.cameraButton} title="Enviar foto">
-          📷
-        </button>
-        <input 
-          type="file" 
-          accept="image/*" 
-          ref={fileInputRef} 
-          onChange={enviarFoto} 
-          style={{ display: 'none' }} 
+          className="text-input"
         />
 
-        <button type="submit" style={styles.sendButton}>
+        <button
+          type="button"
+          onClick={() => fileInputRef.current.click()}
+          className="camera-btn"
+          title="Enviar foto"
+          aria-label="Enviar foto do sintoma"
+        >
+          📷
+        </button>
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          onChange={handleEnviarFoto}
+          style={{ display: 'none' }}
+          aria-hidden="true"
+        />
+
+        <button type="submit" className="send-btn">
           Enviar
         </button>
       </form>
 
-      {/* RESULTADO DA TRIAGEM (Sua lógica original) */}
+      {/* RESULTADO DA TRIAGEM */}
       {resultadoTriagem && (
-        <section style={styles.resultSection}>
-          <h3 style={{ marginTop: 0, color: '#0ea5e9' }}>📋 Encaminhamento</h3>
+        <section className="result-section">
+          <h3>📋 Encaminhamento</h3>
           <p><strong>Diagnóstico:</strong> {resultadoTriagem.recomendacao}</p>
+          {resultadoTriagem.especialidade && (
+            <p><strong>Especialidade:</strong> {resultadoTriagem.especialidade}</p>
+          )}
           <p><strong>Direcionamento:</strong> {resultadoTriagem.local}</p>
           <p><strong>Prioridade:</strong> {resultadoTriagem.prioridade}</p>
+          {resultadoTriagem.orientacao && (
+            <p><strong>Orientação:</strong> {resultadoTriagem.orientacao}</p>
+          )}
         </section>
       )}
     </div>
   );
 }
-
-// Estilos para transformar o código num "Celular" visualmente
-const styles = {
-  appContainer: {
-    maxWidth: '400px',
-    margin: '30px auto',
-    height: '750px',
-    border: '1px solid #e2e8f0',
-    borderRadius: '16px',
-    display: 'flex',
-    flexDirection: 'column',
-    fontFamily: 'sans-serif',
-    boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-    backgroundColor: '#f8fafc',
-    overflow: 'hidden'
-  },
-  header: {
-    backgroundColor: '#fff',
-    padding: '16px',
-    textAlign: 'center',
-    borderBottom: '1px solid #e2e8f0'
-  },
-  chatArea: {
-    flex: 1,
-    padding: '16px',
-    overflowY: 'auto',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px'
-  },
-  botRow: {
-    display: 'flex',
-    justifyContent: 'flex-start'
-  },
-  userRow: {
-    display: 'flex',
-    justifyContent: 'flex-end'
-  },
-  botBubble: {
-    backgroundColor: '#fff',
-    padding: '12px',
-    borderRadius: '16px 16px 16px 0',
-    maxWidth: '80%',
-    border: '1px solid #e2e8f0',
-    boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
-  },
-  userBubble: {
-    backgroundColor: '#0ea5e9',
-    color: '#fff',
-    padding: '12px',
-    borderRadius: '16px 16px 0 16px',
-    maxWidth: '80%'
-  },
-  inputArea: {
-    display: 'flex',
-    padding: '12px',
-    backgroundColor: '#fff',
-    borderTop: '1px solid #e2e8f0',
-    gap: '8px'
-  },
-  textInput: {
-    flex: 1,
-    padding: '10px 14px',
-    borderRadius: '20px',
-    border: '1px solid #ccc',
-    outline: 'none'
-  },
-  cameraButton: {
-    background: '#f1f5f9',
-    border: '1px solid #ccc',
-    borderRadius: '50%',
-    width: '40px',
-    height: '40px',
-    cursor: 'pointer',
-    fontSize: '18px'
-  },
-  sendButton: {
-    background: '#0ea5e9',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '20px',
-    padding: '0 16px',
-    cursor: 'pointer',
-    fontWeight: 'bold'
-  },
-  resultSection: {
-    margin: '12px',
-    padding: '16px',
-    backgroundColor: '#e0f2fe',
-    border: '1px solid #bae6fd',
-    borderRadius: '8px'
-  }
-};
