@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
+import { LiveTransitionBar } from "@/components/LiveTransitionBar";
 import { HowItWorks } from "@/components/HowItWorks";
 import { BenefitsSection } from "@/components/BenefitsSection";
 import { HospitalsSection } from "@/components/HospitalsSection";
@@ -30,6 +31,7 @@ export default function Home() {
     <main className="min-h-screen bg-white text-slate-900 selection:bg-[#2b85ff] selection:text-white">
       <Navbar onOpenAssistant={handleOpenAssistant} />
       <Hero onOpenAssistant={handleOpenAssistant} />
+      <LiveTransitionBar />
       <HowItWorks onOpenAssistant={handleOpenAssistant} />
       <BenefitsSection />
       <HospitalsSection onSelectHospital={(hospitalName) => handleOpenAssistant(`Gostaria de saber mais sobre o atendimento no ${hospitalName}`)} />
