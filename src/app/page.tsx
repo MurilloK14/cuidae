@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { HowItWorks } from "@/components/HowItWorks";
+import { BenefitsSection } from "@/components/BenefitsSection";
+import { HospitalsSection } from "@/components/HospitalsSection";
+import { MissionSection } from "@/components/MissionSection";
 import { ImpactSection } from "@/components/ImpactSection";
 import { FinalCtaSection } from "@/components/FinalCtaSection";
 import { Footer } from "@/components/Footer";
@@ -28,6 +31,9 @@ export default function Home() {
       <Navbar onOpenAssistant={handleOpenAssistant} />
       <Hero onOpenAssistant={handleOpenAssistant} />
       <HowItWorks onOpenAssistant={handleOpenAssistant} />
+      <BenefitsSection />
+      <HospitalsSection onSelectHospital={(hospitalName) => handleOpenAssistant(`Gostaria de saber mais sobre o atendimento no ${hospitalName}`)} />
+      <MissionSection />
       <ImpactSection />
       <FinalCtaSection onCtaClick={() => handleOpenAssistant("Gostaria de conhecer mais sobre a SaúdeIA.")} />
       <Footer />
