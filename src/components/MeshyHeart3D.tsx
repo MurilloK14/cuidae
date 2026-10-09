@@ -62,11 +62,11 @@ export const MeshyHeart3D: React.FC<MeshyHeart3DProps> = ({ isDark = false }) =>
           className={`absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full blur-3xl pointer-events-none transition-all duration-700 ${
             isDark
               ? isHovered
-                ? "bg-gradient-to-tr from-purple-600/35 via-cyan-500/35 to-indigo-600/35 scale-110"
-                : "bg-gradient-to-tr from-purple-800/25 via-cyan-600/20 to-blue-800/25 scale-100"
+                ? "bg-gradient-to-tr from-blue-600/35 via-[#2b85ff]/35 to-cyan-500/35 scale-110"
+                : "bg-gradient-to-tr from-blue-900/25 via-[#2b85ff]/20 to-cyan-800/25 scale-100"
               : isHovered
-              ? "bg-gradient-to-tr from-purple-200/60 via-cyan-200/60 to-indigo-200/50 scale-110"
-              : "bg-gradient-to-tr from-purple-100/50 via-cyan-100/50 to-indigo-100/40 scale-100"
+              ? "bg-gradient-to-tr from-blue-200/60 via-cyan-200/60 to-blue-200/50 scale-110"
+              : "bg-gradient-to-tr from-blue-100/50 via-cyan-100/50 to-blue-100/40 scale-100"
           }`}
           style={{ transform: "translateZ(-40px)" }}
         />

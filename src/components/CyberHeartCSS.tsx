@@ -70,11 +70,11 @@ export const CyberHeartCSS: React.FC<CyberHeartCSSProps> = ({ isDark }) => {
           className={`absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full blur-3xl pointer-events-none transition-all duration-700 ${
             isDark
               ? isHovered
-                ? "bg-gradient-to-tr from-purple-600/40 via-cyan-500/40 to-indigo-600/40 scale-110"
-                : "bg-gradient-to-tr from-purple-800/30 via-cyan-600/25 to-blue-800/30 scale-100"
+                ? "bg-gradient-to-tr from-blue-600/40 via-[#2b85ff]/40 to-cyan-500/40 scale-110"
+                : "bg-gradient-to-tr from-blue-900/30 via-[#2b85ff]/25 to-cyan-800/30 scale-100"
               : isHovered
-              ? "bg-gradient-to-tr from-purple-300/60 via-cyan-200/70 to-indigo-200/60 scale-110"
-              : "bg-gradient-to-tr from-purple-200/40 via-cyan-100/50 to-indigo-100/40 scale-100"
+              ? "bg-gradient-to-tr from-blue-300/60 via-cyan-200/70 to-blue-200/60 scale-110"
+              : "bg-gradient-to-tr from-blue-200/40 via-cyan-100/50 to-blue-100/40 scale-100"
           }`}
           style={{ transform: "translateZ(-60px)" }}
         />

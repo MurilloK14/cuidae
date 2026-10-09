@@ -9,9 +9,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SaúdeIA | Conectando você aos hospitais com o poder da IA",
+  title: "Cuidaê | Conectando você aos hospitais e postos de saúde",
   description:
-    "Nossa plataforma usa inteligência artificial para integrar os hospitais da sua cidade, facilitando o acesso a atendimentos, exames, leitos e orientações médicas. Mais agilidade, menos burocracia e saúde para todos.",
+    "O Cuidaê facilita seu acesso à saúde pública. Faça uma triagem rápida de sintomas e descubra se deve ir ao posto de saúde (UBS), UPA 24h ou hospital mais próximo.",
   icons: {
     icon: "/images/cuidae-icon.png",
   },

@@ -43,7 +43,7 @@ export function HowItWorks({ onOpenAssistant }: HowItWorksProps) {
     },
     {
       num: "02",
-      title: "A IA cruza dados com a rede municipal",
+      title: "O Cuidaê cruza dados com a rede municipal",
       short: "Mapeamento em tempo real de UBSs, UPAs e hospitais.",
       desc: "O sistema analisa seu endereço e cruza com os postos de saúde (UBS), UPAs 24h e prontos-socorros com atendimento ativo na sua região.",
       icon: Network,
@@ -59,13 +59,13 @@ export function HowItWorks({ onOpenAssistant }: HowItWorksProps) {
     {
       num: "03",
       title: "Você recebe o encaminhamento exato",
-      short: "Classificação por cores (SUS/Manchester) sem adivinhação.",
+      short: "Classificação por cores do SUS sem adivinhação.",
       desc: "Recomendação precisa: se você deve ir a uma UBS para consulta programada, correr para a UPA 24h ou resolver com teleconsulta imediata.",
       icon: ClipboardList,
       badge: "Classificação Inteligente",
       phoneScreen: {
         tag: "PASSO 3 • CLASSIFICAÇÃO",
-        bubble: "Protocolo de Manchester processado:",
+        bubble: "Nível de urgência analisado:",
         patientInput: "Classificação: Amarelo (Urgência Moderada)",
         status: "Atendimento prioritário em UBS indicada",
         subtext: "Evite pronto-socorro para não esperar na fila errada."
@@ -119,7 +119,7 @@ export function HowItWorks({ onOpenAssistant }: HowItWorksProps) {
             </div>
 
             <h2 className="text-2xl sm:text-3xl lg:text-[2.25rem] font-black text-[#091426] tracking-tight leading-tight">
-              Como a IA conecta seus sintomas ao atendimento certo.
+              Como o Cuidaê conecta seus sintomas ao atendimento certo.
             </h2>
 
             <p className="mt-1.5 text-xs sm:text-sm lg:text-base text-slate-600 leading-relaxed font-normal">
@@ -285,9 +285,9 @@ export function HowItWorks({ onOpenAssistant }: HowItWorksProps) {
                 <div className="px-3.5 py-2.5 bg-white flex justify-between items-center border-b border-slate-100 shadow-sm">
                   <div className="flex items-center gap-1.5">
                     <div className="w-6 h-6 rounded-md bg-[#2b85ff] text-white flex items-center justify-center font-bold text-[11px]">
-                      S
+                      C
                     </div>
-                    <span className="font-extrabold text-xs text-[#091426]">SaúdeIA</span>
+                    <span className="font-extrabold text-xs text-[#091426]">Cuidaê</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
@@ -307,7 +307,7 @@ export function HowItWorks({ onOpenAssistant }: HowItWorksProps) {
 
                     {/* AI Chat Bubble */}
                     <div className="bg-[#eef5ff] text-[#2b85ff] p-2.5 rounded-xl rounded-tl-sm text-[11px] font-medium leading-relaxed border border-[#2b85ff]/15">
-                      🩺 <strong>Triagem IA:</strong> {currentStep.phoneScreen.bubble}
+                      🩺 <strong>Assistente Cuidaê:</strong> {currentStep.phoneScreen.bubble}
                     </div>
 
                     {/* Patient / System Box */}

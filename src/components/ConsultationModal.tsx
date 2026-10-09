@@ -47,7 +47,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
     const firstBotMessage: Message = {
       id: "1",
       sender: "bot",
-      text: "Olá! Sou a assistente inteligente da SaúdeIA. Como posso te ajudar hoje?",
+      text: "Olá! Sou a assistente de saúde do Cuidaê. Como posso te ajudar hoje?",
       options: [
         { label: "Agendar consulta", action: "consulta" },
         { label: "Verificar leitos de UTI e enfermaria", action: "leitos" },
@@ -126,7 +126,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
         botResponse = {
           id: Date.now().toString(),
           sender: "bot",
-          text: "Entendido! O sistema SaúdeIA está conectado aos 8 hospitais da cidade. Nossa IA pode fazer sua triagem rápida, consultar leitos ou agendar exames diretamente.",
+          text: "Entendido! O Cuidaê está conectado às unidades de saúde da cidade. Nosso assistente pode fazer sua triagem rápida, consultar disponibilidade ou orientar exames.",
           options: [
             { label: "Fazer triagem rápida", action: "triagem" },
             { label: "Verificar leitos disponíveis", action: "leitos" },
@@ -185,7 +185,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-bold text-sm">Assistente SaúdeIA</h3>
+                <h3 className="font-bold text-sm">Assistente Cuidaê</h3>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </div>
               <p className="text-[11px] text-slate-300">Integração hospitalar em tempo real</p>
@@ -268,7 +268,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
           {isTyping && (
             <div className="flex items-center gap-1.5 text-xs text-slate-400 px-2">
               <Bot className="w-3.5 h-3.5 text-[#1672eb] animate-spin" />
-              <span>SaúdeIA está digitando...</span>
+              <span>Cuidaê está digitando...</span>
             </div>
           )}
         </div>

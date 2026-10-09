@@ -27,28 +27,28 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAssistant }) => {
           <div className="lg:col-span-7 flex flex-col items-start text-left animate-fade-in-up opacity-0" style={{ animationDelay: "0.1s" }}>
             {/* Small Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-xs font-bold tracking-wider mb-4 sm:mb-6">
-              INTELIGÊNCIA ARTIFICIAL A SERVIÇO DA SUA SAÚDE
+              ASSISTENTE DE SAÚDE INTELIGENTE
             </div>
             
             {/* Heading */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold text-slate-900 leading-[1.12] tracking-[-0.03em] mb-4 sm:mb-6">
               Conectando você<br />
-              aos hospitais da cidade<br />
-              <span className="text-[#2b85ff]">com o poder da IA.</span>
+              aos postos e hospitais<br />
+              <span className="text-[#2b85ff]">com clareza e agilidade.</span>
             </h1>
             
             {/* Paragraph */}
             <p className="text-base sm:text-lg text-slate-600 mb-6 sm:mb-8 max-w-xl leading-relaxed">
-              Nossa plataforma usa inteligência artificial para integrar os hospitais da sua cidade, facilitando o acesso a atendimentos, exames, leitos e orientações médicas. Mais agilidade, menos burocracia e saúde para todos.
+              O Cuidaê analisa seus sintomas em menos de 2 minutos e indica se você deve ir a um posto de saúde (UBS), UPA 24h ou realizar teleconsulta. Menos tempo de espera e cuidado certo para a sua saúde.
             </p>
             
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
               <a
-                href="/cadastro"
+                href="/triagem"
                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#091426] hover:bg-[#1a2c4e] text-white font-medium transition-all duration-300 shadow-[0_8px_20px_-8px_rgba(9,20,38,0.5)] hover:shadow-[0_12px_24px_-8px_rgba(9,20,38,0.6)] hover:-translate-y-0.5 text-sm sm:text-base"
               >
-                <span>Começar agora</span>
+                <span>Fazer Triagem Gratuita</span>
                 <ArrowRight className="w-5 h-5" />
               </a>
               
@@ -56,7 +56,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAssistant }) => {
                 href="#como-funciona"
                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-medium transition-all duration-300 hover:bg-slate-50 shadow-sm text-sm sm:text-base"
               >
-                Saiba como funciona
+                Como funciona
               </a>
             </div>
           </div>
@@ -137,7 +137,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAssistant }) => {
           >
             <span className="w-2 h-2 rounded-full bg-[#2b85ff] animate-ping" />
             <span>Role para ver como funciona</span>
-            <span className="inline-block animate-bounce text-slate-400 group-hover:text-[#2b85ff]">↓</span>
+            <span className="inline-block text-slate-400 group-hover:text-[#2b85ff] group-hover:translate-y-0.5 transition-transform">↓</span>
           </a>
         </div>
       </div>

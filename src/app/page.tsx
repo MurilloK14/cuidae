@@ -37,7 +37,7 @@ export default function Home() {
       <HospitalsSection onSelectHospital={(hospitalName) => handleOpenAssistant(`Gostaria de saber mais sobre o atendimento no ${hospitalName}`)} />
       <MissionSection />
       <ImpactSection />
-      <FinalCtaSection onCtaClick={() => handleOpenAssistant("Gostaria de conhecer mais sobre a SaúdeIA.")} />
+      <FinalCtaSection onCtaClick={() => handleOpenAssistant("Gostaria de conhecer mais sobre o Cuidaê.")} />
       <Footer />
       <ConsultationModal isOpen={isAssistantOpen} onClose={handleCloseAssistant} initialPrompt={assistantPrompt} />
     </main>

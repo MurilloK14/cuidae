@@ -24,7 +24,7 @@ export const LiveTransitionBar: React.FC = () => {
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
               </div>
               <p className="text-[11px] sm:text-xs text-slate-400 font-medium leading-tight">
-                Triagem rápida com IA
+                Triagem rápida e orientada
               </p>
             </div>
           </div>
@@ -37,14 +37,14 @@ export const LiveTransitionBar: React.FC = () => {
             <div>
               <span className="text-sm sm:text-base font-extrabold text-white tracking-tight">UBSs & UPAs</span>
               <p className="text-[11px] sm:text-xs text-slate-400 font-medium leading-tight">
-                Mapeamento municipal ativo
+                Rede municipal integrada
               </p>
             </div>
           </div>
 
           {/* Metric 3 */}
           <div className="flex items-center gap-3 p-2 rounded-xl transition-all hover:bg-white/5">
-            <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-[#2b85ff] shrink-0">
               <MapPin className="w-5 h-5" />
             </div>
             <div>
@@ -61,9 +61,9 @@ export const LiveTransitionBar: React.FC = () => {
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-sm sm:text-base font-extrabold text-white tracking-tight">100% Seguro</span>
+              <span className="text-sm sm:text-base font-extrabold text-white tracking-tight">100% Gratuito</span>
               <p className="text-[11px] sm:text-xs text-slate-400 font-medium leading-tight">
-                Conforme LGPD & SUS
+                Privacidade & LGPD garantidos
               </p>
             </div>
           </div>

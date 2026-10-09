@@ -63,7 +63,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
             <div className="relative h-9 w-32 sm:h-10 sm:w-36">
               <Image
                 src="/images/cuidae-logo-trimmed.png"
-                alt="SaúdeIA"
+                alt="Cuidaê"
                 fill
                 priority
                 className="object-contain object-left"
@@ -100,10 +100,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
               Entrar
             </a>
             <a
-              href="/cadastro"
+              href="/triagem"
               className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#091426] hover:bg-[#1a2c4e] text-white text-sm font-medium transition-all duration-300 shadow-[0_4px_12px_-4px_rgba(9,20,38,0.4)] hover:shadow-[0_8px_16px_-6px_rgba(9,20,38,0.5)] hover:-translate-y-0.5 active:translate-y-0"
             >
-              <span>Cadastre-se grátis</span>
+              <span>Fazer Triagem</span>
               <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
             </a>
           </div>

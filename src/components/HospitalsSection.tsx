@@ -154,7 +154,7 @@ export const HospitalsSection: React.FC<HospitalsSectionProps> = ({ onSelectHosp
               Postos de Saúde, UPAs e Hospitais da sua região.
             </h2>
             <p className="mt-3 text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
-              A SaúdeIA mapeia as Unidades Básicas de Saúde (UBS), prontos-atendimentos 24h e hospitais municipais para orientar você ao local correto conforme a gravidade dos seus sintomas.
+              O Cuidaê mapeia as Unidades Básicas de Saúde (UBS), prontos-atendimentos 24h e hospitais municipais para orientar você ao local correto conforme a gravidade dos seus sintomas.
             </p>
           </div>
 
