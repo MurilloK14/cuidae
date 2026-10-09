@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Search,
   Network,
   ClipboardList,
   Heart,
   Building2,
-  ChevronRight,
   MapPin,
-  User,
-  Sparkles,
   CheckCircle2,
   Clock,
-  ArrowRight
+  ArrowRight,
+  ShieldCheck,
+  ChevronRight,
+  Sparkles
 } from "lucide-react";
 import Link from "next/link";
 
@@ -23,74 +23,130 @@ interface HowItWorksProps {
 
 export function HowItWorks({ onOpenAssistant }: HowItWorksProps) {
   const [activeStep, setActiveStep] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const steps = [
     {
       num: "01",
       title: "Você relata o que está sentindo",
-      desc: "Descreva seus sintomas, intensidade da dor e se tem febre ou outras condições. Nossa IA faz perguntas clínicas guiadas em menos de 2 minutos.",
+      short: "Perguntas clínicas inteligentes em menos de 2 minutos.",
+      desc: "Descreva sintomas, intensidade da dor e sinais de febre. A IA faz perguntas clínicas objetivas para entender a gravidade sem jargões médicos.",
       icon: Search,
-      color: "from-blue-500 to-[#2b85ff]",
-      badge: "Entrada do Paciente"
+      badge: "Entrada do Paciente",
+      phoneScreen: {
+        tag: "PASSO 1 • TRIAGEM",
+        bubble: "Olá! Conte em poucas palavras o que você está sentindo.",
+        patientInput: "Dor forte de garganta e febre de 38,5°C há 2 dias.",
+        status: "Perguntas clínicas ativas",
+        subtext: "Identificando sintomas associados..."
+      }
     },
     {
       num: "02",
       title: "A IA cruza dados com a rede municipal",
-      desc: "O sistema analisa o grau de urgência (Verde, Amarelo ou Vermelho) e mapeia os postos de saúde (UBS), UPAs 24h e hospitais da sua região.",
+      short: "Mapeamento em tempo real de UBSs, UPAs e hospitais.",
+      desc: "O sistema analisa seu endereço e cruza com os postos de saúde (UBS), UPAs 24h e prontos-socorros com atendimento ativo na sua região.",
       icon: Network,
-      color: "from-[#2b85ff] to-cyan-500",
-      badge: "Análise Clínica & Região"
+      badge: "Rede Municipal Ativa",
+      phoneScreen: {
+        tag: "PASSO 2 • GEOLOCALIZAÇÃO",
+        bubble: "Mapeando unidades no raio de 3 km...",
+        patientInput: "2 unidades com atendimento ativo encontradas",
+        status: "UBS Jardim Saúde (800m) • UPA 24h (2,1km)",
+        subtext: "Cruzando tempo de espera e especialidades..."
+      }
     },
     {
       num: "03",
       title: "Você recebe o encaminhamento exato",
-      desc: "Recomendação clara: ir a uma UBS para consulta de rotina, procurar UPA 24h imediatamente ou agendar teleconsulta pelo celular.",
+      short: "Classificação por cores (SUS/Manchester) sem adivinhação.",
+      desc: "Recomendação precisa: se você deve ir a uma UBS para consulta programada, correr para a UPA 24h ou resolver com teleconsulta imediata.",
       icon: ClipboardList,
-      color: "from-cyan-500 to-emerald-500",
-      badge: "Classificação Inteligente"
+      badge: "Classificação Inteligente",
+      phoneScreen: {
+        tag: "PASSO 3 • CLASSIFICAÇÃO",
+        bubble: "Protocolo de Manchester processado:",
+        patientInput: "Classificação: Amarelo (Urgência Moderada)",
+        status: "Atendimento prioritário em UBS indicada",
+        subtext: "Evite pronto-socorro para não esperar na fila errada."
+      }
     },
     {
       num: "04",
       title: "Atendimento ágil e sem filas perdidas",
-      desc: "Com o encaminhamento e a unidade correta em mãos, você economiza horas evitando ir ao local errado e recebe cuidados mais rápidos.",
+      short: "Chegue no local certo sabendo o que levar e o que esperar.",
+      desc: "Com o direcionamento em mãos, você não perde horas esperando no posto errado e já chega com o resumo da sua triagem pronto para o médico.",
       icon: Heart,
-      color: "from-emerald-500 to-rose-500",
-      badge: "Cuidado Concluído"
+      badge: "Cuidado Concluído",
+      phoneScreen: {
+        tag: "PASSO 4 • ROTA & CUIDADO",
+        bubble: "Unidade selecionada: UBS Jardim Saúde",
+        patientInput: "Tempo a pé: 10 min • Fila estimada: 15 min",
+        status: "Leve documento com foto e Cartão SUS",
+        subtext: "Triagem preliminar enviada com sucesso!"
+      }
     }
   ];
+
+  // Auto rotate steps if user is not manually hovering/interacting
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    const interval = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % steps.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, steps.length]);
+
+  const currentStep = steps[activeStep];
 
   return (
     <section
       id="como-funciona"
-      className="py-24 sm:py-36 bg-gradient-to-b from-slate-50 via-[#f0f6ff]/40 to-white relative overflow-hidden border-b border-slate-100"
+      className="lg:min-h-[calc(100vh-4.5rem)] flex flex-col justify-center py-10 sm:py-14 lg:py-12 bg-gradient-to-b from-slate-50 via-[#f0f6ff]/40 to-white relative overflow-hidden border-b border-slate-100"
     >
-      {/* Background Radial Glow & Medical Grid */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#2b85ff]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cyan-400/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+      {/* Background Radial Glow */}
+      <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[#2b85ff]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+      <div className="absolute bottom-0 left-0 w-[350px] h-[350px] bg-cyan-400/10 rounded-full blur-[90px] pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         
-        {/* Section Header */}
-        <div className="max-w-3xl mb-16 sm:mb-20 text-left">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2b85ff]/10 border border-[#2b85ff]/20 text-[#2b85ff] text-xs font-bold tracking-wider mb-4 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-[#2b85ff] animate-ping" />
-            <span>FLUXO SIMPLES EM 4 PASSOS</span>
+        {/* Compact Header: Fits desktop viewport comfortably */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 lg:mb-8 text-left">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2b85ff]/10 border border-[#2b85ff]/20 text-[#2b85ff] text-[11px] font-bold tracking-wider mb-2.5 shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2b85ff] animate-ping" />
+              <span>FLUXO SIMPLES EM 4 PASSOS</span>
+            </div>
+
+            <h2 className="text-2xl sm:text-3xl lg:text-[2.25rem] font-black text-[#091426] tracking-tight leading-tight">
+              Como a IA conecta seus sintomas ao atendimento certo.
+            </h2>
+
+            <p className="mt-1.5 text-xs sm:text-sm lg:text-base text-slate-600 leading-relaxed font-normal">
+              Sem dúvidas entre postinho ou pronto-socorro. Veja em tempo real como o fluxo funciona em 4 etapas rápidas:
+            </p>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#091426] tracking-[-0.03em] leading-tight">
-            Como a IA conecta seus sintomas ao atendimento certo.
-          </h2>
-
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
-            Esqueça a dúvida de saber se deve ir ao postinho ou correr para o pronto-socorro. Nossa inteligência artificial guia cada etapa com clareza e rapidez.
-          </p>
+          <div className="hidden md:flex items-center gap-3 shrink-0">
+            <Link
+              href="/como-funciona"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2b85ff] hover:text-blue-700 transition-colors"
+            >
+              <span>Ver guia detalhado</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
         </div>
 
-        {/* Content Layout: Steps Left + Live Simulated Phone Right */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        {/* Content Layout: 4 Steps Left + Compact Smartphone Mockup Right */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
           
           {/* Left Column: Interactive 4-Step Cards */}
-          <div className="lg:col-span-7 space-y-4">
+          <div
+            className="lg:col-span-7 space-y-2.5"
+            onMouseEnter={() => setIsAutoPlaying(false)}
+            onMouseLeave={() => setIsAutoPlaying(true)}
+          >
             {steps.map((step, idx) => {
               const Icon = step.icon;
               const isSelected = activeStep === idx;
@@ -98,168 +154,195 @@ export function HowItWorks({ onOpenAssistant }: HowItWorksProps) {
               return (
                 <div
                   key={step.num}
-                  onClick={() => setActiveStep(idx)}
-                  className={`cursor-pointer p-5 sm:p-6 rounded-2xl sm:rounded-3xl border transition-all duration-300 relative group ${
+                  onClick={() => {
+                    setActiveStep(idx);
+                    setIsAutoPlaying(false);
+                  }}
+                  className={`cursor-pointer p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border transition-all duration-300 relative group ${
                     isSelected
-                      ? "bg-white border-[#2b85ff] shadow-[0_12px_32px_-8px_rgba(43,133,255,0.15)] ring-1 ring-[#2b85ff]/20"
+                      ? "bg-white border-[#2b85ff] shadow-[0_10px_25px_-6px_rgba(43,133,255,0.18)] ring-1 ring-[#2b85ff]/30 translate-x-1"
                       : "bg-white/70 hover:bg-white border-slate-200/80 hover:border-slate-300 shadow-sm"
                   }`}
                 >
-                  <div className="flex items-start gap-4 sm:gap-5">
+                  <div className="flex items-start gap-3.5">
                     {/* Number Badge with Gradient */}
                     <div
-                      className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-sm shrink-0 transition-all duration-300 shadow-sm ${
+                      className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center font-black text-xs sm:text-sm shrink-0 transition-all duration-300 shadow-sm ${
                         isSelected
                           ? "bg-gradient-to-br from-[#091426] to-[#1e3a68] text-white scale-105"
                           : "bg-slate-100 text-slate-700 group-hover:bg-[#2b85ff]/10 group-hover:text-[#2b85ff]"
                       }`}
                     >
-                      <Icon className="w-5 h-5" />
+                      <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2 mb-1">
-                        <span className="text-[11px] font-extrabold text-[#2b85ff] uppercase tracking-wider">
+                      <div className="flex items-center justify-between gap-2 mb-0.5">
+                        <span className="text-[10px] font-extrabold text-[#2b85ff] uppercase tracking-wider">
                           Passo {step.num} • {step.badge}
                         </span>
-                        {isSelected && (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                        {isSelected ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
                             <CheckCircle2 className="w-3 h-3" /> Visualizando
+                          </span>
+                        ) : (
+                          <span className="text-[11px] text-slate-400 group-hover:text-slate-600 font-medium">
+                            Clique para ver
                           </span>
                         )}
                       </div>
 
-                      <h3 className="text-base sm:text-lg font-bold text-[#091426] leading-snug">
+                      <h3 className="text-sm sm:text-base font-bold text-[#091426] leading-snug">
                         {step.title}
                       </h3>
 
-                      <p className="mt-1.5 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-                        {step.desc}
-                      </p>
+                      {isSelected ? (
+                        <p className="mt-1 text-xs text-slate-600 leading-relaxed font-normal animate-fade-in">
+                          {step.desc}
+                        </p>
+                      ) : (
+                        <p className="mt-0.5 text-xs text-slate-500 truncate font-normal">
+                          {step.short}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
               );
             })}
 
-            {/* Quick Action Link */}
-            <div className="pt-4 flex items-center gap-4">
+            {/* Quick Action Link and SUS Badge */}
+            <div className="pt-2 flex flex-wrap items-center gap-3">
               <Link
                 href="/triagem"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#091426] hover:bg-[#1a2c4e] text-white text-xs sm:text-sm font-semibold transition-all shadow-sm hover:shadow-md"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#091426] hover:bg-[#1a2c4e] text-white text-xs font-semibold transition-all shadow-sm hover:shadow-md"
               >
-                <span>Experimente a Triagem Agora</span>
-                <ArrowRight className="w-4 h-4 text-[#2b85ff]" />
+                <span>Fazer Triagem Gratuita Agora</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#2b85ff]" />
               </Link>
-              <span className="text-xs text-slate-400 font-medium">
-                100% Gratuito • Sem necessidade de baixar app
+
+              <button
+                type="button"
+                onClick={() => onOpenAssistant?.("Como funciona a triagem de sintomas?")}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-blue-50 hover:bg-blue-100 text-[#2b85ff] text-xs font-semibold transition-colors"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Tirar dúvidas com a IA</span>
+              </button>
+
+              <span className="text-[11px] text-slate-400 font-medium ml-auto hidden sm:inline-block">
+                100% Gratuito • Sem necessidade de cadastro prévio
               </span>
             </div>
           </div>
 
-          {/* Right Column: Smartphone Mockup with Realtime Pulsing Radar & Floating Local Badges */}
-          <div className="lg:col-span-5 relative flex justify-center items-center">
+          {/* Right Column: Compact Smartphone Mockup with Realtime Synchronized Screen */}
+          <div className="lg:col-span-5 relative flex justify-center items-center py-2">
             
             {/* Animated Radar Pulse Rings */}
-            <div className="absolute w-[360px] h-[360px] sm:w-[420px] sm:h-[420px] rounded-full border border-[#2b85ff]/15 animate-ping opacity-25 pointer-events-none" />
-            <div className="absolute w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] rounded-full border border-cyan-400/20 animate-pulse pointer-events-none" />
+            <div className="absolute w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] rounded-full border border-[#2b85ff]/15 animate-ping opacity-20 pointer-events-none" />
+            <div className="absolute w-[220px] h-[220px] sm:w-[260px] sm:h-[260px] rounded-full border border-cyan-400/25 animate-pulse pointer-events-none" />
 
-            {/* Floating Live Badge 1: UBS Jardim Saúde */}
-            <div className="absolute -left-4 sm:-left-12 top-8 z-20 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-[0_12px_28px_-6px_rgba(0,0,0,0.12)] border border-slate-100 flex items-center gap-3 animate-[bounce_4s_ease-in-out_infinite] transition-transform">
-              <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#2b85ff] flex items-center justify-center shrink-0">
+            {/* Floating Live Badge Top: UBS Jardim Saúde */}
+            <div className="absolute -left-2 sm:-left-6 top-2 z-20 bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-xl sm:rounded-2xl shadow-[0_10px_25px_-5px_rgba(0,0,0,0.12)] border border-slate-100 flex items-center gap-2.5 transition-transform hover:scale-105">
+              <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#2b85ff] flex items-center justify-center shrink-0">
                 <Building2 className="w-4 h-4" />
               </div>
               <div className="text-left">
                 <div className="text-xs font-bold text-[#091426]">UBS Jardim Saúde</div>
                 <div className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span>800 m • Fila Rápida (10 min)</span>
+                  <span>800 m • Fila Rápida</span>
                 </div>
               </div>
             </div>
 
-            {/* Floating Live Badge 2: UPA 24h Vergueiro */}
-            <div className="absolute -right-4 sm:-right-10 top-1/2 -translate-y-6 z-20 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-[0_12px_28px_-6px_rgba(0,0,0,0.12)] border border-slate-100 flex items-center gap-3 animate-[bounce_5s_ease-in-out_infinite_reverse] transition-transform">
-              <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+            {/* Floating Live Badge Bottom: UPA 24h Vergueiro */}
+            <div className="absolute -right-2 sm:-right-6 bottom-4 z-20 bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-xl sm:rounded-2xl shadow-[0_10px_25px_-5px_rgba(0,0,0,0.12)] border border-slate-100 flex items-center gap-2.5 transition-transform hover:scale-105">
+              <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
                 <MapPin className="w-4 h-4" />
               </div>
               <div className="text-left">
                 <div className="text-xs font-bold text-[#091426]">UPA 24h Vergueiro</div>
                 <div className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                  <span>2,1 km • Plantão Ativo & Raio-X</span>
+                  <span>2,1 km • Plantão Ativo</span>
                 </div>
               </div>
             </div>
 
-            {/* Floating Live Badge 3: Teleconsulta Médica */}
-            <div className="absolute -left-2 sm:-left-8 bottom-10 z-20 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-[0_12px_28px_-6px_rgba(0,0,0,0.12)] border border-slate-100 flex items-center gap-2.5 animate-[bounce_4.5s_ease-in-out_infinite] transition-transform">
-              <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
-                <Clock className="w-4 h-4" />
-              </div>
-              <div className="text-left">
-                <div className="text-xs font-bold text-[#091426]">Teleconsulta 24h</div>
-                <div className="text-[10px] text-purple-600 font-semibold">
-                  Médico disponível em 5 min
-                </div>
-              </div>
-            </div>
-
-            {/* Phone Hardware Shell */}
-            <div className="relative rounded-[2.5rem] bg-slate-900 p-3 shadow-[0_25px_50px_-12px_rgba(9,20,38,0.35)] border-4 border-slate-800 w-[280px] sm:w-[310px] z-10">
+            {/* Phone Hardware Shell (Compact height: ~430px) */}
+            <div className="relative rounded-[2rem] bg-slate-900 p-2.5 shadow-[0_20px_45px_-10px_rgba(9,20,38,0.3)] border-[3px] border-slate-800 w-[260px] sm:w-[275px] z-10">
               {/* Dynamic Island / Notch */}
-              <div className="absolute top-3 inset-x-0 flex justify-center z-20">
-                <div className="w-24 h-4 bg-slate-900 rounded-full" />
+              <div className="absolute top-2 inset-x-0 flex justify-center z-20">
+                <div className="w-20 h-3.5 bg-slate-900 rounded-full" />
               </div>
 
               {/* Screen Content */}
-              <div className="bg-slate-50 rounded-[2rem] overflow-hidden w-full aspect-[9/18.5] flex flex-col pt-5">
+              <div className="bg-slate-50 rounded-[1.6rem] overflow-hidden w-full aspect-[9/17.5] flex flex-col pt-4">
+                
                 {/* App Status Header */}
-                <div className="px-4 py-3 bg-white flex justify-between items-center border-b border-slate-100 shadow-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-[#2b85ff] text-white flex items-center justify-center font-bold text-xs">
+                <div className="px-3.5 py-2.5 bg-white flex justify-between items-center border-b border-slate-100 shadow-sm">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-6 h-6 rounded-md bg-[#2b85ff] text-white flex items-center justify-center font-bold text-[11px]">
                       S
                     </div>
-                    <span className="font-extrabold text-sm text-[#091426]">SaúdeIA</span>
+                    <span className="font-extrabold text-xs text-[#091426]">SaúdeIA</span>
                   </div>
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <div className="flex items-center gap-1">
+                    <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+                      Ao vivo
+                    </span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  </div>
                 </div>
 
-                {/* Simulated Triage Interface */}
-                <div className="p-4 flex-1 flex flex-col justify-between space-y-3 text-left">
+                {/* Simulated Triage Interface - Dynamically updates with activeStep */}
+                <div className="p-3 flex-1 flex flex-col justify-between space-y-2 text-left">
                   <div className="space-y-2">
-                    <div className="bg-[#eef5ff] text-[#2b85ff] p-3 rounded-2xl rounded-tl-sm text-xs font-medium leading-relaxed border border-[#2b85ff]/15">
-                      🩺 <strong>Triagem IA:</strong> Qual o seu sintoma principal hoje?
+                    {/* Current Step Tag inside Phone */}
+                    <div className="inline-block px-2 py-0.5 bg-slate-200/70 text-slate-700 rounded text-[9px] font-extrabold uppercase tracking-wide">
+                      {currentStep.phoneScreen.tag}
                     </div>
 
-                    <div className="bg-white p-2.5 rounded-xl border border-slate-200 text-[11px] text-slate-800 font-semibold shadow-sm flex items-center justify-between">
-                      <span>Dor de garganta e febre (38°C)</span>
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#2b85ff]" />
+                    {/* AI Chat Bubble */}
+                    <div className="bg-[#eef5ff] text-[#2b85ff] p-2.5 rounded-xl rounded-tl-sm text-[11px] font-medium leading-relaxed border border-[#2b85ff]/15">
+                      🩺 <strong>Triagem IA:</strong> {currentStep.phoneScreen.bubble}
                     </div>
 
-                    <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px]">
-                        <span className="font-bold text-slate-700">Classificação:</span>
-                        <span className="font-extrabold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
-                          Amarelo • Moderado
+                    {/* Patient / System Box */}
+                    <div className="bg-white p-2.5 rounded-xl border border-slate-200 text-[10px] text-slate-800 font-semibold shadow-sm flex items-center justify-between">
+                      <span className="leading-snug">{currentStep.phoneScreen.patientInput}</span>
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#2b85ff] shrink-0 ml-1.5" />
+                    </div>
+
+                    {/* Status & Recommendation Card */}
+                    <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm space-y-1">
+                      <div className="flex items-center justify-between text-[10px]">
+                        <span className="font-bold text-slate-700">Situação:</span>
+                        <span className="font-bold text-[#2b85ff] text-[10px]">
+                          {currentStep.badge}
                         </span>
                       </div>
-                      <p className="text-[10px] text-slate-500 leading-tight">
-                        Recomendação: Avaliação clínica em UBS ou teleconsulta.
+                      <p className="text-[9px] text-slate-600 font-medium leading-tight">
+                        {currentStep.phoneScreen.status}
+                      </p>
+                      <p className="text-[8.5px] text-slate-400 leading-tight italic">
+                        {currentStep.phoneScreen.subtext}
                       </p>
                     </div>
                   </div>
 
-                  {/* Destination Card inside Phone */}
-                  <div className="bg-[#091426] text-white p-3 rounded-2xl space-y-1.5 shadow-md">
+                  {/* Destination / Action Card inside Phone */}
+                  <div className="bg-[#091426] text-white p-2.5 rounded-xl space-y-1 shadow-md">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
-                        Mais Próxima (800m)
+                      <span className="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">
+                        Recomendado SUS
                       </span>
-                      <span className="text-[10px] text-slate-300">Aberto</span>
+                      <span className="text-[9px] text-slate-300">Aberto</span>
                     </div>
-                    <p className="text-xs font-bold leading-tight">UBS Jardim Saúde</p>
-                    <div className="flex items-center justify-between pt-1 border-t border-slate-800 text-[10px] text-slate-300">
+                    <p className="text-[11px] font-bold leading-tight">UBS Jardim Saúde</p>
+                    <div className="flex items-center justify-between pt-1 border-t border-slate-800 text-[9px] text-slate-300">
                       <span>A pé: 10 min</span>
                       <span className="text-[#2b85ff] font-bold">Ver Rota →</span>
                     </div>

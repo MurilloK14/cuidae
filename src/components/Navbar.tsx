@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { ArrowRight, Menu, X } from "lucide-react";
 
 interface NavbarProps {
@@ -9,11 +10,13 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("inicio");
 
   useEffect(() => {
+    if (pathname !== "/") return;
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
 
@@ -35,14 +38,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [pathname]);
 
   const navLinks = [
-    { label: "Início", href: "#inicio", id: "inicio" },
-    { label: "Como funciona", href: "#como-funciona", id: "como-funciona" },
-    { label: "Hospitais", href: "#hospitais", id: "hospitais" },
-    { label: "Sobre nós", href: "#nossa-missao", id: "nossa-missao" },
-    { label: "Contato", href: "#contato", id: "contato" },
+    { label: "Início", href: pathname === "/" ? "#inicio" : "/#inicio", id: "inicio" },
+    { label: "Como funciona", href: pathname === "/" ? "#como-funciona" : "/como-funciona", id: "como-funciona" },
+    { label: "Hospitais", href: pathname === "/" ? "#hospitais" : "/#hospitais", id: "hospitais" },
+    { label: "Sobre nós", href: pathname === "/" ? "#nossa-missao" : "/#nossa-missao", id: "nossa-missao" },
+    { label: "Contato", href: pathname === "/" ? "#contato" : "/#contato", id: "contato" },
   ];
 
   return (
@@ -56,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <a href="#inicio" className="flex items-center gap-2 group">
+          <a href="/" className="flex items-center gap-2 group">
             <div className="relative h-9 w-32 sm:h-10 sm:w-36">
               <Image
                 src="/images/cuidae-logo-trimmed.png"
