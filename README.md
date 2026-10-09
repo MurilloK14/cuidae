@@ -9,51 +9,51 @@
   [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
 
   <p align="center">
-    <strong>Plataforma inteligente que conecta pacientes a hospitais, unidades básicas de saúde e orientação ágil com o poder da Inteligência Artificial.</strong>
+    <strong>Smart healthcare platform connecting citizens to hospitals, public clinics, and preliminary triage powered by Artificial Intelligence.</strong>
   </p>
 </div>
 
 ---
 
-## 🏥 Sobre o Projeto
+## 🏥 About The Project
 
-O **Cuidaê (SaúdeIA)** foi desenvolvido para simplificar e desburocratizar o acesso a informações essenciais de saúde. Integrando inteligência artificial e mapeamento de unidades de pronto atendimento, a plataforma auxilia os cidadãos na tomada de decisões em momentos críticos.
+**Cuidaê (SaúdeIA)** was developed to streamline and simplify access to essential healthcare information. Combining AI assistance and hospital mapping, the platform empowers patients during critical healthcare decisions.
 
-### ✨ Funcionalidades Principais
-- 🤖 **Assistente com Inteligência Artificial:** Chat interativo para orientação prévia e esclarecimento de dúvidas sobre sintomas e condutas recomendadas.
-- 🏥 **Mapeamento de Hospitais & UPAs:** Localização rápida de hospitais, tempos médios de espera e especialidades disponíveis na região.
-- 📱 **Interface Humanizada & Acessível:** Layout claro, limpo e intuitivo pensado para atender diferentes perfis de usuários.
-- ⚡ **Performance e SSR:** Construído com o App Router do Next.js para máxima velocidade e otimização de SEO.
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-- **Next.js & React:** Framework moderno com Server-Side Rendering e Server Components.
-- **TypeScript:** Tipagem estática robusta garantindo escalabilidade e segurança de código.
-- **Tailwind CSS:** Estilização utilitária ágil com animações sutis e design responsivo.
-- **Supabase:** Infraestrutura backend com PostgreSQL e autenticação.
-- **Lucide Icons:** Biblioteca de ícones moderna e consistente.
+### ✨ Core Features
+- 🤖 **AI-Powered Virtual Assistant:** Interactive guidance chat providing early symptom orientation and actionable next steps.
+- 🏥 **Hospital & Emergency Clinic Hub:** Fast discovery of regional hospitals, emergency wait times, and specialties.
+- 📱 **Humanized & Accessible Interface:** Clean, legible design crafted to accommodate diverse user demographics.
+- ⚡ **High Performance SSR:** Built with the Next.js App Router for optimal speed and search indexing.
 
 ---
 
-## 🚀 Como Executar o Projeto
+## 🛠️ Built With
 
-1. Clone o repositório:
+- **Next.js & React:** Modern framework featuring Server-Side Rendering and Server Components.
+- **TypeScript:** Strict static typing for code safety and maintainability.
+- **Tailwind CSS:** Utility-first styling with responsive layouts and fluid transitions.
+- **Supabase:** Backend infrastructure with PostgreSQL database and authentication.
+- **Lucide Icons:** Modern and consistent iconography.
+
+---
+
+## 🚀 Getting Started
+
+1. Clone the repository:
 ```bash
 git clone https://github.com/MurilloK14/cuidae.git
 ```
-2. Instale as dependências:
+2. Install dependencies:
 ```bash
 cd cuidae
 npm install
 ```
-3. Inicie o servidor de desenvolvimento:
+3. Start the local development server:
 ```bash
 npm run dev
 ```
-4. Acesse `http://localhost:3000` no seu navegador.
+4. Open `http://localhost:3000` in your browser.
 
 ---
 
-Desenvolvido por [Murillo Kennedy](https://github.com/MurilloK14).
+Developed by [Murillo Kennedy](https://github.com/MurilloK14).
