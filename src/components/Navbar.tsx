@@ -146,11 +146,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
                 Fazer Login
               </a>
               <a
-                href="/cadastro"
+                href="/triagem"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-[#091426] text-white text-sm font-medium shadow-sm"
               >
-                <span>Cadastre-se grátis</span>
+                <span>Fazer Triagem Gratuita</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>

@@ -21,7 +21,7 @@ export default function PlanosPage() {
       <div className="text-center mb-12">
         <h1 className="text-3xl sm:text-4xl font-bold text-[#091426] mb-4">Planos e Preços</h1>
         <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-          Escolha o plano ideal para cuidar da sua saúde com a tecnologia da SaúdeIA.
+          Escolha o plano ideal para cuidar da sua saúde com a tecnologia do Cuidaê.
         </p>
       </div>
 

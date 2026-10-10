@@ -71,7 +71,7 @@ export default function ComoFuncionaPage() {
     {
       num: "03",
       badge: "Passo 3 • Classificação Clínica",
-      title: "Classificação precisa de urgência pelo Protocolo Manchester",
+      title: "Classificação precisa de urgência por Nível de Risco (Protocolo SUS)",
       desc: "Evite ir ao pronto-socorro para casos leves e nunca demore para buscar socorro em situações de risco. A IA aplica critérios de triagem médica padronizados.",
       bullets: [
         "Verde (Não Urgente): Consultas de rotina e acompanhamento na UBS do bairro",
@@ -101,7 +101,7 @@ export default function ComoFuncionaPage() {
   const faqs = [
     {
       q: "A triagem com IA substitui uma consulta médica presencial?",
-      a: "Não. A SaúdeIA atua como uma ferramenta inteligente de triagem, orientação e encaminhamento ao serviço adequado do SUS (UBS, UPA ou Hospital), nunca substituindo o diagnóstico clínico ou prescrição definitiva de um médico."
+      a: "Não. O Cuidaê atua como uma ferramenta inteligente de triagem, orientação e encaminhamento ao serviço adequado do SUS (UBS, UPA ou Hospital), nunca substituindo o diagnóstico clínico ou prescrição definitiva de um médico."
     },
     {
       q: "Preciso pagar alguma coisa para usar a plataforma?",

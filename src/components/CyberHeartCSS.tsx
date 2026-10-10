@@ -97,7 +97,7 @@ export const CyberHeartCSS: React.FC<CyberHeartCSSProps> = ({ isDark }) => {
           {/* Ring 2 - Tilt -55 deg */}
           <div
             className={`absolute w-[300px] h-[300px] sm:w-[360px] sm:h-[360px] rounded-full border border-dotted transition-colors duration-500 animate-spin ${
-              isDark ? "border-purple-400/30" : "border-purple-600/25"
+              isDark ? "border-[#2b85ff]/30" : "border-[#2b85ff]/25"
             }`}
             style={{
               transform: "rotateX(-55deg) rotateY(-20deg)",
@@ -169,7 +169,7 @@ export const CyberHeartCSS: React.FC<CyberHeartCSSProps> = ({ isDark }) => {
               className={`${
                 i % 2 === 0
                   ? "fill-cyan-400 dark:fill-cyan-300"
-                  : "fill-purple-400 dark:fill-purple-300"
+                  : "fill-[#2b85ff] dark:fill-sky-400"
               } transition-all duration-300`}
               filter="url(#nodeGlow)"
             />
@@ -237,11 +237,11 @@ export const CyberHeartCSS: React.FC<CyberHeartCSSProps> = ({ isDark }) => {
                 <stop offset="100%" stopColor="#818cf8" />
               </linearGradient>
 
-              {/* Glowing Vein Purple Gradient */}
+              {/* Glowing Vein Blue Gradient */}
               <linearGradient id="purpleVeinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#c084fc" />
-                <stop offset="50%" stopColor="#a855f7" />
-                <stop offset="100%" stopColor="#6366f1" />
+                <stop offset="0%" stopColor="#38bdf8" />
+                <stop offset="50%" stopColor="#2b85ff" />
+                <stop offset="100%" stopColor="#0284c7" />
               </linearGradient>
 
               {/* Glowing Filters */}
@@ -272,7 +272,7 @@ export const CyberHeartCSS: React.FC<CyberHeartCSSProps> = ({ isDark }) => {
               <path
                 d="M195,52 C195,32 208,22 220,22 C232,22 240,32 240,52 L240,90 L195,90 Z"
                 fill="url(#aortaGrad)"
-                stroke={isDark ? "#c084fc" : "#9333ea"}
+                stroke={isDark ? "#38bdf8" : "#0284c7"}
                 strokeWidth="1.5"
               />
 
@@ -316,7 +316,7 @@ export const CyberHeartCSS: React.FC<CyberHeartCSSProps> = ({ isDark }) => {
               <path
                 d="M175,150 Q215,120 255,135 L245,185 Q205,190 175,170 Z"
                 fill={isDark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.4)"}
-                stroke={isDark ? "rgba(168,85,247,0.2)" : "rgba(147,51,234,0.3)"}
+                stroke={isDark ? "rgba(56,189,248,0.2)" : "rgba(43,133,255,0.3)"}
                 strokeWidth="1"
               />
             </g>
@@ -378,7 +378,7 @@ export const CyberHeartCSS: React.FC<CyberHeartCSSProps> = ({ isDark }) => {
                 <path d="M135,235 h20 v18 h15" />
                 <circle cx="100" cy="185" r="2" fill="#22d3ee" />
                 <circle cx="110" cy="220" r="2" fill="#22d3ee" />
-                <circle cx="228" cy="180" r="2" fill="#c084fc" />
+                <circle cx="228" cy="180" r="2" fill="#38bdf8" />
                 <circle cx="170" cy="253" r="2" fill="#22d3ee" />
               </g>
 
@@ -402,7 +402,7 @@ export const CyberHeartCSS: React.FC<CyberHeartCSSProps> = ({ isDark }) => {
                   cy="0"
                   r="16"
                   fill={isDark ? "rgba(15,23,42,0.85)" : "rgba(255,255,255,0.9)"}
-                  stroke="#a855f7"
+                  stroke="#38bdf8"
                   strokeWidth="2"
                 />
                 {/* Glowing Core Center */}
@@ -440,7 +440,7 @@ export const CyberHeartCSS: React.FC<CyberHeartCSSProps> = ({ isDark }) => {
             <span className="px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-400/30 text-cyan-600 dark:text-cyan-300">
               BIO:LIVE
             </span>
-            <span className="px-2 py-0.5 rounded bg-purple-500/10 border border-purple-400/30 text-purple-600 dark:text-purple-300 font-semibold">
+            <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-400/30 text-emerald-600 dark:text-emerald-300 font-semibold">
               {bpm} BPM
             </span>
           </div>

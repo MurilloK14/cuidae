@@ -39,7 +39,7 @@ export default function LoginPage() {
   return (
     <div className="sm:mx-auto sm:w-full sm:max-w-md animate-fade-in-up">
       <div className="flex justify-center mb-8">
-        <Image src="/images/cuidae-logo-trimmed.png" alt="SaúdeIA Logo" width={144} height={40} className="h-10 w-36 object-contain" />
+        <Image src="/images/cuidae-logo-trimmed.png" alt="Cuidaê Logo" width={144} height={40} className="h-10 w-36 object-contain" />
       </div>
       
       <div className="bg-white py-8 px-4 shadow-xl sm:rounded-3xl border border-slate-100 sm:px-10">

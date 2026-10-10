@@ -55,7 +55,7 @@ export default async function AppLayout({
               <div className="relative h-9 w-32">
                 <Image
                   src="/images/cuidae-logo-trimmed.png"
-                  alt="SaúdeIA"
+                  alt="Cuidaê"
                   fill
                   className="object-contain object-left"
                   sizes="128px"
