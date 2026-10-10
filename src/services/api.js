@@ -26,7 +26,7 @@ export async function enviarSintomas(sintoma, camada, localizacao) {
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.error || 'Erro ao processar sintomas');
+    throw new Error(err.error || err.texto || 'Erro ao processar sintomas');
   }
   return res.json();
 }
@@ -49,7 +49,7 @@ export async function enviarImagem(arquivo, camada, localizacao) {
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.error || 'Erro ao processar imagem');
+    throw new Error(err.error || err.texto || 'Erro ao processar imagem');
   }
   return res.json();
 }

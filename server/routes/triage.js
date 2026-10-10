@@ -14,9 +14,9 @@ const router = Router();
 // Verifica quais serviços estão ativos
 const GEMINI_ATIVO = process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'SUA_CHAVE_AQUI';
 const INFERMEDICA_ATIVA = process.env.INFERMEDICA_APP_ID && process.env.INFERMEDICA_APP_ID !== 'SEU_APP_ID_AQUI';
-const IA_COMPLETA = GEMINI_ATIVO && INFERMEDICA_ATIVA;
+const IA_COMPLETA = true; // Forçado para testar a API real
 
-console.log(`[Config] Gemini: ${GEMINI_ATIVO ? '✅' : '❌'} | Infermedica: ${INFERMEDICA_ATIVA ? '✅' : '❌'} | Fluxo IA completo: ${IA_COMPLETA ? '✅' : '❌ (usando fallback local)'}`);
+console.log(`[Config] Gemini: ${GEMINI_ATIVO ? '✅' : '❌'} | Infermedica: ${INFERMEDICA_ATIVA ? '✅' : '❌'} | Fluxo IA completo: FORÇADO (sem fallback)`);
 
 /**
  * GET /api/triage/welcome
@@ -115,22 +115,12 @@ router.post('/symptoms', async (req, res) => {
   } catch (err) {
     console.error('❌ Erro no fluxo de triagem:', err.message);
 
-    // Fallback automático em caso de erro
-    const resultado = analisarSintomas(sintoma, camadaValida);
-    const linkMaps = gerarLinkMaps(lat, lng, 'UBS');
-
-    return res.json({
+    // Retorna o erro real da API em vez do fallback local
+    return res.status(500).json({
       remetente: 'bot',
-      texto: resultado.mensagem,
-      triagem: {
-        recomendacao: resultado.recomendacao,
-        especialidade: resultado.especialidade,
-        local: resultado.local,
-        prioridade: resultado.prioridade,
-        orientacao: resultado.orientacao
-      },
-      mapa: linkMaps,
-      fonteIA: 'fallback-erro',
+      texto: `🚨 Erro na API: ${err.message}. Verifique suas chaves no .env!`,
+      triagem: null,
+      fonteIA: 'erro-api',
       timestamp: new Date().toISOString()
     });
   }
@@ -224,21 +214,11 @@ router.post('/image', upload.single('imagem'), async (req, res) => {
   } catch (err) {
     console.error('❌ Erro na análise de imagem:', err.message);
 
-    const resultado = analisarImagem(camadaValida, req.file.originalname);
-    const linkMaps = gerarLinkMaps(lat, lng, 'UBS');
-
-    return res.json({
+    return res.status(500).json({
       remetente: 'bot',
-      texto: resultado.mensagem,
-      triagem: {
-        recomendacao: resultado.recomendacao,
-        especialidade: resultado.especialidade,
-        local: resultado.local,
-        prioridade: resultado.prioridade,
-        orientacao: resultado.orientacao
-      },
-      mapa: linkMaps,
-      fonteIA: 'fallback-erro',
+      texto: `🚨 Erro na API: ${err.message}. Verifique suas chaves no .env!`,
+      triagem: null,
+      fonteIA: 'erro-api',
       arquivoRecebido: req.file.originalname,
       timestamp: new Date().toISOString()
     });
