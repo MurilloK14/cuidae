@@ -10,9 +10,29 @@ export default function App() {
   const [inputTexto, setInputTexto] = useState('');
   const [resultadoTriagem, setResultadoTriagem] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
+  const [localizacao, setLocalizacao] = useState(null);
+  const [locStatus, setLocStatus] = useState('solicitando'); // solicitando | ativa | negada
 
   const chatEndRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  // Solicita geolocalização ao abrir o app
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setLocStatus('negada');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setLocalizacao({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setLocStatus('ativa');
+      },
+      () => {
+        setLocStatus('negada');
+      }
+    );
+  }, []);
 
   // Busca a mensagem de boas-vindas
   const iniciarChat = async () => {
@@ -37,10 +57,22 @@ export default function App() {
     iniciarChat();
   };
 
-  // Faz a rolagem automática do chat
+  // Rolagem automática
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [mensagens, isTyping]);
+
+  // Processa a resposta da API (triagem + mapa)
+  const processarResposta = (data) => {
+    setMensagens((prev) => [
+      ...prev,
+      { id: nextId++, remetente: 'bot', texto: data.texto }
+    ]);
+
+    if (data.triagem) {
+      setResultadoTriagem({ ...data.triagem, mapa: data.mapa || null });
+    }
+  };
 
   // Enviar mensagem de texto
   const handleEnviarMensagem = async (e) => {
@@ -56,16 +88,8 @@ export default function App() {
     setIsTyping(true);
 
     try {
-      const data = await enviarSintomas(textoEnviado, camada);
-
-      setMensagens((prev) => [
-        ...prev,
-        { id: nextId++, remetente: 'bot', texto: data.texto }
-      ]);
-
-      if (data.triagem) {
-        setResultadoTriagem(data.triagem);
-      }
+      const data = await enviarSintomas(textoEnviado, camada, localizacao);
+      processarResposta(data);
     } catch (err) {
       setMensagens((prev) => [
         ...prev,
@@ -87,29 +111,19 @@ export default function App() {
       ...prev,
       { id: nextId++, remetente: 'usuario', imagem: imageUrl }
     ]);
-    
-    // Simula a progressão da Inteligência Artificial lendo a imagem (Gera o fator 'UAU' na banca)
+
     setIsTyping(true);
     await new Promise(resolve => setTimeout(resolve, 800));
     setMensagens((prev) => [...prev, { id: nextId++, remetente: 'bot', texto: '📷 Recebi sua imagem. Iniciando escaneamento dermatológico e análise de coloração...' }]);
-    
+
     await new Promise(resolve => setTimeout(resolve, 1500));
     setMensagens((prev) => [...prev, { id: nextId++, remetente: 'bot', texto: '⚙️ Extraindo padrões e cruzando com o banco de dados clínico...' }]);
-    
+
     await new Promise(resolve => setTimeout(resolve, 1500));
 
     try {
-      // Chama o backend real
-      const data = await enviarImagem(file, camada);
-
-      setMensagens((prev) => [
-        ...prev,
-        { id: nextId++, remetente: 'bot', texto: data.texto }
-      ]);
-
-      if (data.triagem) {
-        setResultadoTriagem(data.triagem);
-      }
+      const data = await enviarImagem(file, camada, localizacao);
+      processarResposta(data);
     } catch (err) {
       setMensagens((prev) => [
         ...prev,
@@ -129,9 +143,17 @@ export default function App() {
       <header className="header">
         <div className="header-top">
           <h1>🏥 SaúdePraTodos</h1>
-          <button onClick={resetChat} className="reset-btn" title="Nova Consulta">
-            🔄
-          </button>
+          <div className="header-actions">
+            <span
+              className={`loc-badge ${locStatus}`}
+              title={locStatus === 'ativa' ? 'Localização ativa' : 'Localização desativada'}
+            >
+              {locStatus === 'ativa' ? '📍' : locStatus === 'solicitando' ? '⏳' : '📍❌'}
+            </span>
+            <button onClick={resetChat} className="reset-btn" title="Nova Consulta">
+              🔄
+            </button>
+          </div>
         </div>
         <div className="layer-selector">
           {['Gratuito', 'Intermediário', 'Premium'].map((tipo) => (
@@ -209,9 +231,26 @@ export default function App() {
             <p><strong>Especialidade:</strong> {resultadoTriagem.especialidade}</p>
           )}
           <p><strong>Direcionamento:</strong> {resultadoTriagem.local}</p>
-          <p><strong>Prioridade:</strong> {resultadoTriagem.prioridade}</p>
+          <p>
+            <strong>Prioridade:</strong>{' '}
+            <span className={`priority-badge ${resultadoTriagem.prioridade?.toLowerCase()}`}>
+              {resultadoTriagem.prioridade}
+            </span>
+          </p>
           {resultadoTriagem.orientacao && (
             <p><strong>Orientação:</strong> {resultadoTriagem.orientacao}</p>
+          )}
+
+          {/* LINK DO MAPA */}
+          {resultadoTriagem.mapa && (
+            <a
+              href={resultadoTriagem.mapa.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="maps-link"
+            >
+              {resultadoTriagem.mapa.label}
+            </a>
           )}
         </section>
       )}

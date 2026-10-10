@@ -12,11 +12,17 @@ export async function fetchBoasVindas() {
 /**
  * Envia sintomas em texto para triagem.
  */
-export async function enviarSintomas(sintoma, camada) {
+export async function enviarSintomas(sintoma, camada, localizacao) {
+  const body = { sintoma, camada };
+  if (localizacao) {
+    body.lat = localizacao.lat;
+    body.lng = localizacao.lng;
+  }
+
   const res = await fetch(`${API_BASE}/triage/symptoms`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sintoma, camada })
+    body: JSON.stringify(body)
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -28,10 +34,14 @@ export async function enviarSintomas(sintoma, camada) {
 /**
  * Envia uma imagem para análise de triagem.
  */
-export async function enviarImagem(arquivo, camada) {
+export async function enviarImagem(arquivo, camada, localizacao) {
   const formData = new FormData();
   formData.append('imagem', arquivo);
   formData.append('camada', camada);
+  if (localizacao) {
+    formData.append('lat', localizacao.lat.toString());
+    formData.append('lng', localizacao.lng.toString());
+  }
 
   const res = await fetch(`${API_BASE}/triage/image`, {
     method: 'POST',
