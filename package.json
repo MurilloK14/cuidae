@@ -1,19 +1,26 @@
 {
-  "name": "site-saude-ai",
-  "version": "0.1.0",
+  "name": "cuidae-saude-pra-todos",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "server": "node server/index.js",
+    "dev:all": "concurrently \"npm run server\" \"npm run dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.2",
     "clsx": "^2.1.1",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
     "lucide-react": "^0.453.0",
     "meshoptimizer": "^1.2.0",
+    "multer": "^2.4.0",
     "next": "14.2.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -26,6 +33,7 @@
     "@types/react-dom": "^18.3.1",
     "@types/three": "^0.186.0",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^10.0.5",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"

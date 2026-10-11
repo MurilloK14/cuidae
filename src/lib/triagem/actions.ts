@@ -51,19 +51,57 @@ export async function submitTriagem(formData: FormData) {
     }
   }
 
-  // Triage classification logic (mock for frontend/MVP; FastAPI/Infermedica handles this in backend)
+  // Triage classification logic: integra com backend Gemini AI (Express) com fallback para heurística local
   let nivel_urgencia: 'verde' | 'amarelo' | 'vermelho' = 'verde'
   let recomendacao: 'ubs' | 'upa' | 'teleconsulta' | 'esperar' = 'teleconsulta'
+  let geminiOrientacao: string | null = null
 
-  if (intensidade >= 8 || (tem_febre === 'Sim' && ['4-7 dias', 'Mais de 1 semana', 'Mais de 1 mês'].includes(duracao))) {
-    nivel_urgencia = 'vermelho'
-    recomendacao = 'upa'
-  } else if (intensidade >= 5 || tem_febre === 'Sim') {
-    nivel_urgencia = 'amarelo'
-    recomendacao = 'ubs'
-  } else if (intensidade < 3) {
-    nivel_urgencia = 'verde'
-    recomendacao = 'esperar'
+  try {
+    const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001'
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 4000)
+
+    const triageRes = await fetch(`${backendUrl}/api/triage/symptoms`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sintoma: sintoma_principal, camada: 'Gratuito' }),
+      signal: controller.signal,
+    })
+    clearTimeout(timeoutId)
+
+    if (triageRes.ok) {
+      const triageData = await triageRes.json()
+      const prioridade = triageData?.triagem?.prioridade
+      geminiOrientacao = triageData?.texto || triageData?.triagem?.orientacao
+
+      if (prioridade === 'Urgente') {
+        nivel_urgencia = 'vermelho'
+        recomendacao = 'upa'
+      } else if (prioridade === 'Alta') {
+        nivel_urgencia = 'amarelo'
+        recomendacao = 'ubs'
+      } else if (prioridade === 'Média') {
+        nivel_urgencia = 'amarelo'
+        recomendacao = 'ubs'
+      } else {
+        nivel_urgencia = 'verde'
+        recomendacao = 'teleconsulta'
+      }
+    } else {
+      throw new Error('API backend retornou status inválido')
+    }
+  } catch {
+    // Fallback heurístico caso o backend esteja offline
+    if (intensidade >= 8 || (tem_febre === 'Sim' && ['4-7 dias', 'Mais de 1 semana', 'Mais de 1 mês'].includes(duracao))) {
+      nivel_urgencia = 'vermelho'
+      recomendacao = 'upa'
+    } else if (intensidade >= 5 || tem_febre === 'Sim') {
+      nivel_urgencia = 'amarelo'
+      recomendacao = 'ubs'
+    } else if (intensidade < 3) {
+      nivel_urgencia = 'verde'
+      recomendacao = 'esperar'
+    }
   }
 
   const explicacaoMap: Record<string, string> = {
@@ -88,7 +126,7 @@ export async function submitTriagem(formData: FormData) {
     { pergunta: 'descricao_foto', resposta: descricao_foto || null },
   ].filter(r => r.resposta !== null && r.resposta !== undefined && r.resposta !== '')
 
-  // Insert triagem (tabela unificada v2 otimizada para FastAPI/Infermedica)
+  // Insert triagem (tabela unificada v2 integrada com backend)
   const { data: triagem, error: triagemError } = await supabase
     .from('triagens')
     .insert({
@@ -99,7 +137,7 @@ export async function submitTriagem(formData: FormData) {
       respostas,
       nivel_urgencia,
       recomendacao,
-      explicacao: explicacaoMap[recomendacao],
+      explicacao: geminiOrientacao || explicacaoMap[recomendacao],
       foto_storage_path,
       cidade_snapshot: profile?.cidade || 'Não informada',
       uf_snapshot: profile?.uf || 'BR',
