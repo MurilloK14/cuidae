@@ -45,8 +45,6 @@ export function getLocal(camada, prioridade, tipoUnidade) {
  * @returns {object} - { url, label } ou null se não aplicável
  */
 export function gerarLinkMaps(lat, lng, tipoUnidade) {
-  if (!lat || !lng) return null;
-
   const termo = TERMOS_BUSCA[tipoUnidade] || TERMOS_BUSCA['UBS'];
   
   // Se for SAMU, não tem link de mapa
@@ -59,10 +57,12 @@ export function gerarLinkMaps(lat, lng, tipoUnidade) {
   }
 
   const termoEncoded = encodeURIComponent(termo);
-  const url = `https://www.google.com/maps/search/${termoEncoded}/@${lat},${lng},14z`;
+  const url = (lat && lng)
+    ? `https://www.google.com/maps/search/${termoEncoded}/@${lat},${lng},14z`
+    : `https://www.google.com/maps/search/${termoEncoded}`;
 
   return {
-    label: `📍 Ver ${tipoUnidade} mais próxima no mapa`,
+    label: `📍 Ver ${tipoUnidade} mais próxima no Google Maps`,
     url,
     tipo: 'mapa'
   };

@@ -1,0 +1,80 @@
+[
+  {
+    "id": "dcb8b7e8-a428-4ce2-b7d9-40039e6fd412",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com muita febre, manchas vermelhas pelo corpo e dor atrás dos olhos",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Estou com muita febre, manchas vermelhas pelo corpo e dor atrás dos olhos"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral / Infectologia",
+    "explicacao": "Olá, sinto muito que esteja se sentindo assim. Os sintomas que você descreveu, como febre, dor atrás dos olhos e manchas na pele, sugerem a possibilidade de uma arbovirose, como a dengue. É muito importante que você busque atendimento presencial em uma unidade de saúde para avaliação detalhada e acompanhamento.",
+    "orientacao": "Beba bastante água e líquidos para manter-se hidratado. Não tome medicamentos por conta própria, especialmente AAS, aspirina ou anti-inflamatórios (como ibuprofeno), pois podem piorar os sintomas. Procure a unidade de saúde mais próxima e, se houver sangramentos ou dor abdominal intensa, vá imediatamente ao serviço de urgência.",
+    "tipoUnidade": "UPA",
+    "mapa": {
+      "label": "📍 Ver UPA mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UPA%20Unidade%20de%20Pronto%20Atendimento/@-23.5505,-46.6333,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T19:08:06.499Z"
+  },
+  {
+    "id": "2f8dc14c-dce6-4849-810b-9d5f4085e820",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com dor intensa no peito e formigamento no braço esquerdo",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Estou com dor intensa no peito e formigamento no braço esquerdo"
+      }
+    ],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Cardiologia / Emergência",
+    "explicacao": "Compreendo sua preocupação, e estes sintomas são um sinal de alerta que exigem atenção médica imediata, pois há uma possibilidade de ser um evento cardíaco, como um infarto. Peço que mantenha a calma e permaneça em repouso absoluto. É essencial acionar o atendimento de urgência agora mesmo.",
+    "orientacao": "Ligue imediatamente para o SAMU (192), permaneça sentado ou recostado, evite fazer qualquer esforço físico e afrouxe roupas apertadas enquanto aguarda o socorro.",
+    "tipoUnidade": "SAMU",
+    "mapa": {
+      "label": "📍 Ver SAMU mais próxima no mapa",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-23.5505,-46.6333,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "created_at": "2026-10-11T19:07:01.947Z"
+  },
+  {
+    "id": "e49f971a-7a19-4bae-99b3-d12428a308d8",
+    "user_id": "anonimo",
+    "sintoma_principal": "Teste dor de garganta e tosse",
+    "duracao": "Não informada",
+    "intensidade": 4,
+    "respostas": [],
+    "nivel_urgencia": "verde",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Sintomas gripais leves",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini",
+    "created_at": "2026-10-11T19:03:36.741Z"
+  }
+]
