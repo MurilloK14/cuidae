@@ -60,7 +60,7 @@ router.get('/resultado/:id', (req, res) => {
  * POST /api/triage/symptoms
  */
 router.post('/symptoms', async (req, res) => {
-  const { sintoma, camada, lat, lng, user_id } = req.body;
+  const { sintoma, camada, lat, lng, user_id, historico } = req.body;
 
   if (!sintoma || !sintoma.trim()) {
     return res.status(400).json({ error: 'O campo "sintoma" é obrigatório.' });
@@ -70,7 +70,7 @@ router.post('/symptoms', async (req, res) => {
 
   try {
     console.log('[Gemini] Avaliando sintomas:', sintoma);
-    const respostaFinal = await avaliarSintomas(sintoma);
+    const respostaFinal = await avaliarSintomas(sintoma, historico);
 
     const tipoUnidade = respostaFinal.tipoUnidade || 'UBS';
     const local = getLocal(camadaValida, respostaFinal.prioridade, tipoUnidade);

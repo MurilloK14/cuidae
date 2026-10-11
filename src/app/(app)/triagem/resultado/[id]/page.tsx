@@ -56,12 +56,56 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
         </div>
       </div>
 
-      {/* Symptom Context */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 mb-8">
-        <p className="text-sm text-slate-400 mb-1">Sintoma relatado</p>
-        <p className="text-slate-900 font-medium">{triagem.sintoma_principal}</p>
-        <p className="text-xs text-slate-400 mt-2">
-          {new Date(triagem.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+      {/* Symptom Context & AI Insights */}
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 mb-8 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <p className="text-xs uppercase tracking-wider font-semibold text-slate-400">Sintoma Relatado</p>
+            <p className="text-slate-900 font-semibold text-lg">{triagem.sintoma_principal}</p>
+          </div>
+          {triagem.fonteIA && (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-[#2b85ff] border border-blue-100">
+              <span className="w-2 h-2 rounded-full bg-[#2b85ff] animate-pulse"></span>
+              {triagem.fonteIA}
+            </span>
+          )}
+        </div>
+
+        {triagem.especialidade && (
+          <div className="flex items-center gap-2 text-sm text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100">
+            <span className="font-semibold text-slate-900">Especialidade recomendada:</span>
+            <span className="text-[#2b85ff] font-medium">{triagem.especialidade}</span>
+          </div>
+        )}
+
+        {triagem.orientacao && (
+          <div className="bg-blue-50/60 rounded-xl p-4 border border-blue-100/80">
+            <h3 className="text-sm font-semibold text-blue-900 mb-1 flex items-center gap-1.5">
+              💡 Recomendações e Cuidados Imediatos
+            </h3>
+            <p className="text-sm text-blue-950 leading-relaxed">
+              {triagem.orientacao}
+            </p>
+          </div>
+        )}
+
+        {triagem.mapa && (
+          <div className="pt-2">
+            <a
+              href={triagem.mapa.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#2b85ff] hover:bg-blue-600 text-white text-sm font-semibold rounded-xl shadow-sm transition-all"
+            >
+              <MapPin className="w-4 h-4" />
+              {triagem.mapa.label || 'Ver Unidade Mais Próxima no Google Maps'}
+              <ExternalLink className="w-3.5 h-3.5 ml-1" />
+            </a>
+          </div>
+        )}
+
+        <p className="text-xs text-slate-400 pt-1">
+          Triagem registrada em: {new Date(triagem.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
         </p>
       </div>
 

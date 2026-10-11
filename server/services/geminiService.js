@@ -33,8 +33,18 @@ Retorne APENAS um JSON válido com esta estrutura exata:
 /**
  * Gemini avalia os sintomas em texto e gera o diagnóstico.
  */
-export async function avaliarSintomas(textoOriginal) {
+export async function avaliarSintomas(textoOriginal, historico = []) {
   if (genAI) {
+    let contextoPaciente = `Relato do paciente: "${textoOriginal}"`;
+    if (Array.isArray(historico) && historico.length > 0) {
+      const historicoTexto = historico
+        .filter(m => m.texto)
+        .slice(-6)
+        .map(m => `${m.remetente === 'usuario' ? 'Paciente' : 'Assistente Cuidaê'}: ${m.texto}`)
+        .join('\n');
+      contextoPaciente = `Histórico prévio da conversa:\n${historicoTexto}\n\nNova mensagem do paciente: "${textoOriginal}"\n\nResponda de forma humanizada e atualize a triagem médica considerando o contexto acumulado.`;
+    }
+
     for (const modelName of CANDIDATE_MODELS) {
       try {
         const model = genAI.getGenerativeModel({
@@ -44,7 +54,7 @@ export async function avaliarSintomas(textoOriginal) {
 
         const result = await model.generateContent([
           { text: PROMPT_DIAGNOSTICO },
-          { text: `Relato do paciente: "${textoOriginal}"` }
+          { text: contextoPaciente }
         ]);
 
         const raw = result.response.text();

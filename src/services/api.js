@@ -12,8 +12,8 @@ export async function fetchBoasVindas() {
 /**
  * Envia sintomas em texto para triagem.
  */
-export async function enviarSintomas(sintoma, camada, localizacao) {
-  const body = { sintoma, camada };
+export async function enviarSintomas(sintoma, camada, localizacao, historico = []) {
+  const body = { sintoma, camada, historico };
   if (localizacao) {
     body.lat = localizacao.lat;
     body.lng = localizacao.lng;

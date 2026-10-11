@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { getTriagemFromStore } from '@/lib/db/triageStore'
 
 export async function submitTriagem(formData: FormData) {
   const supabase = createClient()
@@ -166,18 +167,27 @@ export async function submitTriagem(formData: FormData) {
 }
 
 export async function getTriagemResultado(triagemId: string) {
-  const supabase = createClient()
-  
-  const { data: triagem, error: triagemError } = await supabase
-    .from('triagens')
-    .select('*')
-    .eq('id', triagemId)
-    .single()
+  // 1. Tenta carregar do store persistente unificado (local + cache)
+  const local = await getTriagemFromStore(triagemId)
+  if (local) return local
 
-  if (triagemError) {
-    console.error('Erro ao buscar resultado da triagem:', triagemError)
+  // 2. Fallback via Supabase
+  try {
+    const supabase = createClient()
+    const { data: triagem, error: triagemError } = await supabase
+      .from('triagens')
+      .select('*')
+      .eq('id', triagemId)
+      .single()
+
+    if (triagemError) {
+      console.error('Erro ao buscar resultado da triagem:', triagemError)
+      return null
+    }
+
+    return triagem
+  } catch (err) {
+    console.warn('[Triagem] Falha ao consultar Supabase:', err)
     return null
   }
-
-  return triagem
 }

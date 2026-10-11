@@ -64,6 +64,11 @@ export async function updateSession(request: NextRequest) {
   const isPublicRoute = publicRoutes.includes(pathname)
   const isAuthRoute = ['/login', '/cadastro'].includes(pathname)
 
+  // Allow all API routes to pass through
+  if (pathname.startsWith('/api/')) {
+    return supabaseResponse
+  }
+
   // Redirect unauthenticated users away from protected routes
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone()
