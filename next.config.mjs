@@ -2,15 +2,16 @@
 const nextConfig = {
   reactStrictMode: true,
   async rewrites() {
-    const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+    const backendUrl = process.env.BACKEND_URL;
+    // Se BACKEND_URL não estiver configurado (produção na Vercel), usa os handlers nativos do Next.js
+    if (!backendUrl) {
+      return [];
+    }
+
     return [
       {
         source: '/api/triage/:path*',
         destination: `${backendUrl}/api/triage/:path*`,
-      },
-      {
-        source: '/api/unidades/:path*',
-        destination: `${backendUrl}/api/unidades/:path*`,
       },
       {
         source: '/api/health',
