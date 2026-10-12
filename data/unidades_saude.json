@@ -1,0 +1,1563 @@
+[
+  {
+    "id": "7a1b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "nome": "Hospital Regional Dom Moura",
+    "nome_curto": "HRDM",
+    "categoria": "hospital",
+    "tipo_label": "Hospital Geral / Maternidade / Emergência Regional",
+    "endereco": "Av. Simôa Gomes, 200, Heliópolis, Garanhuns - PE, CEP 55296-250",
+    "bairro": "Heliópolis",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3761-8101",
+    "telefones_adicionais": [
+      "(87) 3761-8149",
+      "(87) 3761-8105"
+    ],
+    "horario": "24 horas (todos os dias)",
+    "horario_detalhe": "Urgência e emergência 24h",
+    "latitude": -8.8858,
+    "longitude": -36.4802,
+    "especialidades": [
+      "Urgência e Emergência",
+      "Clínica Médica",
+      "Cirurgia Geral",
+      "Ortopedia",
+      "UTI Adulto",
+      "UTI Neonatal",
+      "Pediatria",
+      "Obstetrícia",
+      "Maternidade"
+    ],
+    "servicos": [
+      "Pronto-Socorro 24h",
+      "Internação",
+      "Centro Cirúrgico",
+      "Regulação V GERES"
+    ],
+    "google_rating": 2.9,
+    "google_total_avaliacoes": 350,
+    "google_maps_url": "https://www.google.com/maps/search/Hospital+Regional+Dom+Moura+Garanhuns",
+    "badge": "Emergência 24h",
+    "status": "Pronto-Socorro Aberto",
+    "status_color": "emerald",
+    "sus_gratuito": true,
+    "tem_urgencia": true,
+    "observacoes": "Principal hospital público de emergência e referência para 21 municípios do Agreste Meridional.",
+    "imagem": "/images/hospital_1.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Carlos Eduardo M.",
+        "nota": 4,
+        "data_relativa": "há 2 semanas",
+        "texto": "Fui atendido na urgência após uma crise de apendicite. A espera foi longa na triagem devido à superlotação, mas a equipe de cirurgia e os enfermeiros do pós-operatório foram excelentes e muito atenciosos.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Severina Maria da Silva",
+        "nota": 5,
+        "data_relativa": "há 1 mês",
+        "texto": "Minha filha nasceu na maternidade do Dom Moura. Parto normal humanizado, médicos e enfermeiras obstétricas muito pacientes e cuidadosos. A estrutura é antiga mas o atendimento foi nota 10.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Lucas Andrade",
+        "nota": 2,
+        "data_relativa": "há 3 meses",
+        "texto": "Demora muito para passar pelo acolhimento quando é caso verde ou amarelo. Falta mais médicos no plantão de domingo. Quando consegui ser atendido o médico foi bom, mas a espera cansa.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Patrícia Bezerra",
+        "nota": 4,
+        "data_relativa": "há 4 meses",
+        "texto": "Referência no Agreste. Meu pai precisou da UTI e recebeu todo o suporte necessário com medicação e exames rápidos. Muito grata à equipe do plantão.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "8b2c4d5e-6f7a-4b8c-9d0e-1f2a3b4c5d6e",
+    "nome": "Hospital Infantil Palmira Sales",
+    "nome_curto": "Hosp. Palmira Sales",
+    "categoria": "hospital",
+    "tipo_label": "Hospital Pediátrico / Urgência Infantil",
+    "endereco": "Rua Capitão João Leite, s/n, Aloísio Pinto, Garanhuns - PE",
+    "bairro": "Aloísio Pinto",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-9255",
+    "telefones_adicionais": [],
+    "horario": "24h urgência infantil, ambulatório 08:00 às 17:00",
+    "horario_detalhe": "Pronto-atendimento infantil 24 horas",
+    "latitude": -8.8872,
+    "longitude": -36.4789,
+    "especialidades": [
+      "Pediatria Integral",
+      "Internação Pediátrica",
+      "Cirurgias Pediátricas",
+      "Urgência e Emergência"
+    ],
+    "servicos": [
+      "Pronto-Socorro Pediátrico",
+      "Internação Infantil",
+      "Ambulatório Pediátrico"
+    ],
+    "google_rating": 3.6,
+    "google_total_avaliacoes": 80,
+    "google_maps_url": "https://www.google.com/maps/search/Hospital+Infantil+Palmira+Sales+Garanhuns",
+    "badge": "Pediatria 24h",
+    "status": "Aberto 24h",
+    "status_color": "emerald",
+    "sus_gratuito": true,
+    "tem_urgencia": true,
+    "observacoes": "Referência em assistência pediátrica e urgências infantis na região.",
+    "imagem": "/images/hospital_2.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Juliana Costa Lima",
+        "nota": 5,
+        "data_relativa": "há 3 semanas",
+        "texto": "Levei meu filho de 3 anos com febre alta e falta de ar. O atendimento pediátrico foi rápido, a médica foi um anjo e medicaram ele na hora. Ambiente acolhedor para crianças.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Marcos Vinícius T.",
+        "nota": 4,
+        "data_relativa": "há 2 meses",
+        "texto": "Hospital muito importante para nossa cidade. A equipe de enfermagem pediátrica tem muita paciência com os pequenos. Apenas a recepção precisa de mais bancos e ventilação.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Fernanda Albuquerque",
+        "nota": 3,
+        "data_relativa": "há 5 meses",
+        "texto": "Atendimento médico muito competente, mas em dias de pico a espera para triagem infantil pode ser puxada. No geral é a melhor opção para crianças em Garanhuns.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "9c3d5e6f-7a8b-4c9d-0e1f-2a3b4c5d6e7f",
+    "nome": "Casa de Saúde e Maternidade Perpétuo Socorro",
+    "nome_curto": "Maternidade Perpétuo Socorro",
+    "categoria": "hospital",
+    "tipo_label": "Maternidade / Hospital Geral / Hemodiálise",
+    "endereco": "Av. Gonçalves Maia, 145, Heliópolis, Garanhuns - PE",
+    "bairro": "Heliópolis",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3761-0010",
+    "telefones_adicionais": [],
+    "horario": "24 horas (todos os dias)",
+    "horario_detalhe": "Atendimento obstétrico e hospitalar 24h",
+    "latitude": -8.8894,
+    "longitude": -36.482,
+    "especialidades": [
+      "Maternidade",
+      "Obstetrícia",
+      "Clínica Médica",
+      "Cirurgia Geral",
+      "UTI Adulto",
+      "Hemodiálise"
+    ],
+    "servicos": [
+      "Partos e Cesáreas",
+      "Nefrologia e Hemodiálise",
+      "Internação Clínica e Cirúrgica"
+    ],
+    "google_rating": 3.2,
+    "google_total_avaliacoes": 110,
+    "google_maps_url": "https://www.google.com/maps/search/Casa+de+Saude+e+Maternidade+Perpetuo+Socorro+Garanhuns",
+    "badge": "Maternidade 24h",
+    "status": "Aberto 24h",
+    "status_color": "emerald",
+    "sus_gratuito": true,
+    "tem_urgencia": true,
+    "observacoes": "Referência materno-infantil e terapia renal substitutiva no município.",
+    "imagem": "/images/hospital_3.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Renata Ferreira Gomes",
+        "nota": 4,
+        "data_relativa": "há 1 mês",
+        "texto": "Fiz acompanhamento obstétrico e meu parto aqui pelo SUS. Equipe de enfermagem muito dedicada. O setor de hemodiálise também presta um serviço essencial para a região.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Antônio José Santos",
+        "nota": 4,
+        "data_relativa": "há 3 meses",
+        "texto": "Meu tio faz hemodiálise três vezes na semana. Tratamento humanizado, enfermeiros super atenciosos e pontuais nas sessões.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Cláudia Mendes",
+        "nota": 2,
+        "data_relativa": "há 6 meses",
+        "texto": "O atendimento dos médicos é bom, mas o espaço de espera para familiares é pequeno e falta estacionamento.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "a1d4e5f6-8b9c-4d0e-1f2a-3b4c5d6e7f8a",
+    "nome": "UPAE Garanhuns (Dr. Antônio Simão dos Santos Figueira)",
+    "nome_curto": "UPAE Garanhuns",
+    "categoria": "policlinica",
+    "tipo_label": "Unidade Pernambucana de Atenção Especializada",
+    "endereco": "BR-423, Km 92, São José, Garanhuns - PE",
+    "bairro": "São José",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3764-9001",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 07:00 às 17:00",
+    "horario_detalhe": "Consultas agendadas e cirurgias ambulatoriais",
+    "latitude": -8.8789,
+    "longitude": -36.4678,
+    "especialidades": [
+      "Cardiologia",
+      "Dermatologia",
+      "Endocrinologia",
+      "Gastroenterologia",
+      "Ginecologia",
+      "Nefrologia",
+      "Neurologia",
+      "Oftalmologia",
+      "Ortopedia",
+      "Otorrinolaringologia",
+      "Urologia",
+      "Cirurgia Ambulatorial"
+    ],
+    "servicos": [
+      "Consultas Especializadas",
+      "Exames Diagnósticos",
+      "Cirurgias de Pequeno Porte",
+      "Reabilitação Fisioterapêutica"
+    ],
+    "google_rating": 4.1,
+    "google_total_avaliacoes": 140,
+    "google_maps_url": "https://www.google.com/maps/search/UPAE+Garanhuns",
+    "badge": "Especialidades Médicas",
+    "status": "Atendimento Agendado",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Centro de especialidades ambulatoriais e exames de média complexidade pelo SUS via regulação.",
+    "imagem": "/images/policlinica_1.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Drauzio Cavalcanti",
+        "nota": 5,
+        "data_relativa": "há 2 semanas",
+        "texto": "Estrutura impecável de primeiro mundo! Fui encaminhado pelo posto para cardiologista e oftalmologista. Consulta no horário marcado, tudo climatizado, limpo e organizado.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Maria das Graças Silva",
+        "nota": 5,
+        "data_relativa": "há 1 mês",
+        "texto": "Fiz exames de ultrassom e ecocardiograma aqui. Funcionários educados desde a portaria até os técnicos. Nem parece SUS de tão organizado.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "José Roberto Moura",
+        "nota": 4,
+        "data_relativa": "há 2 meses",
+        "texto": "Excelente policlínica. A única dificuldade é conseguir a vaga regulada no posto do bairro, mas uma vez agendado na UPAE tudo funciona com perfeição.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "b2e5f6a7-9c0d-4e1f-2a3b-4c5d6e7f8a9b",
+    "nome": "CELL - Centro Dr. Luís Lessa",
+    "nome_curto": "Centro Luís Lessa",
+    "categoria": "policlinica",
+    "tipo_label": "Centro de Especialidades e Diagnósticos",
+    "endereco": "Rua Waldomiro Gomes, s/n, Cohab II, Garanhuns - PE",
+    "bairro": "Cohab II",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-7023",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 07:00 às 17:00",
+    "horario_detalhe": "Atendimento eletivo de especialidades e exames de imagem",
+    "latitude": -8.8745,
+    "longitude": -36.5012,
+    "especialidades": [
+      "Cardiologia",
+      "Ortopedia",
+      "Reumatologia",
+      "Psiquiatria",
+      "Mastologia",
+      "Ultrassonografia",
+      "Raio-X",
+      "Ecocardiograma"
+    ],
+    "servicos": [
+      "Consultas Especializadas",
+      "Exames de Imagem",
+      "Laudos Cardiológicos"
+    ],
+    "google_rating": 3.8,
+    "google_total_avaliacoes": 45,
+    "google_maps_url": "https://www.google.com/maps/search/Centro+Dr+Luis+Lessa+Garanhuns",
+    "badge": "Especialidades & Imagem",
+    "status": "Atendimento Eletivo",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Policlínica municipal voltada para consultas especializadas e exames por imagem.",
+    "imagem": "/images/policlinica_2.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Ana Paula Rocha",
+        "nota": 4,
+        "data_relativa": "há 3 semanas",
+        "texto": "Passei com o ortopedista municipal e fiz raio-X no mesmo dia. Centro bem organizado e atendimento pontual.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Gilberto Feitosa",
+        "nota": 4,
+        "data_relativa": "há 2 meses",
+        "texto": "Centro de especialidades muito útil para quem mora na Cohab II e região. Médicos atenciosos.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "c3f6a7b8-0d1e-4f2a-3b4c-5d6e7f8a9b0c",
+    "nome": "CEO - Centro de Especialidades Odontológicas",
+    "nome_curto": "CEO Garanhuns",
+    "categoria": "policlinica",
+    "tipo_label": "Centro Odontológico Especializado",
+    "endereco": "Av. Djalma Dutra, 201, Heliópolis, Garanhuns - PE",
+    "bairro": "Heliópolis",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-7000",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 16:00",
+    "horario_detalhe": "Atendimento odontológico especializado regulado",
+    "latitude": -8.889,
+    "longitude": -36.4831,
+    "especialidades": [
+      "Endodontia",
+      "Periodontia",
+      "Cirurgia Bucomaxilofacial",
+      "Estomatologia",
+      "Pacientes Especiais"
+    ],
+    "servicos": [
+      "Canal Odontológico",
+      "Cirurgias Orais",
+      "Tratamento de Gengiva",
+      "Diagnóstico de Lesões Bucais"
+    ],
+    "google_rating": 4.3,
+    "google_total_avaliacoes": 25,
+    "google_maps_url": "https://www.google.com/maps/search/CEO+Garanhuns",
+    "badge": "Odontologia Avançada",
+    "status": "Atendimento Regulado",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Unidade especializada em saúde bucal com procedimentos de alta complexidade odontológica.",
+    "imagem": "/images/ceo_1.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Thiago Oliveira",
+        "nota": 5,
+        "data_relativa": "há 1 mês",
+        "texto": "Fiz tratamento de canal e extração de siso que foram encaminhados pelo posto de saúde. Dentistas super cuidadosos e anestesia sem dor. Serviço público de alta qualidade!",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Marta Regina C.",
+        "nota": 4,
+        "data_relativa": "há 3 meses",
+        "texto": "Atendimento odontológico de ponta. Os profissionais explicam todo o procedimento com muita paciência.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "d4a7b8c9-1e2f-4a3b-4c5d-6e7f8a9b0c1d",
+    "nome": "Instituto Dona Lindu (Hospital de Amor)",
+    "nome_curto": "Hospital de Amor",
+    "categoria": "policlinica",
+    "tipo_label": "Prevenção Oncológica e Diagnóstico",
+    "endereco": "Av. Bom Pastor, Cohab II, Garanhuns - PE",
+    "bairro": "Cohab II",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-7000",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 07:00 às 17:00",
+    "horario_detalhe": "Rastreamento, exames preventivos e biópsias",
+    "latitude": -8.879,
+    "longitude": -36.4985,
+    "especialidades": [
+      "Oncologia",
+      "Prevenção de Câncer",
+      "Mamografia Digital",
+      "Biópsias",
+      "Citopatologia"
+    ],
+    "servicos": [
+      "Mamografia",
+      "Papanicolau Preventivo",
+      "Biópsias Guiadas",
+      "Orientação Oncológica"
+    ],
+    "google_rating": 4.7,
+    "google_total_avaliacoes": 30,
+    "google_maps_url": "https://www.google.com/maps/search/Instituto+Dona+Lindu+Hospital+de+Amor+Garanhuns",
+    "badge": "Prevenção Oncológica",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Centro de excelência para prevenção e diagnóstico precoce do câncer de mama e colo do útero.",
+    "imagem": "/images/hospital_amor.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Socorro Tenório",
+        "nota": 5,
+        "data_relativa": "há 2 semanas",
+        "texto": "Fiz mamografia preventiva e exame citopatológico. Atendimento humanizado, carinhoso e muito rápido. Equipamento digital de última geração.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Lúcia de Fátima",
+        "nota": 5,
+        "data_relativa": "há 2 meses",
+        "texto": "Um presente para a saúde das mulheres de Garanhuns e região. Prevenção salva vidas e o Dona Lindu é exemplo nacional.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "e5b8c9d0-2f3a-4b4c-5d6e-7f8a9b0c1d2e",
+    "nome": "CAPS III Alzira Maria Veloso",
+    "nome_curto": "CAPS III",
+    "categoria": "caps",
+    "tipo_label": "Centro de Atenção Psicossocial Adulto 24h",
+    "endereco": "Rua Manoel Alves Machado, s/n, Cohab II, Garanhuns - PE",
+    "bairro": "Cohab II",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-7024",
+    "telefones_adicionais": [],
+    "horario": "24 horas (todos os dias)",
+    "horario_detalhe": "Acolhimento diurno e leitos de crise 24h",
+    "latitude": -8.8732,
+    "longitude": -36.502,
+    "especialidades": [
+      "Psiquiatria",
+      "Psicologia",
+      "Terapia Ocupacional",
+      "Serviço Social",
+      "Acolhimento de Crise"
+    ],
+    "servicos": [
+      "Acolhimento de Crise 24h",
+      "Leitos de Repouso Noturno",
+      "Oficinas Terapêuticas",
+      "Atendimento Psiquiátrico"
+    ],
+    "google_rating": 3.9,
+    "google_total_avaliacoes": 18,
+    "google_maps_url": "https://www.google.com/maps/search/CAPS+III+Alzira+Maria+Veloso+Garanhuns",
+    "badge": "Saúde Mental 24h",
+    "status": "Acolhimento 24h",
+    "status_color": "emerald",
+    "sus_gratuito": true,
+    "tem_urgencia": true,
+    "observacoes": "Unidade especializada em transtornos mentais graves e persistentes com acolhimento contínuo 24 horas.",
+    "imagem": "/images/caps_1.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Gisele Vasconcelos",
+        "nota": 4,
+        "data_relativa": "há 1 mês",
+        "texto": "Equipe multidisciplinar excelente. Acolheram meu irmão em crise com muito respeito e humanidade. Oficinas terapêuticas e acompanhamento psiquiátrico constante.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Manoel Messias",
+        "nota": 4,
+        "data_relativa": "há 3 meses",
+        "texto": "Serviço 24h fundamental para a saúde mental do município. Médicos e psicólogos dedicados.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "f6c9d0e1-3a4b-4c5d-6e7f-8a9b0c1d2e3f",
+    "nome": "CAPSi Dr. José Inaudo Gomes",
+    "nome_curto": "CAPSi Infantojuvenil",
+    "categoria": "caps",
+    "tipo_label": "Centro de Atenção Psicossocial da Infância e Juventude",
+    "endereco": "Av. Gonçalves Maia, 398, Heliópolis, Garanhuns - PE",
+    "bairro": "Heliópolis",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-7000",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 17:00",
+    "horario_detalhe": "Atendimento à crianças e adolescentes",
+    "latitude": -8.8875,
+    "longitude": -36.4815,
+    "especialidades": [
+      "Psiquiatria Infantil",
+      "Psicoterapia",
+      "Fonoaudiologia",
+      "Terapia Ocupacional",
+      "TEA/Autismo"
+    ],
+    "servicos": [
+      "Avaliação Multidisciplinar",
+      "Atendimento ao Espectro Autista",
+      "Psicoterapia Infantil",
+      "Orientação Familiar"
+    ],
+    "google_rating": 4.2,
+    "google_total_avaliacoes": 12,
+    "google_maps_url": "https://www.google.com/maps/search/CAPSi+Dr+Jose+Inaudo+Gomes+Garanhuns",
+    "badge": "Saúde Mental Infantil",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Atenção psicossocial especializada para crianças e jovens até 18 anos com sofrimento mental severo.",
+    "imagem": "/images/caps_2.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Aline Maciel",
+        "nota": 5,
+        "data_relativa": "há 3 semanas",
+        "texto": "Meu filho autista faz terapia e acompanhamento fonoaudiológico aqui. Terapeutas maravilhosas e recepção carinhosa.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Rodrigo Sampaio",
+        "nota": 4,
+        "data_relativa": "há 2 meses",
+        "texto": "Ótimo suporte para famílias e crianças atípicas. Acolhimento nota 10.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "07d0e1f2-4b5c-4d6e-7f8a-9b0c1d2e3f4a",
+    "nome": "CAPS AD",
+    "nome_curto": "CAPS Álcool e Drogas",
+    "categoria": "caps",
+    "tipo_label": "Centro de Atenção Psicossocial Álcool e Outras Drogas",
+    "endereco": "Rua Padre Agobar Valença, 336, Severiano Moraes Filho, Garanhuns - PE",
+    "bairro": "Severiano Moraes Filho",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-7000",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 17:00",
+    "horario_detalhe": "Acolhimento humanizado para dependência química",
+    "latitude": -8.894,
+    "longitude": -36.4795,
+    "especialidades": [
+      "Dependência Química",
+      "Redução de Danos",
+      "Álcool e Drogas",
+      "Grupos Terapêuticos"
+    ],
+    "servicos": [
+      "Acolhimento Inicial",
+      "Grupos de Apoio",
+      "Acompanhamento Psiquiátrico",
+      "Reinserção Social"
+    ],
+    "google_rating": 4,
+    "google_total_avaliacoes": 10,
+    "google_maps_url": "https://www.google.com/maps/search/CAPS+AD+Garanhuns",
+    "badge": "Redução de Danos",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Apoio e reabilitação psicossocial para pessoas com problemas decorrentes do uso prejudicial de substâncias.",
+    "imagem": "/images/caps_3.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Valdemir P.",
+        "nota": 4,
+        "data_relativa": "há 2 meses",
+        "texto": "Trabalho de acolhimento e redução de danos muito sério. Profissionais que tratam os pacientes sem preconceito.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "18e1f2a3-5c6d-4e7f-8a9b-0c1d2e3f4a5b",
+    "nome": "UBS Heliópolis",
+    "nome_curto": "UBS Heliópolis",
+    "categoria": "ubs",
+    "tipo_label": "Unidade Básica de Saúde / PSF",
+    "endereco": "Rua Pedro Cavalcante, s/n, Heliópolis, Garanhuns - PE",
+    "bairro": "Heliópolis",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 98120-9531",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 16:00",
+    "horario_detalhe": "Atenção Primária à Saúde da comunidade",
+    "latitude": -8.8915,
+    "longitude": -36.4835,
+    "especialidades": [
+      "Clínica Geral",
+      "Pediatria",
+      "Vacinação",
+      "Pré-natal",
+      "Saúde da Mulher",
+      "Curativos",
+      "Testes Rápidos",
+      "Dispensação de Medicamentos"
+    ],
+    "servicos": [
+      "Consultas Médicas",
+      "Vacinação",
+      "Pré-natal e Preventivo",
+      "Dispensação de Remédios"
+    ],
+    "google_rating": 3.7,
+    "google_total_avaliacoes": 22,
+    "google_maps_url": "https://www.google.com/maps/search/UBS+Heliopolis+Garanhuns",
+    "badge": "Atenção Básica",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Posto de saúde para consultas médicas rotineiras, vacinação e acompanhamento familiar.",
+    "imagem": "/images/ubs_1.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Bianca Ramos",
+        "nota": 4,
+        "data_relativa": "há 3 semanas",
+        "texto": "Sempre levo meus filhos para vacinação nessa unidade. Equipe de enfermagem rápida e prestativa. Consultas médicas precisam de agendamento cedo mas o atendimento é bom.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Fábio Dantas",
+        "nota": 4,
+        "data_relativa": "há 1 mês",
+        "texto": "Posto bem localizado. Renovo receitas de pressão e diabetes mensalmente sem complicações.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "29f2a3b4-6d7e-4f8a-9b0c-1d2e3f4a5b6c",
+    "nome": "UBS Magano",
+    "nome_curto": "UBS Magano",
+    "categoria": "ubs",
+    "tipo_label": "Unidade Básica de Saúde / PSF",
+    "endereco": "Rua Serra Branca, s/n, Magano, Garanhuns - PE",
+    "bairro": "Magano",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 98179-5573",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 16:00",
+    "horario_detalhe": "Atenção Primária à Saúde da comunidade",
+    "latitude": -8.8805,
+    "longitude": -36.505,
+    "especialidades": [
+      "Clínica Geral",
+      "Pediatria",
+      "Vacinação",
+      "Pré-natal",
+      "Saúde da Mulher",
+      "Curativos",
+      "Testes Rápidos",
+      "Dispensação de Medicamentos"
+    ],
+    "servicos": [
+      "Consultas Médicas",
+      "Vacinação",
+      "Pré-natal e Preventivo",
+      "Dispensação de Remédios"
+    ],
+    "google_rating": 3.5,
+    "google_total_avaliacoes": 28,
+    "google_maps_url": "https://www.google.com/maps/search/UBS+Magano+Garanhuns",
+    "badge": "Atenção Básica",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Atendimento à população do bairro Magano para cuidados primários e preventivos.",
+    "imagem": "/images/ubs_2.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Tereza Cristina",
+        "nota": 4,
+        "data_relativa": "há 1 mês",
+        "texto": "Atendimento atencioso do médico da família e das agentes comunitárias que visitam nossa rua com frequência.",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Ivanildo Bezerra",
+        "nota": 3,
+        "data_relativa": "há 2 meses",
+        "texto": "Boa equipe médica, mas precisa de melhoria nas instalações físicas e climatização da recepção.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "3aa3b4c5-7e8f-4a9b-0c1d-2e3f4a5b6c7d",
+    "nome": "UBS Indiano",
+    "nome_curto": "UBS Indiano",
+    "categoria": "ubs",
+    "tipo_label": "Unidade Básica de Saúde / PSF",
+    "endereco": "Rua Cecília Rodrigues, 541, Severiano Moraes Filho, Garanhuns - PE",
+    "bairro": "Severiano Moraes Filho",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 98137-3276",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 16:00",
+    "horario_detalhe": "Atenção Primária à Saúde da comunidade",
+    "latitude": -8.897,
+    "longitude": -36.4745,
+    "especialidades": [
+      "Clínica Geral",
+      "Pediatria",
+      "Vacinação",
+      "Pré-natal",
+      "Saúde da Mulher",
+      "Curativos",
+      "Testes Rápidos",
+      "Dispensação de Medicamentos"
+    ],
+    "servicos": [
+      "Consultas Médicas",
+      "Vacinação",
+      "Pré-natal e Preventivo",
+      "Dispensação de Remédios"
+    ],
+    "google_rating": 3.6,
+    "google_total_avaliacoes": 19,
+    "google_maps_url": "https://www.google.com/maps/search/UBS+Indiano+Garanhuns",
+    "badge": "Atenção Básica",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Unidade de saúde básica com atendimento de enfermagem e clínico geral.",
+    "imagem": "/images/ubs_3.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Camila Peixoto",
+        "nota": 4,
+        "data_relativa": "há 3 semanas",
+        "texto": "Fiz todo o meu pré-natal aqui. Enfermeira e médico super dedicados, tiraram todas as minhas dúvidas.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "4bb4c5d6-8f9a-4b0c-1d2e-3f4a5b6c7d8e",
+    "nome": "UBS Boa Vista",
+    "nome_curto": "UBS Boa Vista",
+    "categoria": "ubs",
+    "tipo_label": "Unidade Básica de Saúde / PSF",
+    "endereco": "Rua José do Patrocínio, 121, Boa Vista, Garanhuns - PE",
+    "bairro": "Boa Vista",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 98173-9058",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 16:00",
+    "horario_detalhe": "Atenção Primária à Saúde da comunidade",
+    "latitude": -8.902,
+    "longitude": -36.4895,
+    "especialidades": [
+      "Clínica Geral",
+      "Pediatria",
+      "Vacinação",
+      "Pré-natal",
+      "Saúde da Mulher",
+      "Curativos",
+      "Testes Rápidos",
+      "Dispensação de Medicamentos"
+    ],
+    "servicos": [
+      "Consultas Médicas",
+      "Vacinação",
+      "Pré-natal e Preventivo",
+      "Dispensação de Remédios"
+    ],
+    "google_rating": 3.8,
+    "google_total_avaliacoes": 16,
+    "google_maps_url": "https://www.google.com/maps/search/UBS+Boa+Vista+Garanhuns",
+    "badge": "Atenção Básica",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Atendimento à família, acompanhamento de gestantes e crianças na Boa Vista.",
+    "imagem": "/images/ubs_4.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Wellington S.",
+        "nota": 4,
+        "data_relativa": "há 1 mês",
+        "texto": "Farmácia básica do posto sempre abastecida com os remédios essenciais. Equipe prestativa.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "5cc5d6e7-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
+    "nome": "UBS Bela Vista",
+    "nome_curto": "UBS Bela Vista",
+    "categoria": "ubs",
+    "tipo_label": "Unidade Básica de Saúde / PSF",
+    "endereco": "Rua Mário Notaro, s/n, Cohab III, Garanhuns - PE",
+    "bairro": "Cohab III",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 98171-3823",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 16:00",
+    "horario_detalhe": "Atenção Primária à Saúde da comunidade",
+    "latitude": -8.8955,
+    "longitude": -36.512,
+    "especialidades": [
+      "Clínica Geral",
+      "Pediatria",
+      "Vacinação",
+      "Pré-natal",
+      "Saúde da Mulher",
+      "Curativos",
+      "Testes Rápidos",
+      "Dispensação de Medicamentos"
+    ],
+    "servicos": [
+      "Consultas Médicas",
+      "Vacinação",
+      "Pré-natal e Preventivo",
+      "Dispensação de Remédios"
+    ],
+    "google_rating": 3.5,
+    "google_total_avaliacoes": 14,
+    "google_maps_url": "https://www.google.com/maps/search/UBS+Bela+Vista+Garanhuns",
+    "badge": "Atenção Básica",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Atendimento em atenção básica de saúde aos moradores do bairro Bela Vista e adjacências.",
+    "imagem": "/images/ubs_5.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Clara Silveira",
+        "nota": 4,
+        "data_relativa": "há 2 meses",
+        "texto": "Atendimento tranquilo pela manhã. Vacinas em dia e profissionais que conhecem os moradores do bairro.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "6dd6e7f8-0b1c-4d2e-3f4a-5b6c7d8e9f0a",
+    "nome": "UBS Cohab II",
+    "nome_curto": "UBS Cohab II",
+    "categoria": "ubs",
+    "tipo_label": "Unidade Básica de Saúde / PSF",
+    "endereco": "Rua Valdir Mansur, s/n, Francisco Figueira, Garanhuns - PE",
+    "bairro": "Francisco Figueira",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 98116-1287",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 16:00",
+    "horario_detalhe": "Atenção Primária à Saúde da comunidade",
+    "latitude": -8.875,
+    "longitude": -36.499,
+    "especialidades": [
+      "Clínica Geral",
+      "Pediatria",
+      "Vacinação",
+      "Pré-natal",
+      "Saúde da Mulher",
+      "Curativos",
+      "Testes Rápidos",
+      "Dispensação de Medicamentos"
+    ],
+    "servicos": [
+      "Consultas Médicas",
+      "Vacinação",
+      "Pré-natal e Preventivo",
+      "Dispensação de Remédios"
+    ],
+    "google_rating": 3.9,
+    "google_total_avaliacoes": 25,
+    "google_maps_url": "https://www.google.com/maps/search/UBS+Cohab+II+Garanhuns",
+    "badge": "Atenção Básica",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Posto de saúde da rede de atenção básica com ampla cobertura na Cohab II.",
+    "imagem": "/images/ubs_6.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Eliane Barbosa",
+        "nota": 4,
+        "data_relativa": "há 3 semanas",
+        "texto": "Posto amplo e com boa estrutura. Dr. Clínico Geral muito atencioso na consulta.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "7ee7f8a9-1c2d-4e3f-4a5b-6c7d8e9f0a1b",
+    "nome": "UBS Liberdade",
+    "nome_curto": "UBS Liberdade",
+    "categoria": "ubs",
+    "tipo_label": "Unidade Básica de Saúde / PSF",
+    "endereco": "Rua Voluntários da Pátria, 258, Heliópolis, Garanhuns - PE",
+    "bairro": "Heliópolis",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 98171-3823",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 16:00",
+    "horario_detalhe": "Atenção Primária à Saúde da comunidade",
+    "latitude": -8.8905,
+    "longitude": -36.476,
+    "especialidades": [
+      "Clínica Geral",
+      "Pediatria",
+      "Vacinação",
+      "Pré-natal",
+      "Saúde da Mulher",
+      "Curativos",
+      "Testes Rápidos",
+      "Dispensação de Medicamentos"
+    ],
+    "servicos": [
+      "Consultas Médicas",
+      "Vacinação",
+      "Pré-natal e Preventivo",
+      "Dispensação de Remédios"
+    ],
+    "google_rating": 4,
+    "google_total_avaliacoes": 15,
+    "google_maps_url": "https://www.google.com/maps/search/UBS+Liberdade+Garanhuns",
+    "badge": "Atenção Básica",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Assistência em cuidados básicos de saúde, vacinas e consultas médicas e odontológicas preventivas.",
+    "imagem": "/images/ubs_7.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Márcio Tavares",
+        "nota": 4,
+        "data_relativa": "há 1 mês",
+        "texto": "Unidade organizada, vacinação rápida sem fila na parte da tarde.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "8ff8a9b0-2d3e-4f4a-5b6c-7d8e9f0a1b2c",
+    "nome": "UBS São José",
+    "nome_curto": "UBS São José",
+    "categoria": "ubs",
+    "tipo_label": "Unidade Básica de Saúde / PSF",
+    "endereco": "Rua Dom Mário Vilas Boas, 48, São José, Garanhuns - PE",
+    "bairro": "São José",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 98171-3823",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 16:00",
+    "horario_detalhe": "Atenção Primária à Saúde da comunidade",
+    "latitude": -8.882,
+    "longitude": -36.4715,
+    "especialidades": [
+      "Clínica Geral",
+      "Pediatria",
+      "Vacinação",
+      "Pré-natal",
+      "Saúde da Mulher",
+      "Curativos",
+      "Testes Rápidos",
+      "Dispensação de Medicamentos"
+    ],
+    "servicos": [
+      "Consultas Médicas",
+      "Vacinação",
+      "Pré-natal e Preventivo",
+      "Dispensação de Remédios"
+    ],
+    "google_rating": 3.7,
+    "google_total_avaliacoes": 12,
+    "google_maps_url": "https://www.google.com/maps/search/UBS+Sao+Jose+Garanhuns",
+    "badge": "Atenção Básica",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Equipe de Saúde da Família com atendimentos clínicos e acompanhamento comunitário.",
+    "imagem": "/images/ubs_8.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Joana Prado",
+        "nota": 4,
+        "data_relativa": "há 2 meses",
+        "texto": "Muito bem atendida na triagem e na verificação de pressão. Médica cuidadosa.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "9009b0c1-3e4f-4a5b-6c7d-8e9f0a1b2c3d",
+    "nome": "UBS Vila do Quartel",
+    "nome_curto": "UBS Vila do Quartel",
+    "categoria": "ubs",
+    "tipo_label": "Unidade Básica de Saúde / PSF",
+    "endereco": "Rua Caetés, s/n, Novo Heliópolis, Garanhuns - PE",
+    "bairro": "Novo Heliópolis",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 98171-3823",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 16:00",
+    "horario_detalhe": "Atenção Primária à Saúde da comunidade",
+    "latitude": -8.8845,
+    "longitude": -36.486,
+    "especialidades": [
+      "Clínica Geral",
+      "Pediatria",
+      "Vacinação",
+      "Pré-natal",
+      "Saúde da Mulher",
+      "Curativos",
+      "Testes Rápidos",
+      "Dispensação de Medicamentos"
+    ],
+    "servicos": [
+      "Consultas Médicas",
+      "Vacinação",
+      "Pré-natal e Preventivo",
+      "Dispensação de Remédios"
+    ],
+    "google_rating": 4.1,
+    "google_total_avaliacoes": 10,
+    "google_maps_url": "https://www.google.com/maps/search/UBS+Vila+do+Quartel+Garanhuns",
+    "badge": "Atenção Básica",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Posto de atenção básica para atendimento integral e preventivo à comunidade local.",
+    "imagem": "/images/ubs_9.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Danilo Freitas",
+        "nota": 5,
+        "data_relativa": "há 3 semanas",
+        "texto": "Um dos postos mais tranquilos de Garanhuns. Atendimento rápido e equipe muito simpática.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "a11ac1d2-4f5a-4b6c-7d8e-9f0a1b2c3d4e",
+    "nome": "UBS Aloísio Pinto",
+    "nome_curto": "UBS Aloísio Pinto",
+    "categoria": "ubs",
+    "tipo_label": "Unidade Básica de Saúde / PSF",
+    "endereco": "Rua Ismael Tinô Lima e Silva, 900, Heliópolis, Garanhuns - PE",
+    "bairro": "Heliópolis",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 98171-3823",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 16:00",
+    "horario_detalhe": "Atenção Primária à Saúde da comunidade",
+    "latitude": -8.886,
+    "longitude": -36.474,
+    "especialidades": [
+      "Clínica Geral",
+      "Pediatria",
+      "Vacinação",
+      "Pré-natal",
+      "Saúde da Mulher",
+      "Curativos",
+      "Testes Rápidos",
+      "Dispensação de Medicamentos"
+    ],
+    "servicos": [
+      "Consultas Médicas",
+      "Vacinação",
+      "Pré-natal e Preventivo",
+      "Dispensação de Remédios"
+    ],
+    "google_rating": 3.8,
+    "google_total_avaliacoes": 11,
+    "google_maps_url": "https://www.google.com/maps/search/UBS+Aloisio+Pinto+Garanhuns",
+    "badge": "Atenção Básica",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Serviço público de saúde básica garantindo acompanhamento médico da comunidade.",
+    "imagem": "/images/ubs_10.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Rosemary Cunha",
+        "nota": 4,
+        "data_relativa": "há 1 mês",
+        "texto": "Agentes comunitárias de saúde muito eficientes. Atendimento médico pontual.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "b22bd2e3-5a6b-4c7d-8e9f-0a1b2c3d4e5f",
+    "nome": "CREAS Garanhuns",
+    "nome_curto": "CREAS",
+    "categoria": "creas",
+    "tipo_label": "Centro de Referência Especializado de Assistência Social",
+    "endereco": "Rua Poeta Firmino de Santana, 126, Santo Antônio, Garanhuns - PE",
+    "bairro": "Santo Antônio",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3763-6567",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 14:00",
+    "horario_detalhe": "Atendimento social especializado",
+    "latitude": -8.8901,
+    "longitude": -36.4925,
+    "especialidades": [
+      "Proteção Social Especial",
+      "Violência",
+      "Abuso",
+      "Medidas Socioeducativas"
+    ],
+    "servicos": [
+      "Atendimento Psicossocial",
+      "Proteção a Vítimas de Violência",
+      "Acompanhamento Familiar",
+      "Orientação Jurídico-Social"
+    ],
+    "google_rating": 4.2,
+    "google_total_avaliacoes": 14,
+    "google_maps_url": "https://www.google.com/maps/search/CREAS+Garanhuns",
+    "badge": "Proteção Especial",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Atendimento a indivíduos e famílias em situação de ameaça ou violação de direitos.",
+    "imagem": "/images/creas_1.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Helena Matos",
+        "nota": 5,
+        "data_relativa": "há 2 meses",
+        "texto": "Equipe psicossocial extremamente preparada, sigilosa e acolhedora para famílias em vulnerabilidade.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "c33ce3f4-6b7c-4d8e-9f0a-1b2c3d4e5f60",
+    "nome": "CRAS Heliópolis",
+    "nome_curto": "CRAS Heliópolis",
+    "categoria": "cras",
+    "tipo_label": "Centro de Referência de Assistência Social",
+    "endereco": "Rua Manoel Pessoa Juvenal, 200, Heliópolis, Garanhuns - PE",
+    "bairro": "Heliópolis",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-7000",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 14:00",
+    "horario_detalhe": "Atendimento à família e benefícios sociais",
+    "latitude": -8.8885,
+    "longitude": -36.48,
+    "especialidades": [
+      "CadÚnico",
+      "Bolsa Família",
+      "PAIF",
+      "Convivência e Fortalecimento de Vínculos",
+      "Benefícios Sociais"
+    ],
+    "servicos": [
+      "Inscrição no CadÚnico",
+      "Atualização Bolsa Família",
+      "Orientação Social",
+      "Oficinas Comunitárias"
+    ],
+    "google_rating": 3.9,
+    "google_total_avaliacoes": 20,
+    "google_maps_url": "https://www.google.com/maps/search/CRAS+Heliopolis+Garanhuns",
+    "badge": "Assistência Social",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Porta de entrada para programas sociais e fortalecimento dos vínculos familiares em Heliópolis.",
+    "imagem": "/images/cras_1.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Rosângela Dias",
+        "nota": 4,
+        "data_relativa": "há 1 mês",
+        "texto": "Atualizei o CadÚnico e Bolsa Família com muita facilidade. Atendentes educadas e orientam direito.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "d44df4a5-7c8d-4e9f-0a1b-2c3d4e5f6071",
+    "nome": "CRAS Boa Vista",
+    "nome_curto": "CRAS Boa Vista",
+    "categoria": "cras",
+    "tipo_label": "Centro de Referência de Assistência Social",
+    "endereco": "Rua Vereador João Bezerra Sobrinho, 147, Boa Vista, Garanhuns - PE",
+    "bairro": "Boa Vista",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-7000",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 14:00",
+    "horario_detalhe": "Atendimento à família e benefícios sociais",
+    "latitude": -8.903,
+    "longitude": -36.489,
+    "especialidades": [
+      "CadÚnico",
+      "Bolsa Família",
+      "PAIF",
+      "Convivência e Fortalecimento de Vínculos",
+      "Benefícios Sociais"
+    ],
+    "servicos": [
+      "Inscrição no CadÚnico",
+      "Atualização Bolsa Família",
+      "Orientação Social",
+      "Oficinas Comunitárias"
+    ],
+    "google_rating": 4,
+    "google_total_avaliacoes": 18,
+    "google_maps_url": "https://www.google.com/maps/search/CRAS+Boa+Vista+Garanhuns",
+    "badge": "Assistência Social",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Unidade pública da política de assistência social para as famílias do bairro Boa Vista.",
+    "imagem": "/images/cras_2.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Marilene Sobral",
+        "nota": 4,
+        "data_relativa": "há 2 meses",
+        "texto": "Atendimento rápido e prestativo para cadastro de benefícios sociais e acompanhamento familiar.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "e55ea5b6-8d9e-4f0a-1b2c-3d4e5f607182",
+    "nome": "CRAS Magano",
+    "nome_curto": "CRAS Magano",
+    "categoria": "cras",
+    "tipo_label": "Centro de Referência de Assistência Social",
+    "endereco": "Rua Mariápolis, 390, Magano, Garanhuns - PE",
+    "bairro": "Magano",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-7000",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 14:00",
+    "horario_detalhe": "Atendimento à família e benefícios sociais",
+    "latitude": -8.8795,
+    "longitude": -36.5065,
+    "especialidades": [
+      "CadÚnico",
+      "Bolsa Família",
+      "PAIF",
+      "Convivência e Fortalecimento de Vínculos",
+      "Benefícios Sociais"
+    ],
+    "servicos": [
+      "Inscrição no CadÚnico",
+      "Atualização Bolsa Família",
+      "Orientação Social",
+      "Oficinas Comunitárias"
+    ],
+    "google_rating": 4.1,
+    "google_total_avaliacoes": 15,
+    "google_maps_url": "https://www.google.com/maps/search/CRAS+Magano+Garanhuns",
+    "badge": "Assistência Social",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Acompanhamento social e benefícios federais/municipais para o bairro Magano.",
+    "imagem": "/images/cras_3.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Ednaldo Pires",
+        "nota": 4,
+        "data_relativa": "há 3 semanas",
+        "texto": "Apoio comunitário muito forte no Magano. Cursos e oficinas para jovens e idosos.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "f66fb6c7-9e0f-4a1b-2c3d-4e5f60718293",
+    "nome": "CRAS Bela Vista",
+    "nome_curto": "CRAS Bela Vista",
+    "categoria": "cras",
+    "tipo_label": "Centro de Referência de Assistência Social",
+    "endereco": "Rua Mário Souto Maior, 976, Dom Hélder Câmara, Garanhuns - PE",
+    "bairro": "Dom Hélder Câmara",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-7000",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 14:00",
+    "horario_detalhe": "Atendimento à família e benefícios sociais",
+    "latitude": -8.896,
+    "longitude": -36.514,
+    "especialidades": [
+      "CadÚnico",
+      "Bolsa Família",
+      "PAIF",
+      "Convivência e Fortalecimento de Vínculos",
+      "Benefícios Sociais"
+    ],
+    "servicos": [
+      "Inscrição no CadÚnico",
+      "Atualização Bolsa Família",
+      "Orientação Social",
+      "Oficinas Comunitárias"
+    ],
+    "google_rating": 3.8,
+    "google_total_avaliacoes": 16,
+    "google_maps_url": "https://www.google.com/maps/search/CRAS+Bela+Vista+Garanhuns",
+    "badge": "Assistência Social",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Atendimento socioassistencial às famílias em vulnerabilidade na região Bela Vista.",
+    "imagem": "/images/cras_4.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Vera Lúcia Gomes",
+        "nota": 4,
+        "data_relativa": "há 2 meses",
+        "texto": "Atendimento do CadÚnico organizado por fichas matinais. Muito prestativas.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "0770c7d8-0f1a-4b2c-3d4e-5f60718293a4",
+    "nome": "CRAS Várzea",
+    "nome_curto": "CRAS Várzea",
+    "categoria": "cras",
+    "tipo_label": "Centro de Referência de Assistência Social",
+    "endereco": "Rua das Tulipas, 477, Manoel Chéu, Garanhuns - PE",
+    "bairro": "Manoel Chéu",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-7000",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 14:00",
+    "horario_detalhe": "Atendimento à família e benefícios sociais",
+    "latitude": -8.883,
+    "longitude": -36.491,
+    "especialidades": [
+      "CadÚnico",
+      "Bolsa Família",
+      "PAIF",
+      "Convivência e Fortalecimento de Vínculos",
+      "Benefícios Sociais"
+    ],
+    "servicos": [
+      "Inscrição no CadÚnico",
+      "Atualização Bolsa Família",
+      "Orientação Social",
+      "Oficinas Comunitárias"
+    ],
+    "google_rating": 4.2,
+    "google_total_avaliacoes": 12,
+    "google_maps_url": "https://www.google.com/maps/search/CRAS+Varzea+Garanhuns",
+    "badge": "Assistência Social",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Proteção social básica, cadastramento social e auxílio para as famílias da comunidade Várzea/Manoel Chéu.",
+    "imagem": "/images/cras_5.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Sebastião Lima",
+        "nota": 4,
+        "data_relativa": "há 1 mês",
+        "texto": "Serviço social perto de quem mais precisa no bairro Manoel Chéu. Ótimo atendimento.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "1881d8e9-1a2b-4c3d-4e5f-60718293a4b5",
+    "nome": "CRAS Quilombo (Castainho)",
+    "nome_curto": "CRAS Castainho",
+    "categoria": "cras",
+    "tipo_label": "Centro de Referência de Assistência Social - Zona Rural",
+    "endereco": "Comunidade Quilombola Castainho, Zona Rural, Garanhuns - PE",
+    "bairro": "Zona Rural",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "(87) 3762-7000",
+    "telefones_adicionais": [],
+    "horario": "Segunda a Sexta, das 08:00 às 14:00",
+    "horario_detalhe": "Atendimento à comunidade quilombola e rural",
+    "latitude": -8.918,
+    "longitude": -36.462,
+    "especialidades": [
+      "CadÚnico",
+      "Bolsa Família",
+      "PAIF",
+      "Convivência e Fortalecimento de Vínculos",
+      "Benefícios Sociais"
+    ],
+    "servicos": [
+      "Inscrição no CadÚnico",
+      "Atualização Bolsa Família",
+      "Orientação Social",
+      "Apoio a Comunidades Quilombolas"
+    ],
+    "google_rating": 4.6,
+    "google_total_avaliacoes": 8,
+    "google_maps_url": "https://www.google.com/maps/search/CRAS+Quilombo+Castainho+Garanhuns",
+    "badge": "Assistência Social Rural",
+    "status": "Aberto em Horário Comercial",
+    "status_color": "blue",
+    "sus_gratuito": true,
+    "tem_urgencia": false,
+    "observacoes": "Unidade do CRAS com atuação especial e voltada à população da comunidade remanescente quilombola Castainho.",
+    "imagem": "/images/cras_6.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Antônia Quilombola",
+        "nota": 5,
+        "data_relativa": "há 1 mês",
+        "texto": "Atenção e respeito à comunidade tradicional de Castainho. Suporte indispensável para agricultores e famílias.",
+        "foto_perfil": null
+      }
+    ]
+  },
+  {
+    "id": "2992e9fa-2b3c-4d4e-5f60-718293a4b5c6",
+    "nome": "SAMU 192 Regional Garanhuns",
+    "nome_curto": "SAMU 192",
+    "categoria": "samu",
+    "tipo_label": "Serviço de Atendimento Móvel de Urgência",
+    "endereco": "Av. Caruaru, s/n, São José, Garanhuns - PE",
+    "bairro": "São José",
+    "cidade": "Garanhuns",
+    "uf": "PE",
+    "telefone": "192",
+    "telefones_adicionais": [
+      "(87) 3762-7000"
+    ],
+    "horario": "24 horas (todos os dias)",
+    "horario_detalhe": "Central de Regulação Médica e Resgate 24h",
+    "latitude": -8.881,
+    "longitude": -36.471,
+    "especialidades": [
+      "Resgate de Emergência",
+      "Suporte Básico de Vida",
+      "UTI Móvel"
+    ],
+    "servicos": [
+      "Atendimento Pré-Hospitalar Móvel",
+      "Ambulância UTI (USA)",
+      "Ambulância de Suporte Básico (USB)",
+      "Regulação Médica 192"
+    ],
+    "google_rating": 4,
+    "google_total_avaliacoes": 20,
+    "google_maps_url": "https://www.google.com/maps/search/SAMU+192+Garanhuns",
+    "badge": "Resgate 192 24h",
+    "status": "Prontidão 24h",
+    "status_color": "emerald",
+    "sus_gratuito": true,
+    "tem_urgencia": true,
+    "observacoes": "Socorro médico de urgência pré-hospitalar móvel acionado pelo telefone gratuito 192.",
+    "imagem": "/images/samu_1.jpg",
+    "created_at": "2026-10-12T00:00:00Z",
+    "google_reviews": [
+      {
+        "autor": "Paulo Henrique Nunes",
+        "nota": 5,
+        "data_relativa": "há 3 semanas",
+        "texto": "Socorreram meu avô durante um infarto. A ambulância USA chegou em menos de 10 minutos com médico e desfibrilador. Salvaram a vida dele! Heróis de Garanhuns!",
+        "foto_perfil": null
+      },
+      {
+        "autor": "Regina Duarte M.",
+        "nota": 4,
+        "data_relativa": "há 2 meses",
+        "texto": "Atendimento telefônico do 192 muito calmo e orientou os primeiros socorros até a chegada da equipe de resgate.",
+        "foto_perfil": null
+      }
+    ]
+  }
+]

@@ -41,6 +41,7 @@ export default async function AppLayout({
   const navLinks = [
     { label: 'Dashboard', href: '/dashboard', icon: '📊' },
     { label: 'Nova Triagem', href: '/triagem', icon: '🩺' },
+    { label: 'Unidades', href: '/unidades', icon: '🏥' },
     { label: 'Planos', href: '/planos', icon: '⬆️' },
   ];
 

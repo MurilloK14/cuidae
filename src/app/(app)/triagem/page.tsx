@@ -26,7 +26,8 @@ import {
   AlertTriangle,
   Stethoscope,
   CheckCircle2,
-  FileText
+  FileText,
+  Building2
 } from 'lucide-react'
 import Image from 'next/image'
 
@@ -594,8 +595,24 @@ export default function TriagemPage() {
                           )}
                         </div>
 
-                        {/* Ações: Rota no Mapa e Acessar Prontuário */}
-                        <div className="flex flex-col sm:flex-row gap-2 pt-2 border-t border-slate-100">
+                        {/* Ações: Rota no Mapa, Unidades Recomendadas e Acessar Prontuário */}
+                        <div className="flex flex-col sm:flex-row flex-wrap gap-2 pt-2 border-t border-slate-100">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const params = new URLSearchParams()
+                              if (msg.triagem?.recomendacao) params.set('diagnostico', msg.triagem.recomendacao)
+                              if (msg.triagem?.especialidade) params.set('especialidade', msg.triagem.especialidade)
+                              if (msg.triagem?.tipoUnidade) params.set('tipo', msg.triagem.tipoUnidade)
+                              router.push(`/unidades?${params.toString()}`)
+                            }}
+                            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 bg-blue-50 hover:bg-blue-100 text-[#2b85ff] text-xs font-bold rounded-xl transition-colors border border-blue-200"
+                          >
+                            <Building2 className="w-3.5 h-3.5 text-[#2b85ff]" />
+                            <span>Hospitais Recomendados</span>
+                            <ArrowRight className="w-3 h-3 text-[#2b85ff]" />
+                          </button>
+
                           {msg.mapa && (
                             <a
                               href={msg.mapa.url}
@@ -604,7 +621,7 @@ export default function TriagemPage() {
                               className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-xl transition-colors"
                             >
                               <MapPin className="w-3.5 h-3.5 text-[#2b85ff]" />
-                              {msg.mapa.label || 'Ver Unidade no Google Maps'}
+                              {msg.mapa.label || 'Ver no Google Maps'}
                               <ExternalLink className="w-3 h-3 text-slate-400" />
                             </a>
                           )}
@@ -613,9 +630,9 @@ export default function TriagemPage() {
                             <button
                               type="button"
                               onClick={() => router.push(`/triagem/resultado/${msg.triagem?.id}`)}
-                              className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#2b85ff] hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all shadow-sm"
+                              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#2b85ff] hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all shadow-sm"
                             >
-                              <span>Ver Prontuário Completo</span>
+                              <span>Prontuário Completo</span>
                               <ArrowRight className="w-3.5 h-3.5" />
                             </button>
                           )}

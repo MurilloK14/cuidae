@@ -89,8 +89,8 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
           </div>
         )}
 
-        {triagem.mapa && (
-          <div className="pt-2">
+        {triagem.mapa ? (
+          <div className="pt-2 flex flex-wrap items-center gap-3">
             <a
               href={triagem.mapa.url}
               target="_blank"
@@ -101,6 +101,25 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
               {triagem.mapa.label || 'Ver Unidade Mais Próxima no Google Maps'}
               <ExternalLink className="w-3.5 h-3.5 ml-1" />
             </a>
+            <Link
+              href={`/unidades?diagnostico=${encodeURIComponent(triagem.sintoma_principal || '')}&especialidade=${encodeURIComponent(triagem.especialidade || '')}&tipo=${encodeURIComponent(recomendacao || '')}`}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-[#2b85ff] text-sm font-semibold rounded-xl border border-blue-200 transition-all"
+            >
+              <span>🏥</span>
+              Ver todas as unidades recomendadas
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        ) : (
+          <div className="pt-2">
+            <Link
+              href={`/unidades?diagnostico=${encodeURIComponent(triagem.sintoma_principal || '')}&especialidade=${encodeURIComponent(triagem.especialidade || '')}&tipo=${encodeURIComponent(recomendacao || '')}`}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#2b85ff] hover:bg-blue-600 text-white text-sm font-semibold rounded-xl shadow-sm transition-all"
+            >
+              <MapPin className="w-4 h-4" />
+              Ver todas as unidades recomendadas
+              <ArrowRight className="w-4 h-4 ml-1" />
+            </Link>
           </div>
         )}
 
@@ -109,38 +128,26 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
         </p>
       </div>
 
-      {/* Nearby Health Units */}
+      {/* Recommended Health Units CTA */}
       {showUnidades && (
-        <div className="mb-8">
-          <h2 className="text-xl font-bold text-[#091426] mb-4">📍 Unidades Mais Próximas</h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {[
-              { nome: 'UPA 24h Centro', distancia: '1,2 km', tel: '(11) 3456-7890', lat: -23.55, lng: -46.63 },
-              { nome: 'UBS Jardim Saúde', distancia: '2,8 km', tel: '(11) 3456-7891', lat: -23.56, lng: -46.64 },
-              { nome: 'UBS Vila Nova', distancia: '3,5 km', tel: '(11) 3456-7892', lat: -23.57, lng: -46.65 },
-            ].map((unidade, i) => (
-              <div key={i} className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
-                <h3 className="font-semibold text-slate-900 mb-2">{unidade.nome}</h3>
-                <div className="space-y-2 text-sm text-slate-600 mb-4">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-slate-400" />
-                    <span>A {unidade.distancia} de você</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-slate-400" />
-                    <span>{unidade.tel}</span>
-                  </div>
-                </div>
-                <a
-                  href={`https://maps.google.com/?q=${unidade.lat},${unidade.lng}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[#2b85ff] text-sm font-medium hover:underline flex items-center gap-1"
-                >
-                  Abrir no mapa <ExternalLink className="w-3.5 h-3.5" />
-                </a>
+        <div className="mb-8 bg-gradient-to-br from-blue-50/80 via-white to-blue-50/40 rounded-2xl p-6 border border-blue-100 shadow-sm">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#2b85ff]/10 text-[#2b85ff] mb-2">
+                <span>📍</span> Recomendações personalizadas
               </div>
-            ))}
+              <h2 className="text-xl font-bold text-[#091426] mb-1">Unidades de Saúde Recomendadas</h2>
+              <p className="text-sm text-slate-600">
+                Encontre hospitais, postos de saúde e unidades especializadas mais indicados para o seu caso em Garanhuns.
+              </p>
+            </div>
+            <Link
+              href={`/unidades?diagnostico=${encodeURIComponent(triagem.sintoma_principal || '')}&especialidade=${encodeURIComponent(triagem.especialidade || '')}&tipo=${encodeURIComponent(recomendacao || '')}`}
+              className="px-6 py-3 bg-[#2b85ff] hover:bg-blue-600 text-white font-semibold rounded-xl shadow-sm hover:shadow transition-all flex items-center gap-2 shrink-0"
+            >
+              Ver Unidades Recomendadas
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       )}

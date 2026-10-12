@@ -332,13 +332,23 @@ export const HospitalsSection: React.FC<HospitalsSectionProps> = ({ onSelectHosp
             </div>
           </div>
 
-          <Link
-            href="/triagem"
-            className="px-5 py-2.5 rounded-full bg-[#2b85ff] hover:bg-[#1a70e0] text-white text-xs font-bold transition-all shadow-sm shrink-0 flex items-center gap-1.5"
-          >
-            <span>Iniciar Triagem Grátis</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-2 shrink-0">
+            <Link
+              href="/unidades"
+              className="px-5 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-all shrink-0 flex items-center justify-center gap-1.5"
+            >
+              <Building2 className="w-3.5 h-3.5 text-[#2b85ff]" />
+              <span>Ver Todas as 28 Unidades</span>
+            </Link>
+
+            <Link
+              href="/triagem"
+              className="px-5 py-2.5 rounded-full bg-[#2b85ff] hover:bg-[#1a70e0] text-white text-xs font-bold transition-all shadow-sm shrink-0 flex items-center justify-center gap-1.5"
+            >
+              <span>Iniciar Triagem Grátis</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>

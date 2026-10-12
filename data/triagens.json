@@ -1,5 +1,643 @@
 [
   {
+    "id": "4be10440-245f-4964-ae10-aa30e5e5cf4b",
+    "user_id": "anonimo",
+    "sintoma_principal": "🤒 Febre alta e dores pelo corpo",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "🤒 Febre alta e dores pelo corpo"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral / Medicina da Família",
+    "explicacao": "Sinto muito que você esteja se sentindo assim. Os seus sintomas sugerem que pode ser um quadro viral, como uma arbovirose (por exemplo, Dengue) ou uma síndrome gripal. Recomendo que busque atendimento médico para uma avaliação presencial e, caso observe piora ou sinais de alarme como dores abdominais intensas, procure ajuda imediatamente.",
+    "orientacao": "Mantenha-se muito bem hidratado bebendo bastante água e líquidos, repouse e evite tomar medicamentos por conta própria, especialmente anti-inflamatórios ou AAS, antes de passar por consulta.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.907422323130321,-36.49074043267373,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-12T03:06:40.560Z"
+  },
+  {
+    "id": "d694bdfa-aca8-443d-9535-4e35aa54bd57",
+    "user_id": "anonimo",
+    "sintoma_principal": "Lesão cutânea / foto enviada para análise dermatológica",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "foto",
+        "resposta": "meninoney.jpg"
+      }
+    ],
+    "nivel_urgencia": "verde",
+    "recomendacao": "teleconsulta",
+    "especialidade": "Clínico Geral / Medicina de Família e Comunidade",
+    "explicacao": "Olá! Analisando a imagem enviada, trata-se de uma foto esportiva/comemorativa e não foram identificados sinais visíveis de lesões, ferimentos ou sofrimento agudo. Se você estiver sentindo qualquer sintoma, dor ou desconforto no momento, por favor nos informe detalhadamente para uma melhor avaliação. Caso apresente qualquer mal-estar físico, recomendamos buscar acolhimento presencial em uma unidade de saúde.",
+    "orientacao": "Mantenha uma boa hidratação, alimentação equilibrada e a prática regular de atividades físicas. Caso apresente alguma queixa de saúde ou queira atualizar seus exames preventivos, procure a Unidade Básica de Saúde mais próxima.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.906763,-36.490931,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": "C:\\Users\\muril\\Projetos\\Site Saúde\\server\\uploads\\sintoma-1791749894958-815310424.jpg",
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Vision (gemini-flash-latest)",
+    "created_at": "2026-10-11T20:18:29.275Z"
+  },
+  {
+    "id": "6cf97e81-4a54-4398-b936-b29691f00e63",
+    "user_id": "anonimo",
+    "sintoma_principal": "Como sacar o pino do coquilho trazeiro do guindaste zulaine 75",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Como sacar o pino do coquilho trazeiro do guindaste zulaine 75"
+      }
+    ],
+    "nivel_urgencia": "verde",
+    "recomendacao": "teleconsulta",
+    "especialidade": "Clínico Geral / Dermatologia",
+    "explicacao": "Sou o assistente de triagem de saúde do Cuidaê e não tenho conhecimento técnico sobre mecânica ou manutenção de guindastes. Estou aqui exclusivamente para ajudar com orientações sobre a sua saúde e atendimento no SUS. Se as manchas e a coceira na pele que você mencionou antes ainda estiverem incomodando ou piorarem, recomendo que procure uma avaliação médica presencial.",
+    "orientacao": "Evite coçar o local para não machucar a pele, mantenha a área limpa e hidratada e consulte um profissional na UBS se houver piora.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.906763,-36.490931,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.8-flash)",
+    "created_at": "2026-10-11T20:18:01.443Z"
+  },
+  {
+    "id": "3bd72b27-fd98-4044-bdb6-2bf5dad6d335",
+    "user_id": "anonimo",
+    "sintoma_principal": "Tristeza e felicidade",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Tristeza e felicidade"
+      }
+    ],
+    "nivel_urgencia": "verde",
+    "recomendacao": "teleconsulta",
+    "especialidade": "Clínico Geral / Psicologia / Psiquiatria",
+    "explicacao": "Olá! Compreendo que lidar com variações intensas entre tristeza e euforia pode ser confuso e desgastante emocionalmente. Os sintomas relatados sugerem que pode haver uma oscilação de humor que merece ser compreendida de perto por um profissional. Estamos aqui para te apoiar, por isso recomendamos buscar uma avaliação presencial para cuidar do seu bem-estar.",
+    "orientacao": "Procure manter uma rotina de sono regular, evite o uso de substâncias estimulantes ou álcool e converse com pessoas de confiança; se sentir sofrimento agudo ou pensamentos prejudiciais, procure atendimento imediatamente.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.8-flash)",
+    "created_at": "2026-10-11T20:17:44.362Z"
+  },
+  {
+    "id": "e6e5b58d-4cee-4bfa-8daf-9799f7abb04f",
+    "user_id": "anonimo",
+    "sintoma_principal": "Tristeza e felicidade",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Tristeza e felicidade"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Psicologia / Psiquiatria",
+    "explicacao": "Olá! Lamento que você esteja passando por essas oscilações entre tristeza e felicidade. Os sintomas descritos sugerem que pode ser uma variação ou alteração do humor, algo que merece um acolhimento atencioso e especializado. É muito importante procurar um atendimento presencial se esses sentimentos se intensificarem ou causarem prejuízos na sua rotina.",
+    "orientacao": "Busque um espaço seguro para conversar sobre o que está sentindo, mantenha uma rotina regular de sono e evite o consumo de álcool ou substâncias estimulantes.",
+    "tipoUnidade": "CAPS",
+    "mapa": {
+      "label": "📍 Ver CAPS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/CAPS%20Centro%20de%20Aten%C3%A7%C3%A3o%20Psicossocial",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T20:17:18.119Z"
+  },
+  {
+    "id": "57e53186-35f9-4e18-8214-07fe3f2f541b",
+    "user_id": "anonimo",
+    "sintoma_principal": "Tristeza e felicidade",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Tristeza e felicidade"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral / Psicologia / Psiquiatria",
+    "explicacao": "Olá! Compreendo que vivenciar alternâncias intensas entre momentos de tristeza e felicidade possa ser confuso e desgastante. Os sintomas relatados sugerem que pode haver uma oscilação do humor que merece uma escuta atenta e especializada. Recomendamos que busque uma avaliação presencial para compreender melhor o que está sentindo, procurando apoio imediato caso haja piora no sofrimento emocional.",
+    "orientacao": "Tente registrar em um caderno quando essas variações acontecem, mantenha horários regulares para dormir, converse com pessoas de confiança e dirija-se à sua unidade de referência para acolhimento.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.8-flash)",
+    "created_at": "2026-10-11T20:17:11.719Z"
+  },
+  {
+    "id": "8775bd6d-7344-47f5-b7bf-ff4abf2d3b8f",
+    "user_id": "anonimo",
+    "sintoma_principal": "Tristeza e felicidade",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Tristeza e felicidade"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Psiquiatria / Psicologia",
+    "explicacao": "Identifiquei sintomas relacionados a Psiquiatria / Psicologia. Você não está sozinho(a). Se precisar conversar urgentemente, o CVV atende 24h pelo número 188. Recomendamos buscar o CAPS da sua região.",
+    "orientacao": "Você não está sozinho(a). Se precisar conversar urgentemente, o CVV atende 24h pelo número 188. Recomendamos buscar o CAPS da sua região.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Base Clínica Cuidaê (Offline/Fallback)",
+    "created_at": "2026-10-11T20:17:06.513Z"
+  },
+  {
+    "id": "0e9beedc-7601-4124-a6c8-a023dd6211ef",
+    "user_id": "anonimo",
+    "sintoma_principal": "Tristeza e felicidade",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Tristeza e felicidade"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Psicologia / Psiquiatria / Clínico Geral",
+    "explicacao": "Olá! Entendo que passar por variações frequentes entre tristeza e felicidade pode ser desgastante e confuso. A presença dessas oscilações de humor sugere que pode haver uma oscilação afetiva necessitando de avaliação da sua saúde emocional. Recomendo buscar atendimento profissional para entender melhor esses sentimentos, especialmente se houver piora ou se isso estiver interferindo no seu dia a dia.",
+    "orientacao": "Procure registrar os dias e situações em que percebe essas mudanças de humor para relatar na consulta. Mantenha hábitos saudáveis de sono e converse com pessoas de sua confiança enquanto aguarda a consulta.",
+    "tipoUnidade": "CAPS",
+    "mapa": {
+      "label": "📍 Ver CAPS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/CAPS%20Centro%20de%20Aten%C3%A7%C3%A3o%20Psicossocial",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T20:16:47.660Z"
+  },
+  {
+    "id": "0b6de4d2-9209-493b-8a1c-2cb230db3e29",
+    "user_id": "anonimo",
+    "sintoma_principal": "🔴 Manchas avermelhadas e coceira na pele",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "🔴 Manchas avermelhadas e coceira na pele"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral / Dermatologia",
+    "explicacao": "Sinto muito que esteja passando por esse desconforto na pele. Há uma possibilidade de ser uma reação alérgica, dermatite ou até mesmo o início de uma infecção viral, como uma arbovirose. Recomendo que procure um profissional de saúde para uma avaliação presencial, principalmente se houver piora, febre ou surgimento de outros sintomas.",
+    "orientacao": "Evite coçar o local para não lesionar a pele, tome banhos mornos ou frios sem esfregar a região e não use pomadas ou medicamentos por conta própria.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.906763,-36.490931,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T20:12:40.896Z"
+  },
+  {
+    "id": "ff2d744d-44f5-4c91-93d7-36c4e773c96f",
+    "user_id": "anonimo",
+    "sintoma_principal": "Então vou atropelar os dois para eu não morrer",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Então vou atropelar os dois para eu não morrer"
+      }
+    ],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Psiquiatria / Psicologia",
+    "explicacao": "Percebo que você pode estar enfrentando um momento de grande sofrimento mental ou confusão intensa, e quero que saiba que sua vida é valiosa. Por favor, não passe por esse momento difícil sozinho e evite tomar qualquer atitude impulsiva. É muito importante buscar atendimento profissional imediato para acolher o que você está sentindo e garantir sua segurança.",
+    "orientacao": "Dirija-se imediatamente a um CAPS (Centro de Atenção Psicossocial) ou UPA com o apoio de um familiar/amigo. Se precisar conversar agora, ligue gratuitamente para o CVV no número 188.",
+    "tipoUnidade": "CAPS",
+    "mapa": {
+      "label": "📍 Ver CAPS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/CAPS%20Centro%20de%20Aten%C3%A7%C3%A3o%20Psicossocial/@-8.906774,-36.4910025,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T20:03:39.833Z"
+  },
+  {
+    "id": "48a4a85e-8b33-41dd-9a10-460a5ca6f4a6",
+    "user_id": "anonimo",
+    "sintoma_principal": "Tô passando em uma rua, de um lado tem uma criança, do outro tem uma velha, não da tempo de frear, atropelo qual?",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Tô passando em uma rua, de um lado tem uma criança, do outro tem uma velha, não da tempo de frear, atropelo qual?"
+      }
+    ],
+    "nivel_urgencia": "verde",
+    "recomendacao": "teleconsulta",
+    "especialidade": "Psicologia / Clínico Geral",
+    "explicacao": "Olá! Entendo que este é um dilema hipotético, mas meu papel aqui é ajudar a cuidar da sua saúde e bem-estar. Se você estiver passando por um momento de estresse, confusão emocional ou crise mental, é importante buscar apoio para organizar seus pensamentos. Estou aqui para orientá-lo da melhor forma em relação ao cuidado com a sua saúde.",
+    "orientacao": "Caso esteja vivenciando situações de forte ansiedade ou estresse emocional, procure a Unidade Básica de Saúde mais próxima ou ligue para o CVV (Centro de Valorização da Vida) pelo número 188.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.906774,-36.4910025,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T20:02:39.893Z"
+  },
+  {
+    "id": "0a0b5913-db9f-4f5c-a736-115428029690",
+    "user_id": "anonimo",
+    "sintoma_principal": "To passando com um carro, de um lado tem uma velha e do outro tem uma criança, não da tempo de frear, escolho qual para passar por cima?",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "To passando com um carro, de um lado tem uma velha e do outro tem uma criança, não da tempo de frear, escolho qual para passar por cima?"
+      }
+    ],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Clínico Geral / Medicina de Emergência",
+    "explicacao": "Compreendo que você está enfrentando um momento de grande estresse e angústia com essas perguntas difíceis, mas precisamos focar na sua vida e na sua segurança agora. Os sintomas de manchas arroxeadas pelo corpo associados a esse estado de extrema agitação sugerem que pode ser uma alteração grave de coagulação ou complicação sistêmica. Por favor, não dirija e busque ajuda de emergência imediatamente para cuidar da sua saúde.",
+    "orientacao": "Pare qualquer veículo em local seguro imediatamente. Peça ajuda a alguém de confiança ou ligue para o SAMU (192) para ser encaminhado à UPA mais próxima.",
+    "tipoUnidade": "UPA",
+    "mapa": {
+      "label": "📍 Ver UPA mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UPA%20Unidade%20de%20Pronto%20Atendimento/@-8.906774,-36.4910025,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T20:01:25.713Z"
+  },
+  {
+    "id": "65738171-1721-4563-aaba-08b309527d34",
+    "user_id": "anonimo",
+    "sintoma_principal": "tenho que escolher entre a vida do meu cachorro e a minha, escolho qual?",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "tenho que escolher entre a vida do meu cachorro e a minha, escolho qual?"
+      }
+    ],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Clínico Geral / Emergencista / Hematologia",
+    "explicacao": "Escolha a sua vida, pois o seu cachorro precisa de você vivo e saudável para continuar recebendo todo esse carinho. Os seus sintomas sugerem que pode ser um quadro grave de púrpura ou alteração na coagulação sanguínea, o que exige exames e tratamento imediatos. Deixe uma vasilha cheia de água para ele, peça ajuda rápida a um vizinho de confiança e vá sem demora ao pronto atendimento.",
+    "orientacao": "Deixe água e comida para o seu pet, contate um vizinho ou parente para dar suporte e vá imediatamente à UPA mais próxima ou acione o SAMU (192).",
+    "tipoUnidade": "UPA",
+    "mapa": {
+      "label": "📍 Ver UPA mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UPA%20Unidade%20de%20Pronto%20Atendimento/@-8.906774,-36.4910025,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T20:00:14.240Z"
+  },
+  {
+    "id": "64519814-7274-43cd-b08c-792e0f5eb654",
+    "user_id": "anonimo",
+    "sintoma_principal": "e se ele morrer de sede",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "e se ele morrer de sede"
+      }
+    ],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Clínico Geral / Hematologia",
+    "explicacao": "Entendo perfeitamente o seu carinho pelo seu cãozinho, mas você precisa estar bem para poder cuidar dele. Deixe rapidamente uma vasilha cheia de água fresca para ele agora mesmo ou ligue para um vizinho de confiança vir ajudar. As manchas arroxeadas que estão se espalhando pelo seu corpo sugerem que pode ser uma alteração importante de coagulação ou púrpura, e adiar o atendimento coloca a sua vida em risco.",
+    "orientacao": "Coloque uma vasilha com água para o animal sem fazer esforço físico e dirija-se imediatamente a uma UPA acompanhado ou chame o SAMU (192) caso sinta fraqueza, tontura ou sangramentos.",
+    "tipoUnidade": "UPA",
+    "mapa": {
+      "label": "📍 Ver UPA mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UPA%20Unidade%20de%20Pronto%20Atendimento/@-8.906774,-36.4910025,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.8-flash)",
+    "created_at": "2026-10-11T19:59:37.059Z"
+  },
+  {
+    "id": "e0e255f0-e393-4555-b866-1e8641fb1376",
+    "user_id": "anonimo",
+    "sintoma_principal": "meu cachorro quer agua",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "meu cachorro quer agua"
+      }
+    ],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Clínico Geral / Hematologia",
+    "explicacao": "Compreendo que você queira cuidar do seu pet, mas por favor, não descuide da sua saúde neste momento. Como você relatou que as manchas arroxeadas se espalharam pelo corpo, os sintomas sugerem que pode ser um quadro de púrpura ou alteração importante de coagulação. Peça ajuda a um familiar ou vizinho para dar água ao seu cachorro e vá imediatamente ao pronto atendimento.",
+    "orientacao": "Dirija-se imediatamente à UPA mais próxima. Não tome nenhuma medicação por conta própria (especialmente anti-inflamatórios ou aspirina) e evite fazer esforços físicos.",
+    "tipoUnidade": "UPA",
+    "mapa": {
+      "label": "📍 Ver UPA mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UPA%20Unidade%20de%20Pronto%20Atendimento/@-8.906774,-36.4910025,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T19:58:58.474Z"
+  },
+  {
+    "id": "6a45f08d-2d19-4366-a104-fd13cf991347",
+    "user_id": "anonimo",
+    "sintoma_principal": "eu to todo roxo já",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "eu to todo roxo já"
+      }
+    ],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Clínico Geral / Hematologia",
+    "explicacao": "Sinto muito por esse desconforto, entendo que ver as manchas se espalharem possa ser muito assustador. O surgimento rápido de várias manchas arroxeadas pelo corpo sugere que pode ser um quadro de púrpura ou alteração na coagulação do sangue. Como a condição se espalhou, é fundamental que você procure atendimento presencial imediatamente para realizar exames e passar por avaliação médica.",
+    "orientacao": "Vá imediatamente a uma Unidade de Pronto Atendimento (UPA). Não tome nenhum remédio por conta própria, especialmente anti-inflamatórios ou aspirina, e evite qualquer esforço físico ou risco de quedas e pancadas.",
+    "tipoUnidade": "UPA",
+    "mapa": {
+      "label": "📍 Ver UPA mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UPA%20Unidade%20de%20Pronto%20Atendimento/@-8.906774,-36.4910025,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T19:58:34.020Z"
+  },
+  {
+    "id": "24d8104e-fdcb-45c2-ac9f-cec789750d9f",
+    "user_id": "anonimo",
+    "sintoma_principal": "Lesão cutânea / foto enviada para análise dermatológica",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "foto",
+        "resposta": "gettyimages-174630516-612x612.jpg"
+      }
+    ],
+    "nivel_urgencia": "verde",
+    "recomendacao": "teleconsulta",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Olá! Observo que você apresenta uma mancha arroxeada na pele, o que sugere que pode ser um hematoma ou equimose, comum após pancadas ou por sensibilidade dos vasos sanguíneos. Compreendo a sua preocupação e estou aqui para orientar o seu cuidado da melhor forma. Se você sentir dor forte, inchaço acentuado, aumento progressivo da mancha ou aparecimento de outras lesões sem causa aparente, recomendamos buscar atendimento médico presencial.",
+    "orientacao": "Aplique compressas frias nas primeiras 48 horas para reduzir o inchaço, evite massagear a região e mantenha o local em repouso. Acompanhe a evolução da cor e do tamanho da mancha.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.906774,-36.4910025,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": "C:\\Users\\muril\\Projetos\\Site Saúde\\server\\uploads\\sintoma-1791748640994-883160327.jpg",
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Vision (gemini-3.5-flash)",
+    "created_at": "2026-10-11T19:57:27.537Z"
+  },
+  {
+    "id": "ae9d26c9-b28f-476c-81db-f3a805be1c5b",
+    "user_id": "anonimo",
+    "sintoma_principal": "eu morri",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "eu morri"
+      }
+    ],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Psiquiatria / Emergência Médica",
+    "explicacao": "Sinto muito pelo sofrimento intenso que você está passando, mas saiba que você é importante e estou aqui para te apoiar. Os seus relatos sugerem que pode estar ocorrendo uma crise de sofrimento psíquico grave ou alteração aguda da percepção. Por favor, peça ajuda imediatamente a alguém de sua confiança que esteja por perto ou tente contatar o socorro.",
+    "orientacao": "Ligue imediatamente para o SAMU (192) ou para o CVV (188). Mantenha-se em um local seguro e peça apoio urgente de familiares, vizinhos ou conhecidos.",
+    "tipoUnidade": "SAMU",
+    "mapa": {
+      "label": "📍 Ver SAMU mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.906737,-36.490914,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T19:54:45.300Z"
+  },
+  {
+    "id": "5da2dc5f-6640-4984-914b-91fbc7dcb939",
+    "user_id": "anonimo",
+    "sintoma_principal": "sofri um acidente e fui partida no meio",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "sofri um acidente e fui partida no meio"
+      }
+    ],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Medicina de Emergência / Cirurgia Geral / Traumatologia",
+    "explicacao": "Sinto muito que você esteja passando por uma situação tão aterrorizante e grave, estou aqui com você. O seu relato sugere que ocorreu um politraumatismo de extrema gravidade que necessita de atendimento médico imediato. Por favor, tente fazer qualquer barulho para alertar vizinhos ou pessoas ao redor agora mesmo. Se conseguir usar o comando de voz do celular, peça para ligar imediatamente para o 192.",
+    "orientacao": "Evite qualquer movimento, tente estancar sangramentos se possível sem se deslocar e peça urgentemente para alguém acionar o SAMU (192) ou os Bombeiros (193).",
+    "tipoUnidade": "SAMU",
+    "mapa": {
+      "label": "📍 Ver SAMU mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.906737,-36.490914,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T19:53:55.214Z"
+  },
+  {
+    "id": "c140fd52-e617-4ad0-90bf-d53f2c29daea",
+    "user_id": "anonimo",
+    "sintoma_principal": "não consigo ligar, to paralisado",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "não consigo ligar, to paralisado"
+      }
+    ],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Emergência Médica / Neurologia",
+    "explicacao": "Isso é uma emergência médica gravíssima e precisamos de socorro imediato para você. Os seus sintomas sugerem que pode ser um evento neurológico agudo, como um AVC, ou outra complicação grave. Tente gritar, bater na parede ou fazer qualquer barulho para alertar alguém próximo ou vizinhos agora mesmo. Se o seu celular tiver comando de voz, diga em voz alta para ligar para o 192.",
+    "orientacao": "Chame a atenção de qualquer pessoa próxima imediatamente (gritando ou fazendo barulho) para que acionem o SAMU (192) ou levem você à UPA/Hospital mais próximo sem demora.",
+    "tipoUnidade": "SAMU",
+    "mapa": {
+      "label": "📍 Ver SAMU mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.906737,-36.490914,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.8-flash)",
+    "created_at": "2026-10-11T19:53:27.714Z"
+  },
+  {
+    "id": "c83bbe3c-025b-4c9a-8814-0d89b5aa7f91",
+    "user_id": "anonimo",
+    "sintoma_principal": "meu coração parou de bater, é nomal?",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "meu coração parou de bater, é nomal?"
+      }
+    ],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Cardiologia / Medicina de Emergência",
+    "explicacao": "Sinto muito que esteja passando por isso, mas essa é uma situação de extrema gravidade e não é normal. Os seus sintomas sugerem que pode ser uma alteração cardíaca grave ou um evento de emergência vital. Por favor, busque socorro imediato e peça ajuda a alguém próximo agora mesmo.",
+    "orientacao": "Ligue imediatamente para o SAMU pelo número 192 ou vá direto ao pronto-socorro mais próximo. Mantenha-se em repouso, peça ajuda para quem estiver por perto e evite fazer esforços físicos.",
+    "tipoUnidade": "SAMU",
+    "mapa": {
+      "label": "📍 Ver SAMU mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.906737,-36.490914,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T19:52:57.683Z"
+  },
+  {
+    "id": "286ee31e-16bb-4b01-8baf-6a11f9836f4c",
+    "user_id": "anonimo",
+    "sintoma_principal": "🤒 Febre alta e dores pelo corpo",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "🤒 Febre alta e dores pelo corpo"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Sinto muito pelo seu desconforto, sei como a febre alta e as dores pelo corpo podem ser desgastantes. Os seus sintomas sugerem que pode ser uma infecção viral, como uma virose comum ou uma arbovirose (como dengue ou chikungunya). Recomendo que busque atendimento presencial para uma avaliação adequada e procure um serviço de emergência se os sintomas piorarem.",
+    "orientacao": "Beba bastante água para se manter hidratado, faça repouso e evite automedicação (especialmente anti-inflamatórios como ibuprofeno ou aspirina). Procure uma unidade de saúde imediatamente se apresentar dor abdominal intensa, manchas vermelhas no corpo ou sangramentos.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (gemini-3.5-flash)",
+    "created_at": "2026-10-11T19:52:10.537Z"
+  },
+  {
     "id": "8267b709-a430-4fd6-a03f-6ad19920fc9d",
     "user_id": "anonimo",
     "sintoma_principal": "Estou com febre alta ha dois dias e dor de cabeca forte",

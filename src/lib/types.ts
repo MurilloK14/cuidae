@@ -178,3 +178,63 @@ export interface TriagemFormData {
   foto: File | null
   descricao_foto: string
 }
+
+// ----- Health Units & Reviews -----
+
+export type CategoriaUnidade = 'hospital' | 'policlinica' | 'caps' | 'ubs' | 'cras' | 'creas' | 'samu'
+
+export interface UnidadeSaudeCompleta {
+  id: string
+  nome: string
+  nome_curto?: string
+  categoria: CategoriaUnidade
+  tipo_label: string
+  endereco: string
+  bairro: string
+  cidade: string
+  uf: string
+  telefone: string
+  telefones_adicionais?: string[]
+  horario: string
+  horario_detalhe?: string
+  latitude: number
+  longitude: number
+  especialidades: string[]
+  servicos?: string[]
+  google_rating: number
+  google_total_avaliacoes: number
+  google_maps_url: string
+  badge?: string
+  status: string
+  status_color: string
+  sus_gratuito: boolean
+  tem_urgencia: boolean
+  observacoes?: string
+  imagem: string
+  created_at: string
+  google_reviews?: GoogleReview[]
+  // Computed fields from recommendation API
+  score?: number
+  distanciaKm?: number
+  motivoRecomendacao?: string
+}
+
+export interface GoogleReview {
+  autor: string
+  nota: number
+  data_relativa: string
+  texto: string
+  foto_perfil?: string | null
+}
+
+export interface AvaliacaoUnidade {
+  id: string
+  unidade_id: string
+  user_id: string
+  nome: string
+  nota: number
+  comentario: string
+  created_at: string
+}
+
+export type OrdenacaoUnidades = 'recomendacao' | 'distancia' | 'avaliacao' | 'nome'

@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import triageRoutes from './routes/triage.js';
+import unidadesRoutes from './routes/unidades.js';
 
 dotenv.config();
 
@@ -19,6 +20,9 @@ app.get('/api/health', (_req, res) => {
 
 // Rotas de triagem
 app.use('/api/triage', triageRoutes);
+
+// Rotas de unidades de saúde
+app.use('/api/unidades', unidadesRoutes);
 
 // Tratamento de erro global
 app.use((err, _req, res, _next) => {
