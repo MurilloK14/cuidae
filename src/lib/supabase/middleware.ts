@@ -54,20 +54,38 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
+  const { pathname } = request.nextUrl
+
+  // Allow Next internals, static files, and API routes to pass through immediately
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/api/') ||
+    pathname.includes('.')
+  ) {
+    return supabaseResponse
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const { pathname } = request.nextUrl
-
-  const publicRoutes = ['/', '/login', '/cadastro', '/recuperar-senha', '/redefinir-senha', '/admin/login']
-  const isPublicRoute = publicRoutes.includes(pathname)
+  const publicRoutes = [
+    '/',
+    '/login',
+    '/cadastro',
+    '/recuperar-senha',
+    '/redefinir-senha',
+    '/admin/login',
+    '/como-funciona',
+    '/hospital',
+    '/hospital/painel',
+    '/unidades',
+    '/triagem',
+    '/agendamento',
+    '/planos',
+  ]
+  const isPublicRoute = publicRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`))
   const isAuthRoute = ['/login', '/cadastro'].includes(pathname)
-
-  // Allow all API routes to pass through
-  if (pathname.startsWith('/api/')) {
-    return supabaseResponse
-  }
 
   // Redirect unauthenticated users away from protected routes
   if (!user && !isPublicRoute) {

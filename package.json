@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "predev": "node -e \"if(require('fs').existsSync('.next/BUILD_ID')){console.log('Removendo cache de build de producao conflitante (.next)...');require('fs').rmSync('.next',{recursive:true,force:true})}\"",
     "dev": "next dev",
+    "clean": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\"",
     "server": "node server/index.js",
     "dev:all": "concurrently \"npm run server\" \"npm run dev\"",
     "build": "next build",
