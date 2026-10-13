@@ -13,6 +13,6 @@ export const config = {
      * - favicon.ico and other icons
      * - static file extensions (svg, png, jpg, jpeg, gif, webp, woff, woff2, ttf, json, etc.)
      */
-    '/((?!_next/|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot|mp4|webm|json)$).*)',
+    '/((?!_next/|favicon.ico|.*\\.(?:css|js|map|svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot|mp4|webm|json)$).*)',
   ],
 }

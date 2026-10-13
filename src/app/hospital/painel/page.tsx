@@ -449,7 +449,8 @@ export default function PainelHospitalPage() {
 
   if (!autenticadoHospital) {
     return (
-      <div className="max-w-2xl mx-auto py-8 sm:py-12 px-4 animate-fade-in font-jakarta">
+      <div className="min-h-screen bg-slate-50/60 dark:bg-[#090e17] py-8 sm:py-12 px-4 transition-colors duration-200">
+        <div className="max-w-2xl mx-auto animate-fade-in font-jakarta">
         <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm p-6 sm:p-9 text-center space-y-6">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#091426] to-slate-800 text-white flex items-center justify-center mx-auto shadow-md relative">
             <Building2 className="w-8 h-8 text-emerald-400" />
@@ -599,12 +600,14 @@ export default function PainelHospitalPage() {
             </div>
           </div>
         )}
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 pb-20 font-jakarta animate-fade-in">
+    <div className="min-h-screen bg-slate-50/60 dark:bg-[#090e17] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 transition-colors duration-200">
+      <div className="max-w-7xl mx-auto space-y-6 pb-20 font-jakarta animate-fade-in">
       
       {/* Barra de Status Institucional Superior */}
       <div className="bg-[#091426] text-white px-5 py-3.5 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-md">
@@ -1554,6 +1557,7 @@ export default function PainelHospitalPage() {
         </div>
       )}
 
+      </div>
     </div>
   )
 }

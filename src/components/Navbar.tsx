@@ -61,7 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <a href="/" className="flex items-center gap-2 group">
-            <div className="relative h-9 w-32 sm:h-10 sm:w-36">
+            <div className="relative h-9 w-32 sm:h-10 sm:w-36" style={{ maxWidth: '144px', maxHeight: '40px' }}>
               <Image
                 src="/images/cuidae-logo-trimmed.png"
                 alt="Cuidaê"

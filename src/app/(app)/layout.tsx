@@ -2,10 +2,8 @@ import React from 'react';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
-import { getSessionByToken } from '@/lib/db/hospitalAuthStore';
-import { LogOut, User, Settings, Building2 } from 'lucide-react';
+import { LogOut, User, Settings } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { signOut } from '@/lib/auth/actions';
 
@@ -14,46 +12,32 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
-  const hospitalToken = cookieStore.get('cuidae_hospital_session')?.value;
-  const hospitalSession = hospitalToken ? getSessionByToken(hospitalToken) : null;
-
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user && !hospitalSession) {
+  if (!user) {
     redirect('/login');
   }
 
-  let nome = 'Usuário';
-  let primeiroNome = 'Usuário';
-  let badge = { text: 'Grátis', color: 'bg-slate-100 text-slate-600' };
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('nome_completo, camada')
+    .eq('id', user.id)
+    .single();
 
-  if (hospitalSession) {
-    nome = hospitalSession.hospital_nome;
-    primeiroNome = hospitalSession.hospital_curto || hospitalSession.hospital_nome.split(' ')[0];
-    badge = { text: 'Hospital Credenciado', color: 'bg-emerald-100 text-emerald-800' };
-  } else if (user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('nome_completo, camada')
-      .eq('id', user.id)
-      .single();
+  const nome = profile?.nome_completo || user.email?.split('@')[0] || 'Usuário';
+  const primeiroNome = nome.split(' ')[0];
+  const camada = profile?.camada || 'gratuita';
 
-    nome = profile?.nome_completo || user.email?.split('@')[0] || 'Usuário';
-    primeiroNome = nome.split(' ')[0];
-    const camada = profile?.camada || 'gratuita';
+  const camadaLabel: Record<string, { text: string; color: string }> = {
+    gratuita: { text: 'Grátis', color: 'bg-slate-100 text-slate-600' },
+    intermediaria: { text: 'Intermediário', color: 'bg-blue-100 text-blue-700' },
+    premium: { text: 'Premium', color: 'bg-amber-100 text-amber-700' },
+  };
 
-    const camadaLabel: Record<string, { text: string; color: string }> = {
-      gratuita: { text: 'Grátis', color: 'bg-slate-100 text-slate-600' },
-      intermediaria: { text: 'Intermediário', color: 'bg-blue-100 text-blue-700' },
-      premium: { text: 'Premium', color: 'bg-amber-100 text-amber-700' },
-    };
-
-    badge = camadaLabel[camada] || camadaLabel.gratuita;
-  }
+  const badge = camadaLabel[camada] || camadaLabel.gratuita;
 
   const navLinks = [
     { label: 'Dashboard', href: '/dashboard', icon: '📊' },
@@ -71,7 +55,7 @@ export default async function AppLayout({
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/dashboard" className="flex items-center gap-2 group transition-opacity hover:opacity-90">
-              <div className="relative h-9 w-32">
+              <div className="relative h-9 w-32" style={{ maxWidth: '128px', maxHeight: '36px' }}>
                 <Image
                   src="/images/cuidae-logo-trimmed.png"
                   alt="Cuidaê"

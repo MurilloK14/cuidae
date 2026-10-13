@@ -85,7 +85,8 @@ export async function updateSession(request: NextRequest) {
     '/agendamento',
     '/planos',
   ]
-  const isPublicRoute = publicRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`))
+  const isHospitalRoute = pathname === '/hospital' || pathname.startsWith('/hospital/')
+  const isPublicRoute = isHospitalRoute || publicRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`))
   const isAuthRoute = ['/login', '/cadastro'].includes(pathname)
 
   // Redirect unauthenticated users away from protected routes, preserving any session cookies
