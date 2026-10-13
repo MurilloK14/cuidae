@@ -53,8 +53,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] py-3"
-          : "bg-white/80 backdrop-blur-sm border-b border-slate-100/60 py-4"
+          ? "bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 shadow-[0_2px_12px_rgba(0,0,0,0.02)] py-3"
+          : "bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-100/60 dark:border-slate-800/60 py-4"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -67,14 +67,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
                 alt="Cuidaê"
                 fill
                 priority
-                className="object-contain object-left"
+                className="object-contain object-left dark:brightness-110"
                 sizes="(max-width: 640px) 128px, 144px"
               />
             </div>
           </a>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center space-x-9 text-[15px] font-medium text-slate-600">
+          <nav className="hidden md:flex items-center space-x-9 text-[15px] font-medium text-slate-600 dark:text-slate-300">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
               return (
@@ -82,7 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
                   key={link.id}
                   href={link.href}
                   className={`transition-colors duration-200 hover:text-[#2b85ff] relative py-1 group ${
-                    isActive ? "text-slate-900 font-semibold" : "text-slate-600"
+                    isActive ? "text-slate-900 dark:text-white font-semibold" : "text-slate-600 dark:text-slate-300"
                   }`}
                 >
                   {link.label}
@@ -93,7 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
           </nav>
 
           {/* Right Action */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
             <a
               href="/login"
@@ -110,12 +110,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
             </a>
           </div>
 
-          {/* Mobile Hamburger Button */}
-          <div className="flex md:hidden items-center">
+          {/* Mobile Right Controls: Theme + Hamburger */}
+          <div className="flex md:hidden items-center gap-1.5">
+            <ThemeToggle />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Menu de navegação"
-              className="p-2 text-slate-700 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors"
+              className="p-2 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -124,7 +125,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden mt-3 pt-3 pb-4 border-t border-slate-100 space-y-2 animate-in fade-in">
+          <div className="md:hidden mt-3 pt-3 pb-4 border-t border-slate-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 space-y-2 animate-in fade-in shadow-xl">
             {navLinks.map((link) => (
               <a
                 key={link.id}
@@ -132,25 +133,25 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
                 onClick={() => setMobileMenuOpen(false)}
                 className={`block px-3 py-2 rounded-xl text-sm font-medium ${
                   activeSection === link.id
-                    ? "bg-[#eef5ff] text-[#2b85ff] font-semibold"
-                    : "text-slate-700 hover:bg-slate-50"
+                    ? "bg-[#eef5ff] dark:bg-blue-950/60 text-[#2b85ff] dark:text-blue-400 font-semibold"
+                    : "text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
                 }`}
               >
                 {link.label}
               </a>
             ))}
-            <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-2">
               <a
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center py-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-colors"
+                className="w-full flex items-center justify-center py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
               >
                 Fazer Login
               </a>
               <a
                 href="/triagem"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-[#091426] text-white text-sm font-medium shadow-sm"
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-[#091426] dark:bg-blue-600 text-white text-sm font-medium shadow-sm"
               >
                 <span>Fazer Triagem Gratuita</span>
                 <ArrowRight className="w-4 h-4" />

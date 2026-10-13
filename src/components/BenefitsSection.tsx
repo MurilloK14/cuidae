@@ -28,11 +28,11 @@ export const BenefitsSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-24 sm:py-32 bg-white relative">
+    <section className="py-24 sm:py-32 bg-white dark:bg-[#090e17] transition-colors duration-200 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="max-w-3xl mb-16 text-left">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#091426] tracking-[-0.03em] leading-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#091426] dark:text-white tracking-[-0.03em] leading-tight">
             Menos burocracia. Mais acesso.
           </h2>
         </div>
@@ -44,21 +44,21 @@ export const BenefitsSection: React.FC = () => {
             return (
               <div
                 key={idx}
-                className="p-8 rounded-3xl bg-white border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:border-slate-200 hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] transition-all duration-300 flex flex-col justify-between"
+                className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:border-slate-200 dark:hover:border-slate-700 hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   {/* Minimalist Icon */}
-                  <div className="w-11 h-11 rounded-2xl bg-slate-50 text-[#091426] flex items-center justify-center mb-6">
+                  <div className="w-11 h-11 rounded-2xl bg-slate-50 dark:bg-slate-800 text-[#091426] dark:text-[#2b85ff] flex items-center justify-center mb-6">
                     <Icon className="w-5 h-5 stroke-[1.8]" />
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-lg font-bold text-[#091426] mb-3 leading-snug">
+                  <h3 className="text-lg font-bold text-[#091426] dark:text-white mb-3 leading-snug">
                     {item.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
                     {item.description}
                   </p>
                 </div>

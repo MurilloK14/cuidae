@@ -176,9 +176,9 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in">
-      <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-100 flex flex-col h-[600px] max-h-[90vh] overflow-hidden">
+      <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 flex flex-col h-[600px] max-h-[90vh] overflow-hidden transition-colors">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 bg-[#0d1f36] text-white">
+        <div className="flex items-center justify-between px-5 py-4 bg-[#0d1f36] dark:bg-slate-950 text-white border-b dark:border-slate-800">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-[#1672eb] flex items-center justify-center text-white">
               <Bot className="w-5 h-5" />
@@ -201,7 +201,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
         </div>
 
         {/* Messages Body */}
-        <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/50">
+        <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/50 dark:bg-slate-950/70">
           {messages.map((msg) => {
             const isBot = msg.sender === "bot";
             return (
@@ -212,8 +212,8 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                 <div
                   className={`max-w-[85%] rounded-2xl p-3.5 text-xs sm:text-sm leading-relaxed shadow-xs ${
                     isBot
-                      ? "bg-white text-slate-800 border border-slate-200/80 rounded-tl-xs"
-                      : "bg-[#0d1f36] text-white rounded-tr-xs"
+                      ? "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-slate-800 rounded-tl-xs"
+                      : "bg-[#0d1f36] dark:bg-[#1e293b] text-white rounded-tr-xs"
                   }`}
                 >
                   <p>{msg.text}</p>
@@ -224,18 +224,18 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                       {msg.hospitals.map((h, i) => (
                         <div
                           key={i}
-                          className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs"
+                          className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs"
                         >
                           <div>
-                            <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                              <Building2 className="w-3.5 h-3.5 text-[#1672eb]" />
+                            <div className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                              <Building2 className="w-3.5 h-3.5 text-[#1672eb] dark:text-[#38bdf8]" />
                               <span>{h.name}</span>
                             </div>
-                            <div className="text-[10px] text-slate-500 mt-0.5">
+                            <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
                               {h.distance} • {h.status}
                             </div>
                             {h.beds && (
-                              <div className="text-[10px] text-emerald-600 font-semibold mt-0.5">
+                              <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
                                 {h.beds}
                               </div>
                             )}
@@ -252,7 +252,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                         <button
                           key={i}
                           onClick={() => handleOptionClick(opt)}
-                          className="px-2.5 py-1 rounded-full bg-[#e8f1fc] hover:bg-[#d5e7fc] text-[#1672eb] text-[11px] font-medium border border-[#cbe0fb] transition-all hover:scale-102 active:scale-98 text-left"
+                          className="px-2.5 py-1 rounded-full bg-[#e8f1fc] dark:bg-blue-950/60 hover:bg-[#d5e7fc] dark:hover:bg-blue-900/80 text-[#1672eb] dark:text-[#60a5fa] text-[11px] font-medium border border-[#cbe0fb] dark:border-blue-800/60 transition-all hover:scale-102 active:scale-98 text-left"
                         >
                           {opt.label}
                         </button>
@@ -260,21 +260,21 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                     </div>
                   )}
                 </div>
-                <span className="text-[9px] text-slate-400 mt-1 px-1">{msg.timestamp}</span>
+                <span className="text-[9px] text-slate-400 dark:text-slate-500 mt-1 px-1">{msg.timestamp}</span>
               </div>
             );
           })}
 
           {isTyping && (
-            <div className="flex items-center gap-1.5 text-xs text-slate-400 px-2">
-              <Bot className="w-3.5 h-3.5 text-[#1672eb] animate-spin" />
+            <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 px-2">
+              <Bot className="w-3.5 h-3.5 text-[#1672eb] dark:text-[#38bdf8] animate-spin" />
               <span>Cuidaê está digitando...</span>
             </div>
           )}
         </div>
 
         {/* Input Bar */}
-        <div className="p-3 border-t border-slate-200 bg-white">
+        <div className="p-3 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-colors">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -287,7 +287,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Digite sua dúvida ou necessidade..."
-              className="flex-1 py-2.5 px-3.5 bg-slate-50 border border-slate-200 rounded-full text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#1672eb] focus:bg-white transition-colors"
+              className="flex-1 py-2.5 px-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#1672eb] focus:bg-white dark:focus:bg-slate-900 transition-colors"
             />
             <button
               type="submit"

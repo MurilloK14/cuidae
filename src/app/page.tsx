@@ -28,7 +28,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-white text-slate-900 selection:bg-[#2b85ff] selection:text-white">
+    <main className="min-h-screen bg-white dark:bg-[#090e17] text-slate-900 dark:text-slate-100 selection:bg-[#2b85ff] selection:text-white transition-colors duration-200">
       <Navbar onOpenAssistant={handleOpenAssistant} />
       <Hero onOpenAssistant={handleOpenAssistant} />
       <LiveTransitionBar />
