@@ -238,3 +238,62 @@ export interface AvaliacaoUnidade {
 }
 
 export type OrdenacaoUnidades = 'recomendacao' | 'distancia' | 'avaliacao' | 'nome'
+
+// ----- Agendamentos Hospitalares com Diagnóstico de IA -----
+
+export type StatusAgendamentoHospital = 'agendado' | 'confirmado' | 'em_atendimento' | 'concluido' | 'cancelado'
+
+export type StatusEnvioHospital = 'transmitido_com_sucesso' | 'recepcionado' | 'em_processamento'
+
+export interface TransmissaoHospitalDetalhes {
+  data_envio: string
+  canal: string
+  sistema_destino: string
+  hash_seguranca: string
+  recepcionado_por: string
+  status_prontuario: string
+}
+
+export interface AgendamentoHospitalar {
+  id: string
+  protocolo: string
+  user_id: string
+  paciente_nome: string
+  paciente_cpf: string
+  paciente_telefone: string
+  paciente_email?: string
+  paciente_data_nascimento?: string
+  // Hospital / Unidade
+  unidade_id: string
+  unidade_nome: string
+  unidade_tipo: string
+  unidade_endereco: string
+  unidade_bairro?: string
+  unidade_cidade: string
+  unidade_uf: string
+  unidade_telefone: string
+  // Agendamento
+  especialidade: string
+  data_agendamento: string
+  horario: string
+  turno: 'manha' | 'tarde' | 'plantao_urgencia'
+  tipo_atendimento: 'presencial' | 'triagem_hospitalar' | 'retorno' | 'exame'
+  observacoes_paciente?: string
+  // Diagnóstico e Triagem IA
+  triagem_id?: string
+  sintomas_citados: string
+  diagnostico_ia: string
+  nivel_urgencia: NivelUrgencia
+  prioridade: string
+  orientacao_ia: string
+  especialidade_recomendada_ia?: string
+  fonte_ia: string
+  resumo_clinico_hospital: string
+  // Transmissão
+  status: StatusAgendamentoHospital
+  status_envio_hospital: StatusEnvioHospital
+  transmissao_hospital: TransmissaoHospitalDetalhes
+  created_at: string
+  updated_at: string
+}
+

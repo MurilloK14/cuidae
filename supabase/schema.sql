@@ -150,6 +150,26 @@ create table public.teleconsultas (
 );
 
 -- ------------------------------------------------------------------------------
+-- 9b. TABELA: AGENDAMENTOS_HOSPITALARES (Com laudo de IA e sintomas integrados)
+-- ------------------------------------------------------------------------------
+create table if not exists public.agendamentos_hospitalares (
+  id uuid default gen_random_uuid() primary key,
+  protocolo text not null,
+  user_id uuid references public.profiles(id) on delete set null,
+  unidade_id uuid references public.unidades_saude(id) on delete set null,
+  unidade_nome text not null,
+  especialidade text not null,
+  data_agendamento date not null,
+  horario text not null,
+  sintomas_citados text not null,
+  diagnostico_ia text not null,
+  nivel_urgencia public.urgencia_tipo not null,
+  status text default 'agendado' not null,
+  created_at timestamptz default now() not null
+);
+
+
+-- ------------------------------------------------------------------------------
 -- 10. TABELA: ASSINATURAS (Camada Premium vinculada a clínicas/planos parceiros)
 -- ------------------------------------------------------------------------------
 create table public.assinaturas (

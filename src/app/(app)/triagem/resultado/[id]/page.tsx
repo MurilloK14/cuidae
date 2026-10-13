@@ -1,6 +1,7 @@
 import { getTriagemResultado } from '@/lib/triagem/actions'
-import { ShieldCheck, AlertTriangle, AlertOctagon, MapPin, Phone, ExternalLink, Download, ArrowRight, ArrowLeft } from 'lucide-react'
+import { ShieldCheck, AlertTriangle, AlertOctagon, MapPin, Phone, ExternalLink, Download, ArrowRight, ArrowLeft, Calendar, Sparkles } from 'lucide-react'
 import Link from 'next/link'
+
 import { notFound } from 'next/navigation'
 
 export default async function TriagemResultadoPage({ params }: { params: { id: string } }) {
@@ -128,8 +129,35 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
         </p>
       </div>
 
+      {/* Direct Hospital Scheduling CTA with AI Diagnosis */}
+      <div className="mb-8 bg-gradient-to-br from-[#091426] via-[#122748] to-[#1a386b] rounded-2xl p-6 sm:p-7 text-white shadow-md relative overflow-hidden">
+        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+          <div className="space-y-1.5 max-w-xl">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#2b85ff]/30 text-blue-200 border border-blue-400/30">
+              <Sparkles className="w-3.5 h-3.5 text-[#2b85ff]" />
+              Encaminhamento Hospitalar Direto
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-white">
+              Agendar Atendimento no Hospital
+            </h2>
+            <p className="text-sm text-blue-100/90 leading-relaxed">
+              Transmita este agendamento junto com os <strong>sintomas citados</strong> e o <strong>diagnóstico preliminar da IA</strong> diretamente para o hospital de sua escolha em Garanhuns.
+            </p>
+          </div>
+          <Link
+            href={`/agendamento?triagemId=${params.id}&sintomas=${encodeURIComponent(triagem.sintoma_principal || '')}&diagnostico=${encodeURIComponent(triagem.recomendacao || triagem.explicacao || '')}&especialidade=${encodeURIComponent(triagem.especialidade || '')}`}
+            className="px-6 py-3.5 bg-[#2b85ff] hover:bg-blue-600 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 shrink-0 text-sm sm:text-base whitespace-nowrap"
+          >
+            <Calendar className="w-4 h-4" />
+            Agendar com este Diagnóstico
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+
       {/* Recommended Health Units CTA */}
       {showUnidades && (
+
         <div className="mb-8 bg-gradient-to-br from-blue-50/80 via-white to-blue-50/40 rounded-2xl p-6 border border-blue-100 shadow-sm">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import crypto from 'crypto'
+import { saveTriagemToStore } from '@/lib/db/triageStore'
 
 export const dynamic = 'force-dynamic'
 
@@ -148,12 +149,30 @@ export async function POST(request: Request) {
     const mapeamento = mapearUrgencia(respostaIA.prioridade || 'Alta')
     const id = crypto.randomUUID()
 
-    return NextResponse.json({
+    // Persiste no banco unificado para recuperação em prontuário e agendamento
+    const triagemSalva = await saveTriagemToStore({
       id,
+      user_id: 'anonimo',
+      sintoma_principal: sintoma,
+      duracao: 'Recente',
+      intensidade: respostaIA.prioridade === 'Urgente' ? 9 : respostaIA.prioridade === 'Alta' ? 7 : 4,
+      nivel_urgencia: mapeamento.nivel_urgencia,
+      recomendacao: mapeamento.recomendacao,
+      especialidade: respostaIA.especialidade,
+      explicacao: respostaIA.mensagem,
+      orientacao: respostaIA.orientacao,
+      tipoUnidade,
+      mapa: linkMaps,
+      fonteIA: respostaIA.fonteIA,
+      created_at: new Date().toISOString()
+    })
+
+    return NextResponse.json({
+      id: triagemSalva.id,
       remetente: 'bot',
       texto: respostaIA.mensagem,
       triagem: {
-        id,
+        id: triagemSalva.id,
         recomendacao: respostaIA.recomendacao,
         especialidade: respostaIA.especialidade,
         local: tipoUnidade === 'UPA' ? 'UPA / Pronto-Socorro 24h' : 'UBS Mais Próxima',
@@ -164,8 +183,9 @@ export async function POST(request: Request) {
       },
       mapa: linkMaps,
       fonteIA: respostaIA.fonteIA,
-      timestamp: new Date().toISOString()
+      timestamp: triagemSalva.created_at
     })
+
   } catch (err: any) {
     console.error('Erro ao processar sintomas na API:', err)
     return NextResponse.json(

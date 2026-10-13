@@ -251,20 +251,28 @@ export default function UnidadeDetalhePage() {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-3 pt-2">
+          <Link
+            href={`/agendamento?unidadeId=${unidade.id}`}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2b85ff] hover:bg-blue-600 text-white font-bold rounded-xl text-sm shadow-sm transition"
+          >
+            <Calendar className="w-4 h-4" />
+            Agendar Atendimento com IA
+          </Link>
+
           <a
             href={unidade.google_maps_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2b85ff] hover:bg-blue-600 text-white font-semibold rounded-xl text-sm shadow-sm transition"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200/80 text-slate-800 font-semibold rounded-xl text-sm transition"
           >
-            <MapPin className="w-4 h-4" />
-            Abrir Rota no Google Maps
+            <MapPin className="w-4 h-4 text-[#2b85ff]" />
+            Abrir Rota no Maps
             <ExternalLink className="w-3.5 h-3.5 ml-1" />
           </a>
 
           <a
             href={`tel:${unidade.telefone.replace(/\D/g, '')}`}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-100 hover:bg-slate-200/80 text-[#091426] font-semibold rounded-xl text-sm transition"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200/80 text-[#091426] font-semibold rounded-xl text-sm transition"
           >
             <Phone className="w-4 h-4 text-slate-600" />
             Ligar para Unidade

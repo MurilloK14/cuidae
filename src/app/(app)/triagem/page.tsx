@@ -27,8 +27,10 @@ import {
   Stethoscope,
   CheckCircle2,
   FileText,
-  Building2
+  Building2,
+  Calendar
 } from 'lucide-react'
+
 import Image from 'next/image'
 
 interface ChatMessage {
@@ -595,51 +597,72 @@ export default function TriagemPage() {
                           )}
                         </div>
 
-                        {/* Ações: Rota no Mapa, Unidades Recomendadas e Acessar Prontuário */}
-                        <div className="flex flex-col sm:flex-row flex-wrap gap-2 pt-2 border-t border-slate-100">
+                        {/* Ações: Agendar no Hospital, Rota no Mapa, Unidades Recomendadas e Acessar Prontuário */}
+                        <div className="space-y-2 pt-2 border-t border-slate-100">
+                          {/* Botão de Agendamento em Destaque */}
                           <button
                             type="button"
                             onClick={() => {
                               const params = new URLSearchParams()
+                              if (msg.triagem?.id) params.set('triagemId', msg.triagem.id)
                               if (msg.triagem?.recomendacao) params.set('diagnostico', msg.triagem.recomendacao)
                               if (msg.triagem?.especialidade) params.set('especialidade', msg.triagem.especialidade)
-                              if (msg.triagem?.tipoUnidade) params.set('tipo', msg.triagem.tipoUnidade)
-                              router.push(`/unidades?${params.toString()}`)
+                              const ultimaMensagemUsuario = [...mensagens].reverse().find(m => m.remetente === 'usuario')?.texto
+                              if (ultimaMensagemUsuario) params.set('sintomas', ultimaMensagemUsuario)
+                              router.push(`/agendamento?${params.toString()}`)
                             }}
-                            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 bg-blue-50 hover:bg-blue-100 text-[#2b85ff] text-xs font-bold rounded-xl transition-colors border border-blue-200"
+                            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#2b85ff] to-[#1a6edb] hover:from-blue-600 hover:to-blue-700 text-white text-xs font-bold rounded-xl transition-all shadow-sm"
                           >
-                            <Building2 className="w-3.5 h-3.5 text-[#2b85ff]" />
-                            <span>Hospitais Recomendados</span>
-                            <ArrowRight className="w-3 h-3 text-[#2b85ff]" />
+                            <Calendar className="w-4 h-4" />
+                            <span>Agendar no Hospital com este Diagnóstico</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
                           </button>
 
-                          {msg.mapa && (
-                            <a
-                              href={msg.mapa.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-xl transition-colors"
-                            >
-                              <MapPin className="w-3.5 h-3.5 text-[#2b85ff]" />
-                              {msg.mapa.label || 'Ver no Google Maps'}
-                              <ExternalLink className="w-3 h-3 text-slate-400" />
-                            </a>
-                          )}
-
-                          {msg.triagem.id && (
+                          <div className="flex flex-col sm:flex-row flex-wrap gap-2">
                             <button
                               type="button"
-                              onClick={() => router.push(`/triagem/resultado/${msg.triagem?.id}`)}
-                              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#2b85ff] hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all shadow-sm"
+                              onClick={() => {
+                                const params = new URLSearchParams()
+                                if (msg.triagem?.recomendacao) params.set('diagnostico', msg.triagem.recomendacao)
+                                if (msg.triagem?.especialidade) params.set('especialidade', msg.triagem.especialidade)
+                                if (msg.triagem?.tipoUnidade) params.set('tipo', msg.triagem.tipoUnidade)
+                                router.push(`/unidades?${params.toString()}`)
+                              }}
+                              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-50 hover:bg-blue-100 text-[#2b85ff] text-xs font-semibold rounded-xl transition-colors border border-blue-200"
                             >
-                              <span>Prontuário Completo</span>
-                              <ArrowRight className="w-3.5 h-3.5" />
+                              <Building2 className="w-3.5 h-3.5 text-[#2b85ff]" />
+                              <span>Hospitais da Rede</span>
                             </button>
-                          )}
+
+                            {msg.mapa && (
+                              <a
+                                href={msg.mapa.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
+                              >
+                                <MapPin className="w-3.5 h-3.5 text-[#2b85ff]" />
+                                <span>Ver no Maps</span>
+                                <ExternalLink className="w-3 h-3 text-slate-400" />
+                              </a>
+                            )}
+
+                            {msg.triagem.id && (
+                              <button
+                                type="button"
+                                onClick={() => router.push(`/triagem/resultado/${msg.triagem?.id}`)}
+                                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-all"
+                              >
+                                <span>Prontuário</span>
+                                <ArrowRight className="w-3 h-3" />
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     )}
                   </div>
+
 
                   {msg.remetente === 'usuario' && (
                     <div className="w-8 h-8 rounded-full bg-[#091426] text-white flex items-center justify-center shrink-0 mt-1 shadow-sm">
