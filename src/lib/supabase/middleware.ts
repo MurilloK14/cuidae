@@ -79,6 +79,7 @@ export async function updateSession(request: NextRequest) {
     '/como-funciona',
     '/hospital',
     '/hospital/painel',
+    '/hospital/login',
     '/unidades',
     '/triagem',
     '/agendamento',
@@ -87,18 +88,26 @@ export async function updateSession(request: NextRequest) {
   const isPublicRoute = publicRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`))
   const isAuthRoute = ['/login', '/cadastro'].includes(pathname)
 
-  // Redirect unauthenticated users away from protected routes
+  // Redirect unauthenticated users away from protected routes, preserving any session cookies
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone()
     url.pathname = pathname.startsWith('/admin') ? '/admin/login' : '/login'
-    return NextResponse.redirect(url)
+    const redirectRes = NextResponse.redirect(url)
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectRes.cookies.set(cookie.name, cookie.value)
+    })
+    return redirectRes
   }
 
-  // Redirect authenticated users away from auth pages
+  // Redirect authenticated users away from auth pages, preserving session cookies
   if (user && isAuthRoute) {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
+    const redirectRes = NextResponse.redirect(url)
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectRes.cookies.set(cookie.name, cookie.value)
+    })
+    return redirectRes
   }
 
   return supabaseResponse

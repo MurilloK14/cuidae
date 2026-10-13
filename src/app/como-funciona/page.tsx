@@ -122,32 +122,26 @@ export default function ComoFuncionaPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-white text-slate-900 selection:bg-[#2b85ff] selection:text-white pt-20">
+    <main className="min-h-screen bg-white font-jakarta text-slate-900 selection:bg-[#2b85ff] selection:text-white pt-20">
       <Navbar onOpenAssistant={handleOpenAssistant} />
 
       {/* Hero Section of /como-funciona */}
-      <section className="py-16 sm:py-24 bg-gradient-to-b from-slate-50 via-[#f0f6ff]/40 to-white relative overflow-hidden border-b border-slate-100">
+      <section className="py-20 sm:py-28 bg-gradient-to-b from-slate-50 via-[#f0f6ff]/40 to-white relative overflow-hidden border-b border-slate-200/70">
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#2b85ff]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
         
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#2b85ff]/10 border border-[#2b85ff]/20 text-[#2b85ff] text-xs font-bold tracking-wider mb-6 shadow-sm">
-            <Sparkles className="w-4 h-4 animate-pulse" />
-            <span>GUIA COMPLETO DE FUNCIONAMENTO</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#091426] tracking-tight leading-tight">
-            Como a IA conecta seus sintomas <br className="hidden sm:inline" />
-            ao atendimento certo no SUS.
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-[#091426] tracking-tight leading-[1.15]">
+            Como a inteligência artificial conecta você ao atendimento certo no SUS
           </h1>
 
-          <p className="mt-5 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Entenda detalhadamente cada etapa da nossa inteligência artificial: desde a descrição dos seus sintomas até a chegada à UBS ou UPA mais indicada.
+          <p className="mt-6 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Entenda detalhadamente cada etapa da nossa triagem: desde a descrição dos seus sintomas em linguagem natural até o encaminhamento seguro para a UBS ou UPA mais indicada.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
             <Link
               href="/triagem"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#091426] hover:bg-[#1a2c4e] text-white text-sm font-semibold transition-all shadow-md hover:shadow-lg"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#091426] hover:bg-[#1a2c4e] text-white text-sm font-semibold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
             >
               <span>Iniciar Triagem Gratuita</span>
               <ArrowRight className="w-4 h-4 text-[#2b85ff]" />
@@ -156,18 +150,18 @@ export default function ComoFuncionaPage() {
             <button
               type="button"
               onClick={() => handleOpenAssistant("Gostaria de tirar dúvidas sobre o funcionamento da triagem.")}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold transition-all shadow-sm"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-700 text-sm font-semibold transition-all shadow-xs hover:border-slate-300"
             >
               <Stethoscope className="w-4 h-4 text-[#2b85ff]" />
-              <span>Falar com a IA</span>
+              <span>Falar com Assistente</span>
             </button>
           </div>
         </div>
       </section>
 
       {/* 4 Steps In-Depth */}
-      <section className="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-16 sm:space-y-20">
+      <section className="py-20 sm:py-28 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="space-y-16 sm:space-y-24">
           {stepsDetails.map((step, idx) => {
             const Icon = step.icon;
             const isEven = idx % 2 === 1;
@@ -175,15 +169,15 @@ export default function ComoFuncionaPage() {
             return (
               <div
                 key={step.num}
-                className={`flex flex-col ${isEven ? "lg:flex-row-reverse" : "lg:flex-row"} gap-8 lg:gap-14 items-center`}
+                className={`flex flex-col ${isEven ? "lg:flex-row-reverse" : "lg:flex-row"} gap-10 lg:gap-14 items-center`}
               >
                 {/* Left/Right Text Side */}
                 <div className="flex-1 text-left space-y-4">
-                  <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border ${step.tagColor}`}>
-                    <span>{step.badge}</span>
-                  </div>
+                  <span className="text-xs font-bold text-[#2b85ff] tracking-wider uppercase">
+                    Etapa {step.num}
+                  </span>
 
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-[#091426] leading-tight">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-[#091426] tracking-tight leading-tight">
                     {step.title}
                   </h2>
 
@@ -201,25 +195,34 @@ export default function ComoFuncionaPage() {
                   </div>
                 </div>
 
-                {/* Visual Card Side */}
-                <div className="w-full lg:w-[460px] bg-gradient-to-br from-slate-50 to-blue-50/40 p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm relative overflow-hidden">
-                  <div className="w-14 h-14 rounded-2xl bg-white shadow-md border border-slate-100 flex items-center justify-center text-[#2b85ff] mb-6">
-                    <Icon className="w-7 h-7" />
+                {/* Visual Telemetry Card Side (single cohesive container, no nested cards) */}
+                <div className="w-full lg:w-[440px] bg-slate-50/80 p-6 sm:p-7 rounded-2xl border border-slate-200/90 shadow-sm relative">
+                  <div className="flex items-center justify-between pb-5 border-b border-slate-200/70 mb-5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 rounded-xl bg-white shadow-xs border border-slate-200/80 flex items-center justify-center text-[#2b85ff]">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-slate-900">Protocolo Cuidaê IA</div>
+                        <div className="text-[11px] text-slate-500 font-medium">Etapa {step.num} • Processamento Clínico</div>
+                      </div>
+                    </div>
+                    <span className="text-2xl font-black text-slate-300/80 tabular-nums font-mono">
+                      {step.num}
+                    </span>
                   </div>
 
-                  <div className="text-4xl font-black text-slate-300 mb-2">
-                    {step.num}
-                  </div>
-
-                  <div className="space-y-3 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm text-left">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-slate-800">Status da Etapa:</span>
-                      <span className="font-bold text-[#2b85ff] bg-blue-50 px-2 py-0.5 rounded">
-                        Processamento Ativo
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-xs py-1.5 px-3 bg-white rounded-xl border border-slate-200/70">
+                      <span className="font-semibold text-slate-600">Status Operacional</span>
+                      <span className="inline-flex items-center gap-1.5 font-bold text-emerald-700">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        Ativo em Tempo Real
                       </span>
                     </div>
-                    <div className="text-xs text-slate-600 leading-snug">
-                      Inteligência clínica conectada com bancos de dados municipais de saúde pública.
+
+                    <div className="text-xs text-slate-600 leading-relaxed px-1">
+                      Algoritmos treinados com diretrizes clínicas de triagem do SUS e padronização internacional do Protocolo Manchester.
                     </div>
                   </div>
                 </div>
@@ -230,16 +233,15 @@ export default function ComoFuncionaPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 sm:py-24 bg-slate-50/70 border-t border-slate-200/60">
+      <section className="py-20 sm:py-28 bg-slate-50/60 border-t border-slate-200/70">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-200/60 text-slate-700 text-xs font-bold mb-3">
-              <HelpCircle className="w-3.5 h-3.5" />
-              <span>DÚVIDAS FREQUENTES</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#091426]">
-              Perguntas comuns sobre a nossa triagem
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#091426] tracking-tight">
+              Perguntas frequentes sobre a triagem
             </h2>
+            <p className="mt-3 text-sm sm:text-base text-slate-600">
+              Tire suas dúvidas sobre a precisão da IA, gratuidade e proteção de dados.
+            </p>
           </div>
 
           <div className="space-y-3">
@@ -249,7 +251,7 @@ export default function ComoFuncionaPage() {
               return (
                 <div
                   key={fIdx}
-                  className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden transition-all shadow-sm"
+                  className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden transition-all shadow-xs"
                 >
                   <button
                     type="button"
@@ -277,25 +279,25 @@ export default function ComoFuncionaPage() {
       </section>
 
       {/* Call to action */}
-      <section className="py-16 bg-[#091426] text-white text-center">
+      <section className="py-20 bg-[#091426] text-white text-center">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl font-extrabold mb-4">
-            Pronto para experimentar a triagem?
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight mb-4">
+            Pronto para experimentar a triagem inteligente?
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base mb-8 max-w-xl mx-auto">
+          <p className="text-slate-300 text-sm sm:text-base mb-8 max-w-xl mx-auto leading-relaxed">
             Leva menos de 2 minutos e é 100% gratuito. Receba a melhor recomendação para sua saúde agora mesmo.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-3.5">
             <Link
               href="/triagem"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#2b85ff] hover:bg-blue-600 text-white text-sm font-bold transition-all shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#2b85ff] hover:bg-blue-600 text-white text-sm font-bold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
             >
               <span>Começar Triagem Online</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-all border border-white/10"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-all border border-white/15"
             >
               <span>Voltar para a Página Inicial</span>
             </Link>

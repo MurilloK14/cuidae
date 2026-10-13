@@ -39,15 +39,15 @@ export default function RecuperarSenhaPage() {
         <Image src="/images/cuidae-logo-trimmed.png" alt="Cuidaê Logo" width={144} height={40} className="h-10 w-36 object-contain" />
       </div>
       
-      <div className="bg-white py-8 px-4 shadow-xl sm:rounded-3xl border border-slate-100 sm:px-10">
+      <div className="bg-white py-8 px-5 sm:px-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] sm:rounded-2xl border border-slate-200/80">
         <div className="mb-6">
-          <Link href="/login" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors">
+          <Link href="/login" className="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Voltar para o login
           </Link>
         </div>
 
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 mb-2">
           Recuperar senha
         </h2>
         

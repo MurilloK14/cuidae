@@ -153,12 +153,12 @@ export default function UnidadeDetalhePage() {
   const mapsEmbedSrc = `https://maps.google.com/maps?q=${unidade.latitude},${unidade.longitude}&z=15&output=embed`
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-12 animate-fade-in">
+    <div className="max-w-4xl mx-auto space-y-6 pb-12 animate-fade-in font-jakarta">
       {/* Back button */}
       <div>
         <Link
           href="/unidades"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#2b85ff] transition"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-[#2b85ff] transition"
         >
           <ArrowLeft className="w-4 h-4" />
           Voltar para Unidades de Saúde
@@ -166,7 +166,7 @@ export default function UnidadeDetalhePage() {
       </div>
 
       {/* Header Banner */}
-      <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 space-y-5">
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-8 space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#2b85ff]/10 text-[#2b85ff]">

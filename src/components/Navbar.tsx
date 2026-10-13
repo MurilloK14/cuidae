@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ArrowRight, Menu, X } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface NavbarProps {
   onOpenAssistant?: (prompt?: string) => void;
@@ -93,15 +94,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAssistant }) => {
 
           {/* Right Action */}
           <div className="hidden sm:flex items-center gap-3">
+            <ThemeToggle />
             <a
               href="/login"
-              className="text-sm font-semibold text-slate-700 hover:text-[#2b85ff] px-3 py-2 rounded-lg transition-colors"
+              className="text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-[#2b85ff] px-3 py-2 rounded-lg transition-colors"
             >
               Entrar
             </a>
             <a
               href="/triagem"
-              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#091426] hover:bg-[#1a2c4e] text-white text-sm font-medium transition-all duration-300 shadow-[0_4px_12px_-4px_rgba(9,20,38,0.4)] hover:shadow-[0_8px_16px_-6px_rgba(9,20,38,0.5)] hover:-translate-y-0.5 active:translate-y-0"
+              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#091426] dark:bg-[#2b85ff] hover:bg-[#1a2c4e] dark:hover:bg-blue-600 text-white text-sm font-medium transition-all duration-300 shadow-[0_4px_12px_-4px_rgba(9,20,38,0.4)] hover:shadow-[0_8px_16px_-6px_rgba(9,20,38,0.5)] hover:-translate-y-0.5 active:translate-y-0"
             >
               <span>Fazer Triagem</span>
               <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />

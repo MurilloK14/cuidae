@@ -140,8 +140,8 @@ export default function CadastroPage() {
         <Image src="/images/cuidae-logo-trimmed.png" alt="Cuidaê Logo" width={144} height={40} className="h-10 w-36 object-contain" />
       </div>
       
-      <div className="bg-white py-8 px-4 shadow-xl sm:rounded-3xl border border-slate-100 sm:px-10">
-        <h2 className="text-center text-2xl font-bold tracking-tight text-slate-900 mb-6">
+      <div className="bg-white py-8 px-5 sm:px-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] sm:rounded-2xl border border-slate-200/80">
+        <h2 className="text-center text-xl sm:text-2xl font-bold tracking-tight text-slate-900 mb-6">
           Crie sua conta
         </h2>
         

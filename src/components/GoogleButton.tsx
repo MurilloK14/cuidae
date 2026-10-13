@@ -20,7 +20,6 @@ export function GoogleButton({ label = 'Continuar com o Google' }: GoogleButtonP
           redirectTo: `${window.location.origin}/auth/callback`,
           queryParams: {
             access_type: 'offline',
-            prompt: 'consent',
           },
         },
       })
@@ -40,7 +39,7 @@ export function GoogleButton({ label = 'Continuar com o Google' }: GoogleButtonP
       type="button"
       onClick={handleLogin}
       disabled={loading}
-      className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-medium text-sm transition-all shadow-sm hover:border-slate-300 disabled:opacity-60 cursor-pointer"
+      className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-200 font-medium text-sm transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600 disabled:opacity-60 cursor-pointer"
     >
       {loading ? (
         <div className="h-5 w-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />

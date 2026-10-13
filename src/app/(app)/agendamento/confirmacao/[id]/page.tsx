@@ -141,13 +141,13 @@ export default function ConfirmacaoAgendamentoPage() {
   })
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 animate-fade-in pb-16 font-['Inter']">
+    <div className="max-w-4xl mx-auto space-y-8 animate-fade-in pb-16 font-jakarta">
       
       {/* Botões Superiores de Navegação */}
       <div className="flex items-center justify-between no-print">
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#2b85ff] transition"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-[#2b85ff] transition"
         >
           <ArrowLeft className="w-4 h-4" />
           Voltar ao Dashboard
@@ -173,7 +173,7 @@ export default function ConfirmacaoAgendamentoPage() {
       </div>
 
       {/* COMPROVANTE OFICIAL DE ENCAMINHAMENTO HOSPITALAR */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-lg overflow-hidden printable-area">
+      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden printable-area">
         
         {/* Faixa de Cabeçalho / Sucesso */}
         <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-[#122748] p-6 sm:p-8 text-white">
@@ -336,7 +336,7 @@ export default function ConfirmacaoAgendamentoPage() {
           </div>
 
           {/* SEÇÃO PRINCIPAL: FICHA CLÍNICA DE IA TRANSMITIDA AO HOSPITAL */}
-          <div className="border border-blue-200 rounded-3xl bg-gradient-to-br from-blue-50/50 via-white to-indigo-50/30 p-6 sm:p-7 space-y-5">
+          <div className="border border-blue-200 rounded-2xl bg-gradient-to-br from-blue-50/50 via-white to-indigo-50/30 p-6 sm:p-7 space-y-5">
             
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-blue-100 pb-3">
               <div className="flex items-center gap-2.5">

@@ -8,6 +8,13 @@
   --brand-blue: #2b85ff;
 }
 
+.dark {
+  --background: #090e17;
+  --foreground: #f8fafc;
+  --brand-blue: #3b82f6;
+  color-scheme: dark;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -20,6 +27,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Impeccable Browser Surface Theming */

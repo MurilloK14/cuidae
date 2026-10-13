@@ -19,25 +19,25 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
   const isAmarelo = urgencia === 'amarelo'
   const isVermelho = urgencia === 'vermelho'
 
-  const bgColor = isVerde ? 'bg-emerald-50' : isAmarelo ? 'bg-amber-50' : 'bg-red-50'
+  const bgColor = isVerde ? 'bg-emerald-50/80' : isAmarelo ? 'bg-amber-50/80' : 'bg-red-50/80'
   const borderColor = isVerde ? 'border-emerald-200' : isAmarelo ? 'border-amber-200' : 'border-red-200'
-  const textColor = isVerde ? 'text-emerald-800' : isAmarelo ? 'text-amber-800' : 'text-red-800'
-  const iconColor = isVerde ? 'text-emerald-500' : isAmarelo ? 'text-amber-500' : 'text-red-500'
+  const textColor = isVerde ? 'text-emerald-900' : isAmarelo ? 'text-amber-900' : 'text-red-900'
+  const iconColor = isVerde ? 'text-emerald-600' : isAmarelo ? 'text-amber-600' : 'text-red-600'
 
   const showUnidades = recomendacao === 'ubs' || recomendacao === 'upa'
   const showTeleconsulta = recomendacao === 'teleconsulta'
 
   return (
-    <div className="max-w-4xl mx-auto animate-fade-in-up">
-      <div className="mb-8">
-        <Link href="/dashboard" className="text-sm font-medium text-slate-500 hover:text-slate-900 flex items-center gap-2 w-fit">
+    <div className="max-w-4xl mx-auto animate-fade-in-up font-jakarta pb-12">
+      <div className="mb-6">
+        <Link href="/dashboard" className="text-xs font-semibold text-slate-500 hover:text-slate-900 flex items-center gap-2 w-fit transition-colors">
           <ArrowLeft className="w-4 h-4" />
           Voltar ao Dashboard
         </Link>
       </div>
 
       {/* Urgency Banner */}
-      <div className={`rounded-2xl border ${borderColor} ${bgColor} p-6 mb-8`}>
+      <div className={`rounded-2xl border ${borderColor} ${bgColor} p-6 sm:p-7 mb-8 shadow-xs`}>
         <div className="flex items-start gap-4">
           <div className="mt-1 shrink-0">
             {isVerde && <ShieldCheck className={`w-8 h-8 ${iconColor}`} />}
@@ -45,12 +45,12 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
             {isVermelho && <AlertOctagon className={`w-8 h-8 ${iconColor}`} />}
           </div>
           <div>
-            <h1 className={`text-2xl font-bold mb-2 ${textColor}`}>
-              {isVerde && 'Urgência Baixa'}
-              {isAmarelo && 'Urgência Moderada'}
+            <h1 className={`text-xl sm:text-2xl font-bold mb-2 tracking-tight ${textColor}`}>
+              {isVerde && 'Urgência Baixa — Atendimento Eletivo'}
+              {isAmarelo && 'Urgência Moderada — Avaliação Recomendada'}
               {isVermelho && 'Urgência Alta — Procure Atendimento Imediato'}
             </h1>
-            <p className="text-slate-700 text-lg leading-relaxed">
+            <p className="text-slate-700 text-base sm:text-lg leading-relaxed">
               {explicacao}
             </p>
           </div>

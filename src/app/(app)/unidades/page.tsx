@@ -204,9 +204,9 @@ function UnidadesContent() {
   }, [unidades, categoriaAtiva, busca, ordenacao, userLocation])
 
   return (
-    <div className="space-y-8 animate-fade-in pb-12">
+    <div className="space-y-8 animate-fade-in pb-12 font-jakarta">
       {/* Hero Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#2b85ff] via-[#1a6edb] to-[#091426] rounded-3xl p-6 sm:p-10 text-white shadow-lg">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#2b85ff] via-[#1a6edb] to-[#091426] rounded-2xl p-6 sm:p-10 text-white shadow-md border border-blue-600/30">
         <div className="relative z-10 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 text-white backdrop-blur-md mb-4 border border-white/20">
             <MapPin className="w-3.5 h-3.5 text-white" />
@@ -291,7 +291,7 @@ function UnidadesContent() {
       )}
 
       {/* Search & Sort Bar */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 sm:p-5 space-y-4">
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-4 sm:p-5 space-y-4">
         <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
           {/* Search input */}
           <div className="relative flex-1">
@@ -472,7 +472,7 @@ function UnidadesContent() {
                 className={`bg-white rounded-2xl border transition-all duration-200 hover:shadow-md flex flex-col justify-between overflow-hidden ${
                   isRecommended
                     ? 'border-blue-300 ring-2 ring-[#2b85ff]/15 shadow-sm'
-                    : 'border-slate-100 shadow-sm hover:border-slate-200'
+                    : 'border-slate-200/80 shadow-xs hover:border-slate-300 hover:shadow-sm'
                 }`}
               >
                 <div className="p-5 sm:p-6 space-y-4 flex-1">

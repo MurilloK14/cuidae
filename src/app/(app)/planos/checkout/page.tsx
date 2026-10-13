@@ -60,19 +60,19 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12 animate-fade-in-up">
+    <div className="max-w-3xl mx-auto px-4 py-12 animate-fade-in-up font-jakarta">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-[#091426] mb-2">Finalizar Assinatura</h1>
-        <p className="text-slate-600">Complete seus dados para assinar o plano {planoNome}</p>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#091426] tracking-tight mb-2">Finalizar Assinatura</h1>
+        <p className="text-sm sm:text-base text-slate-600">Complete seus dados para confirmar o plano {planoNome}</p>
       </div>
 
-      <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm mb-8">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-6 mb-6">
+      <div className="bg-white rounded-2xl p-7 sm:p-8 border border-slate-200/80 shadow-xs mb-8">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-5 mb-6">
           <div>
-            <h2 className="text-xl font-bold text-[#091426]">Plano Selecionado</h2>
-            <p className="text-slate-500">{planoNome}</p>
+            <h2 className="text-lg font-bold text-[#091426]">Plano Selecionado</h2>
+            <p className="text-xs text-slate-500">{planoNome}</p>
           </div>
-          <div className="text-2xl font-bold text-slate-900">{preco}</div>
+          <div className="text-2xl font-extrabold text-slate-900 tabular-nums">{preco}</div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

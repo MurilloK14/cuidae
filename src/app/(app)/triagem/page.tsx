@@ -379,11 +379,11 @@ export default function TriagemPage() {
   const radioLabelClass = "flex items-center gap-2 cursor-pointer p-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] py-6 sm:py-10 px-4 sm:px-6 lg:px-8 font-['Inter']">
+    <div className="min-h-screen bg-slate-50/60 py-6 sm:py-10 px-4 sm:px-6 lg:px-8 font-jakarta">
       <div className="max-w-4xl mx-auto space-y-6">
 
         {/* Top Header & Mode Toggle */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs">
           <div>
             <div className="flex items-center gap-2">
               <span className="p-2 bg-blue-50 text-[#2b85ff] rounded-xl">
@@ -397,13 +397,13 @@ export default function TriagemPage() {
           </div>
 
           {/* Segmented Control */}
-          <div className="flex bg-slate-100 p-1 rounded-xl self-start sm:self-auto">
+          <div className="flex bg-slate-100 p-1 rounded-xl self-start sm:self-auto border border-slate-200/60">
             <button
               type="button"
               onClick={() => setMode('chat')}
               className={`flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all ${
                 mode === 'chat'
-                  ? 'bg-white text-[#2b85ff] shadow-sm'
+                  ? 'bg-white text-[#2b85ff] shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -418,7 +418,7 @@ export default function TriagemPage() {
               onClick={() => setMode('formulario')}
               className={`flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all ${
                 mode === 'formulario'
-                  ? 'bg-white text-[#091426] shadow-sm'
+                  ? 'bg-white text-[#091426] shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -432,7 +432,7 @@ export default function TriagemPage() {
         {/* MODO 1: CHAT CONVERSACIONAL COM AGENTE DE IA (PADRÃO)                     */}
         {/* ========================================================================= */}
         {mode === 'chat' && (
-          <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col h-[750px] max-h-[85vh] animate-fade-in-up">
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden flex flex-col h-[750px] max-h-[85vh] animate-fade-in-up">
             
             {/* Chat Bar Header */}
             <div className="bg-gradient-to-r from-[#091426] to-[#122748] px-5 py-4 text-white flex items-center justify-between border-b border-slate-800">

@@ -54,6 +54,11 @@ function AgendamentoContent() {
   const [turno, setTurno] = useState<'manha' | 'tarde' | 'plantao_urgencia'>('manha')
   const [tipoAtendimento, setTipoAtendimento] = useState<'presencial' | 'triagem_hospitalar' | 'retorno' | 'exame'>('presencial')
   const [observacoes, setObservacoes] = useState('')
+  const [horariosDisponiveis, setHorariosDisponiveis] = useState<string[]>([
+    '08:00', '08:30', '09:15', '10:00', '10:45', '11:30',
+    '13:30', '14:15', '15:00', '15:45', '16:30', '17:15'
+  ])
+  const [carregandoHorarios, setCarregandoHorarios] = useState(false)
 
   // Dados do Paciente
   const [pacienteNome, setPacienteNome] = useState('')
@@ -151,6 +156,38 @@ function AgendamentoContent() {
         setEspecialidade(unidadeSelecionada.especialidades[0])
       }
     }
+  }, [unidadeSelecionada])
+
+  // Sincroniza em tempo real com a grade de horários configurada pela unidade hospitalar
+  useEffect(() => {
+    async function carregarHorariosHospital() {
+      if (!unidadeSelecionada?.id) return
+      try {
+        setCarregandoHorarios(true)
+        const res = await fetch(
+          `/api/hospital/config?hospitalId=${encodeURIComponent(unidadeSelecionada.id)}&hospitalNome=${encodeURIComponent(unidadeSelecionada.nome)}`
+        )
+        if (res.ok) {
+          const data = await res.json()
+          if (data.success && data.config?.horarios && Array.isArray(data.config.horarios)) {
+            const ativos = data.config.horarios
+              .filter((h: any) => h.ativo !== false)
+              .map((h: any) => h.horario)
+            if (ativos.length > 0) {
+              setHorariosDisponiveis(ativos)
+              if (!ativos.includes(horario)) {
+                setHorario(ativos[0])
+              }
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Falha ao obter horários configurados pelo hospital, mantendo grade padrão:', e)
+      } finally {
+        setCarregandoHorarios(false)
+      }
+    }
+    carregarHorariosHospital()
   }, [unidadeSelecionada])
 
   // Filtrar unidades na busca
@@ -299,26 +336,21 @@ function AgendamentoContent() {
 
   const urgenciaAtual = urgenciaBadgeConfig[nivelUrgencia] || urgenciaBadgeConfig.amarelo
 
-  const HORARIOS_DISPONIVEIS = [
-    '08:00', '08:30', '09:15', '10:00', '10:45', '11:30',
-    '13:30', '14:15', '15:00', '15:45', '16:30', '17:15'
-  ]
-
   return (
-    <div className="max-w-5xl mx-auto space-y-8 animate-fade-in pb-16 font-['Inter']">
+    <div className="max-w-5xl mx-auto space-y-8 animate-fade-in pb-16 font-jakarta">
       
       {/* Header com Navegação */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <Link
             href="/triagem"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#2b85ff] transition mb-2"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-[#2b85ff] transition mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
             Voltar para Triagem
           </Link>
           <div className="flex items-center gap-2.5">
-            <span className="p-2.5 bg-blue-50 text-[#2b85ff] rounded-2xl shadow-xs">
+            <span className="p-2.5 bg-blue-50 text-[#2b85ff] rounded-xl shadow-xs">
               <Calendar className="w-6 h-6" />
             </span>
             <div>
@@ -342,7 +374,7 @@ function AgendamentoContent() {
       </div>
 
       {/* Banner Informativo de Integração Hospitalar */}
-      <div className="bg-gradient-to-r from-blue-900 via-[#122748] to-[#091426] rounded-3xl p-6 sm:p-7 text-white shadow-md relative overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-900 via-[#122748] to-[#091426] rounded-2xl p-6 sm:p-7 text-white shadow-sm border border-slate-800 relative overflow-hidden">
         <div className="relative z-10 max-w-3xl space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-white/15 text-blue-100 backdrop-blur-md border border-white/20">
             <Sparkles className="w-3.5 h-3.5 text-blue-300" />
@@ -376,11 +408,11 @@ function AgendamentoContent() {
           <div className="lg:col-span-7 space-y-6">
             
             {/* 1. SELEÇÃO DA UNIDADE / HOSPITAL */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-xl bg-blue-50 text-[#2b85ff] font-bold text-xs flex items-center justify-center">1</span>
-                  <h3 className="font-bold text-base text-[#091426]">Escolha o Hospital ou Unidade de Saúde</h3>
+                  <span className="w-7 h-7 rounded-xl bg-blue-50 dark:bg-blue-500/20 text-[#2b85ff] dark:text-blue-400 font-bold text-xs flex items-center justify-center">1</span>
+                  <h3 className="font-bold text-base text-[#091426] dark:text-white">Escolha o Hospital ou Unidade de Saúde</h3>
                 </div>
                 <span className="text-xs text-slate-400">Garanhuns e Região</span>
               </div>
@@ -393,7 +425,7 @@ function AgendamentoContent() {
                   value={buscaUnidade}
                   onChange={(e) => setBuscaUnidade(e.target.value)}
                   placeholder="Buscar hospital, policlínica ou posto..."
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm text-[#091426] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-[#091426] dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
                 />
               </div>
 
@@ -407,33 +439,33 @@ function AgendamentoContent() {
                       onClick={() => setUnidadeSelecionada(u)}
                       className={`p-3.5 rounded-2xl border cursor-pointer transition-all ${
                         isSelected
-                          ? 'border-[#2b85ff] bg-blue-50/50 ring-2 ring-[#2b85ff]/20 shadow-xs'
-                          : 'border-slate-200 hover:border-slate-300 bg-white'
+                          ? 'border-[#2b85ff] dark:border-blue-500 bg-blue-50/50 dark:bg-blue-950/40 ring-2 ring-[#2b85ff]/20 shadow-xs'
+                          : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-800/80'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <div className="flex items-center gap-2">
-                            <h4 className="text-sm font-bold text-[#091426]">{u.nome}</h4>
+                            <h4 className="text-sm font-bold text-[#091426] dark:text-white">{u.nome}</h4>
                             {u.categoria === 'hospital' && (
-                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-[#1a6edb]">
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 dark:bg-blue-900/50 text-[#1a6edb] dark:text-blue-300">
                                 Hospital
                               </span>
                             )}
                             {u.sus_gratuito && (
-                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">
                                 100% SUS
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">
-                            {u.endereco} • <span className="font-semibold text-slate-700">{u.bairro}</span>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+                            {u.endereco} • <span className="font-semibold text-slate-700 dark:text-slate-300">{u.bairro}</span>
                           </p>
                         </div>
 
                         <div className="shrink-0 text-right">
                           <span className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${
-                            isSelected ? 'bg-[#2b85ff] border-[#2b85ff] text-white' : 'border-slate-300'
+                            isSelected ? 'bg-[#2b85ff] border-[#2b85ff] text-white' : 'border-slate-300 dark:border-slate-600'
                           }`}>
                             {isSelected && <CheckCircle2 className="w-3.5 h-3.5" />}
                           </span>
@@ -445,8 +477,8 @@ function AgendamentoContent() {
               </div>
 
               {unidadeSelecionada && (
-                <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 text-xs text-slate-600 flex items-center justify-between">
-                  <span className="flex items-center gap-1.5 font-medium text-slate-700">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5 font-medium text-slate-700 dark:text-slate-300">
                     <MapPin className="w-3.5 h-3.5 text-[#2b85ff]" />
                     {unidadeSelecionada.horario} • Tel: {unidadeSelecionada.telefone}
                   </span>
@@ -454,7 +486,7 @@ function AgendamentoContent() {
                     href={unidadeSelecionada.google_maps_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#2b85ff] font-semibold hover:underline flex items-center gap-0.5"
+                    className="text-[#2b85ff] dark:text-blue-400 font-semibold hover:underline flex items-center gap-0.5"
                   >
                     Ver Rota <ExternalLink className="w-3 h-3" />
                   </a>
@@ -463,15 +495,15 @@ function AgendamentoContent() {
             </div>
 
             {/* 2. DATA, HORÁRIO E ESPECIALIDADE */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs space-y-4">
               <div className="flex items-center gap-2">
-                <span className="w-7 h-7 rounded-xl bg-blue-50 text-[#2b85ff] font-bold text-xs flex items-center justify-center">2</span>
-                <h3 className="font-bold text-base text-[#091426]">Data, Horário e Especialidade</h3>
+                <span className="w-7 h-7 rounded-xl bg-blue-50 dark:bg-blue-500/20 text-[#2b85ff] dark:text-blue-400 font-bold text-xs flex items-center justify-center">2</span>
+                <h3 className="font-bold text-base text-[#091426] dark:text-white">Data, Horário e Especialidade</h3>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                     Data da Consulta / Atendimento: *
                   </label>
                   <input
@@ -480,19 +512,19 @@ function AgendamentoContent() {
                     min={minDateStr}
                     value={dataAgendamento}
                     onChange={(e) => setDataAgendamento(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-[#091426] focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-[#091426] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
                   />
                   <span className="text-[11px] text-slate-400 mt-1 block">Dias úteis e plantões disponíveis</span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                     Especialidade Médica: *
                   </label>
                   <select
                     value={especialidade}
                     onChange={(e) => setEspecialidade(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-[#091426] focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff] bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-[#091426] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
                   >
                     {unidadeSelecionada?.especialidades && unidadeSelecionada.especialidades.length > 0 ? (
                       unidadeSelecionada.especialidades.map((esp, i) => (
@@ -514,11 +546,22 @@ function AgendamentoContent() {
 
               {/* Seleção de Horários */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Horário de Preferência:
-                </label>
-                <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                  {HORARIOS_DISPONIVEIS.map((h) => {
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                    Horário de Preferência:
+                  </label>
+                  {carregandoHorarios ? (
+                    <span className="text-[11px] text-[#2b85ff] flex items-center gap-1 font-medium">
+                      <Loader2 className="w-3 h-3 animate-spin" /> Atualizando horários da unidade...
+                    </span>
+                  ) : (
+                    <span className="text-[11px] text-slate-400">
+                      {horariosDisponiveis.length} horários disponíveis
+                    </span>
+                  )}
+                </div>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                  {horariosDisponiveis.map((h) => {
                     const isSelected = horario === h
                     return (
                       <button
@@ -527,12 +570,18 @@ function AgendamentoContent() {
                         onClick={() => {
                           setHorario(h)
                           const horaNum = parseInt(h.split(':')[0], 10)
-                          setTurno(horaNum < 12 ? 'manha' : 'tarde')
+                          if (h.toLowerCase().includes('plantão') || h.toLowerCase().includes('plantao')) {
+                            setTurno('plantao_urgencia')
+                          } else if (horaNum < 12) {
+                            setTurno('manha')
+                          } else {
+                            setTurno('tarde')
+                          }
                         }}
-                        className={`py-2 text-xs font-bold rounded-xl border transition-all ${
+                        className={`py-2 px-1 text-xs font-bold rounded-xl border transition-all text-center ${
                           isSelected
                             ? 'bg-[#2b85ff] border-[#2b85ff] text-white shadow-xs'
-                            : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/80'
                         }`}
                       >
                         {h}
@@ -543,7 +592,7 @@ function AgendamentoContent() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                   Observações para a Recepção ou Equipe Médica (opcional):
                 </label>
                 <input
@@ -551,21 +600,21 @@ function AgendamentoContent() {
                   value={observacoes}
                   onChange={(e) => setObservacoes(e.target.value)}
                   placeholder="Ex: Preciso de auxílio de locomoção, uso cadeira de rodas..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-[#091426] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-[#091426] dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
                 />
               </div>
             </div>
 
             {/* 3. DADOS DO PACIENTE */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs space-y-4">
               <div className="flex items-center gap-2">
-                <span className="w-7 h-7 rounded-xl bg-blue-50 text-[#2b85ff] font-bold text-xs flex items-center justify-center">3</span>
-                <h3 className="font-bold text-base text-[#091426]">Identificação do Paciente</h3>
+                <span className="w-7 h-7 rounded-xl bg-blue-50 dark:bg-blue-500/20 text-[#2b85ff] dark:text-blue-400 font-bold text-xs flex items-center justify-center">3</span>
+                <h3 className="font-bold text-base text-[#091426] dark:text-white">Identificação do Paciente</h3>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                     Nome Completo do Paciente: *
                   </label>
                   <input
@@ -574,12 +623,12 @@ function AgendamentoContent() {
                     value={pacienteNome}
                     onChange={(e) => setPacienteNome(e.target.value)}
                     placeholder="Ex: Maria José de Oliveira"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-[#091426] focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-[#091426] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                     CPF ou Cartão Nacional de Saúde (CNS SUS):
                   </label>
                   <input
@@ -587,12 +636,12 @@ function AgendamentoContent() {
                     value={pacienteCpf}
                     onChange={(e) => setPacienteCpf(e.target.value)}
                     placeholder="000.000.000-00 ou nº SUS"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-[#091426] focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-[#091426] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                     Telefone de Contato / WhatsApp: *
                   </label>
                   <input
@@ -601,7 +650,7 @@ function AgendamentoContent() {
                     value={pacienteTelefone}
                     onChange={(e) => setPacienteTelefone(e.target.value)}
                     placeholder="(87) 90000-0000"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm text-[#091426] focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-[#091426] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff]"
                   />
                 </div>
               </div>
@@ -612,18 +661,18 @@ function AgendamentoContent() {
           {/* COLUNA DIREITA (5 colunas): Ficha Clínica de IA Transmitida */}
           <div className="lg:col-span-5 space-y-6">
             
-            <div className="bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/40 rounded-3xl border border-blue-200/80 p-6 shadow-sm space-y-5 sticky top-24">
+            <div className="bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/40 dark:from-slate-900 dark:via-slate-800/80 dark:to-slate-900 rounded-2xl border border-blue-200/80 dark:border-slate-800 p-6 shadow-sm space-y-5 sticky top-24">
               
-              <div className="flex items-center justify-between border-b border-blue-100 pb-3">
+              <div className="flex items-center justify-between border-b border-blue-100 dark:border-slate-800 pb-3">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-xl bg-[#2b85ff] text-white flex items-center justify-center shadow-xs">
                     <Sparkles className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-sm sm:text-base text-[#091426]">
+                    <h3 className="font-extrabold text-sm sm:text-base text-[#091426] dark:text-white">
                       Ficha Clínica da IA
                     </h3>
-                    <p className="text-[11px] text-slate-500">Transmissão Direta ao Hospital</p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">Transmissão Direta ao Hospital</p>
                   </div>
                 </div>
 
@@ -635,7 +684,7 @@ function AgendamentoContent() {
 
               {/* Bloco de Sintomas Citados */}
               <div className="space-y-2">
-                <label className="block text-xs font-extrabold text-[#091426] uppercase tracking-wider flex items-center justify-between">
+                <label className="block text-xs font-extrabold text-[#091426] dark:text-slate-200 uppercase tracking-wider flex items-center justify-between">
                   <span>📋 Sintomas Citados pelo Paciente:</span>
                   <span className="text-[10px] text-slate-400 font-normal">Será enviado ao médico</span>
                 </label>
@@ -644,7 +693,7 @@ function AgendamentoContent() {
                   value={sintomasCitados}
                   onChange={(e) => setSintomasCitados(e.target.value)}
                   placeholder="Descreva aqui o que está sentindo (ex: febre alta persistente há 2 dias, náusea e dor atrás dos olhos)..."
-                  className="w-full p-3 rounded-2xl border border-slate-200 text-xs sm:text-sm text-[#091426] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff] bg-white resize-none"
+                  className="w-full p-3 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-[#091426] dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff] bg-white dark:bg-slate-800 resize-none"
                   required
                 />
 
@@ -654,7 +703,7 @@ function AgendamentoContent() {
                     type="button"
                     onClick={handleAnalisarComIA}
                     disabled={analisandoIa}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-[#2b85ff] text-xs font-bold rounded-xl border border-blue-200 transition"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-500/20 hover:bg-blue-100 dark:hover:bg-blue-500/30 text-[#2b85ff] dark:text-blue-300 text-xs font-bold rounded-xl border border-blue-200 dark:border-blue-500/30 transition"
                   >
                     {analisandoIa ? (
                       <>
@@ -672,7 +721,7 @@ function AgendamentoContent() {
                 </div>
 
                 {mensagemIa && (
-                  <p className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 p-2 rounded-xl border border-emerald-200 flex items-center gap-1">
+                  <p className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/60 p-2 rounded-xl border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     {mensagemIa}
                   </p>
@@ -680,7 +729,7 @@ function AgendamentoContent() {
               </div>
 
               {/* Bloco de Diagnóstico e Hipótese Clínica de IA */}
-              <div className="space-y-3 bg-white p-4 rounded-2xl border border-blue-100 shadow-xs">
+              <div className="space-y-3 bg-white dark:bg-slate-800/90 p-4 rounded-2xl border border-blue-100 dark:border-slate-700 shadow-xs">
                 <div>
                   <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">
                     🧠 Hipótese Diagnóstica Gerada pela IA:
@@ -690,7 +739,7 @@ function AgendamentoContent() {
                     value={diagnosticoIa}
                     onChange={(e) => setDiagnosticoIa(e.target.value)}
                     placeholder="Ex: Suspeita de Arbovirose / Dengue Clássica"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm font-bold text-[#091426] focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs sm:text-sm font-bold text-[#091426] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30"
                     required
                   />
                 </div>
@@ -714,7 +763,7 @@ function AgendamentoContent() {
                                 : nv === 'amarelo'
                                 ? 'bg-amber-500 border-amber-500 text-white'
                                 : 'bg-emerald-600 border-emerald-600 text-white'
-                              : 'bg-slate-50 border-slate-200 text-slate-600'
+                              : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
                           }`}
                         >
                           {nv}
@@ -725,30 +774,30 @@ function AgendamentoContent() {
                 </div>
 
                 {orientacaoIa && (
-                  <div className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 leading-relaxed">
-                    <strong className="text-slate-800 block mb-0.5">💡 Conduta e Cuidados Imediatos:</strong>
+                  <div className="text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700 leading-relaxed">
+                    <strong className="text-slate-800 dark:text-white block mb-0.5">💡 Conduta e Cuidados Imediatos:</strong>
                     {orientacaoIa}
                   </div>
                 )}
               </div>
 
               {/* Resumo da Transmissão */}
-              <div className="space-y-2 border-t border-blue-100 pt-3 text-xs text-slate-600">
+              <div className="space-y-2 border-t border-blue-100 dark:border-slate-800 pt-3 text-xs text-slate-600 dark:text-slate-300">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-500">Destino Hospitalar:</span>
-                  <strong className="text-[#091426] text-right line-clamp-1">
+                  <span className="text-slate-500 dark:text-slate-400">Destino Hospitalar:</span>
+                  <strong className="text-[#091426] dark:text-white text-right line-clamp-1">
                     {unidadeSelecionada?.nome || 'Hospital a definir'}
                   </strong>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-500">Protocolo Prévio:</span>
-                  <span className="font-mono text-[11px] font-bold text-[#2b85ff]">
+                  <span className="text-slate-500 dark:text-slate-400">Protocolo Prévio:</span>
+                  <span className="font-mono text-[11px] font-bold text-[#2b85ff] dark:text-blue-400">
                     HOSP-GRH-2026-AUTOMÁTICO
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-500">Canal de Transmissão:</span>
-                  <span className="text-slate-700 font-medium">Barramento SUS Cuidaê</span>
+                  <span className="text-slate-500 dark:text-slate-400">Canal de Transmissão:</span>
+                  <span className="text-slate-700 dark:text-slate-300 font-medium">Barramento SUS Cuidaê</span>
                 </div>
               </div>
 

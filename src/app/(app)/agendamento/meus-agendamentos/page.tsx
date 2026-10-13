@@ -61,20 +61,20 @@ export default function MeusAgendamentosPage() {
   })
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 animate-fade-in pb-16 font-['Inter']">
+    <div className="max-w-5xl mx-auto space-y-8 animate-fade-in pb-16 font-jakarta">
       
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#2b85ff] transition mb-2"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-[#2b85ff] transition mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
             Voltar ao Dashboard
           </Link>
           <div className="flex items-center gap-2.5">
-            <span className="p-2.5 bg-blue-50 text-[#2b85ff] rounded-2xl shadow-xs">
+            <span className="p-2.5 bg-blue-50 text-[#2b85ff] rounded-xl shadow-xs">
               <Calendar className="w-6 h-6" />
             </span>
             <div>

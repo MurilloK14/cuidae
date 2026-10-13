@@ -19,11 +19,11 @@ import {
 } from 'lucide-react';
 
 
-// Color mappings for urgency levels
+// Color mappings for urgency levels with proper contrast & subtle borders
 const urgenciaConfig: Record<string, { label: string; color: string; bg: string; dot: string }> = {
-  verde: { label: 'Baixa', color: 'text-emerald-700', bg: 'bg-emerald-50', dot: 'bg-emerald-500' },
-  amarelo: { label: 'Moderada', color: 'text-amber-700', bg: 'bg-amber-50', dot: 'bg-amber-500' },
-  vermelho: { label: 'Alta', color: 'text-red-700', bg: 'bg-red-50', dot: 'bg-red-500' },
+  verde: { label: 'Baixa', color: 'text-emerald-800', bg: 'bg-emerald-50 border border-emerald-200/70', dot: 'bg-emerald-500' },
+  amarelo: { label: 'Moderada', color: 'text-amber-900', bg: 'bg-amber-50 border border-amber-200/70', dot: 'bg-amber-500' },
+  vermelho: { label: 'Alta', color: 'text-red-800', bg: 'bg-red-50 border border-red-200/70', dot: 'bg-red-500' },
 };
 
 const recomendacaoLabel: Record<string, string> = {
@@ -131,13 +131,18 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8 animate-fade-in-up">
       {/* Greeting */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-          Olá, {primeiroNome}! 👋
-        </h1>
-        <p className="mt-1 text-slate-500">
-          Aqui está um resumo da sua saúde.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-200/60">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#091426] tracking-tight">
+            Olá, {primeiroNome}!
+          </h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Acompanhe suas triagens, histórico clínico e agendamentos no SUS.
+          </p>
+        </div>
+        <div className="text-xs font-semibold text-slate-400 tabular-nums font-mono self-start sm:self-auto">
+          {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
+        </div>
       </div>
 
       {/* Quick Actions Grid */}
@@ -145,35 +150,35 @@ export default async function DashboardPage() {
         {/* Quick Action 1: Start Triage */}
         <Link
           href="/triagem"
-          className="group flex items-center gap-4 p-5 sm:p-6 bg-[#091426] rounded-2xl text-white shadow-[0_8px_24px_-8px_rgba(9,20,38,0.5)] hover:shadow-[0_12px_32px_-8px_rgba(9,20,38,0.6)] transition-all duration-300 hover:-translate-y-0.5"
+          className="group flex items-center gap-4 p-5 sm:p-6 bg-[#091426] rounded-2xl text-white shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
         >
-          <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center shrink-0 text-[#2b85ff]">
             <Stethoscope className="w-6 h-6 text-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="text-base sm:text-lg font-semibold">Iniciar Nova Triagem</h2>
-            <p className="text-xs sm:text-sm text-white/60 mt-0.5">
-              Descreva seus sintomas e receba orientação inteligente
+            <h2 className="text-base sm:text-lg font-bold">Iniciar Nova Triagem</h2>
+            <p className="text-xs sm:text-sm text-slate-300 mt-0.5">
+              Descreva seus sintomas e receba orientação de urgência com IA
             </p>
           </div>
-          <ArrowUpRight className="w-5 h-5 text-white/40 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+          <ArrowUpRight className="w-5 h-5 text-white/50 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
         </Link>
 
         {/* Quick Action 2: Schedule at Hospital */}
         <Link
           href="/agendamento"
-          className="group flex items-center gap-4 p-5 sm:p-6 bg-gradient-to-r from-[#2b85ff] to-[#1a6edb] rounded-2xl text-white shadow-[0_8px_24px_-8px_rgba(43,133,255,0.5)] hover:shadow-[0_12px_32px_-8px_rgba(43,133,255,0.6)] transition-all duration-300 hover:-translate-y-0.5"
+          className="group flex items-center gap-4 p-5 sm:p-6 bg-white border border-slate-200/90 rounded-2xl text-slate-900 shadow-xs hover:border-[#2b85ff]/50 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
         >
-          <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
-            <Calendar className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 text-[#2b85ff]">
+            <Calendar className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="text-base sm:text-lg font-semibold">Agendar no Hospital</h2>
-            <p className="text-xs sm:text-sm text-white/80 mt-0.5">
-              Transmita sintomas e laudo de IA para a recepção hospitalar
+            <h2 className="text-base sm:text-lg font-bold text-[#091426]">Agendar no Hospital</h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Transmita sintomas e laudo da triagem para a recepção hospitalar
             </p>
           </div>
-          <ArrowUpRight className="w-5 h-5 text-white/60 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+          <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-[#2b85ff] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
         </Link>
       </div>
 
@@ -182,11 +187,11 @@ export default async function DashboardPage() {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Hospital Appointments Card */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-[#2b85ff]" />
-                <h3 className="font-semibold text-slate-900">Agendamentos no Hospital</h3>
+                <Calendar className="w-4 h-4 text-[#2b85ff]" />
+                <h3 className="font-bold text-slate-900 text-sm sm:text-base">Agendamentos no Hospital</h3>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-xs font-medium text-slate-400">
@@ -267,11 +272,11 @@ export default async function DashboardPage() {
           </div>
 
           {/* Triage History */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-slate-400" />
-                <h3 className="font-semibold text-slate-900">Histórico de Triagens</h3>
+                <Clock className="w-4 h-4 text-slate-400" />
+                <h3 className="font-bold text-slate-900 text-sm sm:text-base">Histórico de Triagens</h3>
               </div>
               {triagens && triagens.length > 0 && (
                 <span className="text-xs font-medium text-slate-400">
@@ -329,10 +334,10 @@ export default async function DashboardPage() {
 
         <div className="space-y-6">
           {/* Reminders */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
             <div className="flex items-center gap-2 px-5 py-4 border-b border-slate-100">
-              <Bell className="w-5 h-5 text-slate-400" />
-              <h3 className="font-semibold text-slate-900">Lembretes</h3>
+              <Bell className="w-4 h-4 text-[#2b85ff]" />
+              <h3 className="font-bold text-slate-900 text-sm sm:text-base">Lembretes Preventivos</h3>
             </div>
             <div className="divide-y divide-slate-50">
               {lembretesExibidos.map((lembrete: any) => (
