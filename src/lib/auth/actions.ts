@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { headers } from 'next/headers'
+import { headers, cookies } from 'next/headers'
 import type { Session } from '@supabase/supabase-js'
 
 export interface UserProfile {
@@ -195,6 +195,12 @@ export async function signIn(formData: AuthInput): Promise<{ error: string } | v
 export async function signOut(): Promise<void> {
   const supabase = createClient()
   await supabase.auth.signOut()
+  try {
+    const cookieStore = cookies()
+    cookieStore.delete('cuidae_hospital_session')
+  } catch (e) {
+    // ignore
+  }
   redirect('/login')
 }
 

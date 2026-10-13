@@ -29,11 +29,25 @@ import {
   X,
   Send,
   Loader2,
-  ArrowLeft
+  ArrowLeft,
+  Lock,
+  ShieldAlert,
+  LogOut,
+  Key,
+  Copy,
+  Mail
 } from 'lucide-react'
 import type { AgendamentoHospitalar, StatusAgendamentoHospital, NivelUrgencia } from '@/lib/types'
 
 export default function PainelHospitalPage() {
+  // Autenticação e Exclusividade Hospitalar
+  const [hospitalSessao, setHospitalSessao] = useState<any>(null)
+  const [verificandoAuth, setVerificandoAuth] = useState(true)
+  const [autenticadoHospital, setAutenticadoHospital] = useState(false)
+  const [loginRapidoLoading, setLoginRapidoLoading] = useState(false)
+  const [modalCredenciamentoAberto, setModalCredenciamentoAberto] = useState(false)
+  const [emailCopiado, setEmailCopiado] = useState(false)
+
   const [agendamentos, setAgendamentos] = useState<AgendamentoHospitalar[]>([])
   const [hospitais, setHospitais] = useState<any[]>([])
   const [metricas, setMetricas] = useState({
@@ -61,6 +75,76 @@ export default function PainelHospitalPage() {
   const [anotacaoMedica, setAnotacaoMedica] = useState('')
   const [salvandoAnotacao, setSalvandoAnotacao] = useState(false)
   const [sucessoAnotacao, setSucessoAnotacao] = useState(false)
+
+  // Checagem de sessão hospitalar
+  const verificarSessaoHospital = async () => {
+    try {
+      setVerificandoAuth(true)
+      const res = await fetch('/api/hospital/auth/me')
+      const data = await res.json()
+      if (data.authenticated && data.hospital) {
+        setHospitalSessao(data.hospital)
+        setAutenticadoHospital(true)
+        if (data.hospital.hospital_id) {
+          setUnidadeFiltro(data.hospital.hospital_id)
+        }
+      } else {
+        setAutenticadoHospital(false)
+      }
+    } catch (err) {
+      console.error('Erro ao verificar sessão hospitalar:', err)
+      setAutenticadoHospital(false)
+    } finally {
+      setVerificandoAuth(false)
+    }
+  }
+
+  useEffect(() => {
+    verificarSessaoHospital()
+  }, [])
+
+  // Login de Demonstração Homologado (Hospital Regional Dom Moura)
+  const handleLoginRapido = async () => {
+    setLoginRapidoLoading(true)
+    try {
+      const res = await fetch('/api/hospital/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: 'hospital.dommoura@cuidae.med.br',
+          senha: 'Hospital@2026',
+        }),
+      })
+      const data = await res.json()
+      if (data.success && data.session) {
+        setHospitalSessao(data.session)
+        setAutenticadoHospital(true)
+        setUnidadeFiltro(data.session.hospital_id)
+        await carregarPainel()
+      }
+    } catch (err) {
+      console.error('Erro no login rápido de teste:', err)
+    } finally {
+      setLoginRapidoLoading(false)
+    }
+  }
+
+  const handleLogoutHospital = async () => {
+    try {
+      await fetch('/api/hospital/auth/logout', { method: 'POST' })
+    } catch (err) {
+      // ignore
+    }
+    setHospitalSessao(null)
+    setAutenticadoHospital(false)
+    window.location.href = '/login?tab=hospital'
+  }
+
+  const copiarEmailAdmin = () => {
+    navigator.clipboard.writeText('murillokennedy12@gmail.com')
+    setEmailCopiado(true)
+    setTimeout(() => setEmailCopiado(false), 3000)
+  }
 
   // Efeito sonoro / Chamada de voz do paciente
   const chamarPacienteVoz = (ag: AgendamentoHospitalar) => {
@@ -203,6 +287,174 @@ export default function PainelHospitalPage() {
     },
   }
 
+  if (verificandoAuth) {
+    return (
+      <div className="max-w-4xl mx-auto py-24 px-4 text-center font-['Inter']">
+        <div className="inline-flex p-4 rounded-3xl bg-blue-50 text-blue-600 mb-4 animate-pulse">
+          <Building2 className="w-10 h-10" />
+        </div>
+        <h2 className="text-xl font-bold text-slate-800">Verificando credenciais hospitalares...</h2>
+        <p className="text-sm text-slate-500 mt-1">Conectando ao barramento institucional de urgência Cuidaê</p>
+      </div>
+    )
+  }
+
+  if (!autenticadoHospital) {
+    return (
+      <div className="max-w-2xl mx-auto py-8 sm:py-12 px-4 animate-fade-in font-['Inter']">
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl p-6 sm:p-9 text-center space-y-6">
+          <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-[#091426] to-slate-800 text-white flex items-center justify-center mx-auto shadow-lg relative">
+            <Building2 className="w-8 h-8 text-emerald-400" />
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center border-2 border-white">
+              <Lock className="w-3.5 h-3.5" />
+            </div>
+          </div>
+
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 uppercase tracking-wider mb-3">
+              <ShieldAlert className="w-3.5 h-3.5 text-amber-600" />
+              Ambiente Exclusivo para Hospitais Homologados
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-[#091426] tracking-tight">
+              Acesso Restrito ao Painel Hospitalar
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed max-w-lg mx-auto">
+              Este painel realiza a gestão da fila de acolhimento de urgência, chamador de pacientes por voz e prontuários médicos transmitidos pela inteligência artificial do Cuidaê.
+              <br /><br />
+              Por sigilo médico e conformidade legal, o acesso é <strong>exclusivo para recepcionistas e equipes médicas autorizadas</strong>.
+            </p>
+          </div>
+
+          {/* Card de Teste Imediato com 1 Clique */}
+          <div className="bg-gradient-to-br from-blue-50/90 to-emerald-50/80 border border-blue-200/80 rounded-2xl p-5 text-left shadow-xs">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs font-bold text-blue-900 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-blue-600" />
+                Deseja testar este painel agora?
+              </span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-600 text-white uppercase tracking-wider">
+                Perfil de Teste Liberado
+              </span>
+            </div>
+            <p className="text-xs text-slate-600 leading-relaxed mb-3">
+              Criamos e homologamos o perfil do <strong>Hospital Regional Dom Moura (HRDM)</strong> para você testar todas as funcionalidades:
+            </p>
+            <div className="bg-white/95 rounded-xl p-3 text-xs font-mono text-slate-800 border border-blue-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+              <div>
+                <div><strong>E-mail:</strong> hospital.dommoura@cuidae.med.br</div>
+                <div><strong>Senha:</strong> Hospital@2026</div>
+              </div>
+              <span className="text-[11px] text-emerald-700 bg-emerald-50 font-sans font-semibold px-2 py-1 rounded-md border border-emerald-200">
+                Dr. Roberto Albuquerque (Chefe de Triagem)
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleLoginRapido}
+              disabled={loginRapidoLoading}
+              className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition shadow-md disabled:opacity-70"
+            >
+              {loginRapidoLoading ? (
+                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <>
+                  <Key className="w-4 h-4" />
+                  <span>Acessar com Perfil Homologado (Hospital Regional Dom Moura)</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Ações Secundárias */}
+          <div className="pt-2 flex flex-col sm:flex-row gap-2.5 justify-center">
+            <Link
+              href="/login?tab=hospital"
+              className="px-5 py-3 rounded-xl bg-[#091426] hover:bg-slate-800 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition shadow-xs"
+            >
+              <Building2 className="w-4 h-4 text-emerald-400" />
+              <span>Ir para Aba de Login Hospitalar</span>
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => setModalCredenciamentoAberto(true)}
+              className="px-5 py-3 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition"
+            >
+              <Mail className="w-4 h-4 text-blue-600" />
+              <span>Credenciar Nova Unidade</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Modal Informativo de Credenciamento */}
+        {modalCredenciamentoAberto && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
+            <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-100 relative">
+              <button
+                onClick={() => setModalCredenciamentoAberto(false)}
+                className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <Building2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900">Credenciamento de Unidade Hospitalar</h3>
+                  <p className="text-xs text-slate-500">Liberação de acesso pelo administrador</p>
+                </div>
+              </div>
+
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-900 space-y-3 mb-4">
+                <p className="leading-relaxed">
+                  Para criar um novo perfil e conectar sua unidade hospitalar, é necessário entrar em contato direto com o administrador para validação do CNPJ e credenciamento oficial:
+                </p>
+
+                <div className="bg-white border border-amber-200 rounded-xl p-3 flex flex-col sm:flex-row items-center justify-between gap-2 font-mono font-bold text-slate-800">
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-blue-600" />
+                    <span>murillokennedy12@gmail.com</span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 w-full sm:w-auto">
+                    <button
+                      type="button"
+                      onClick={copiarEmailAdmin}
+                      className="px-3 py-1.5 rounded-lg text-[11px] font-sans font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1 flex-1 sm:flex-none justify-center"
+                    >
+                      {emailCopiado ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{emailCopiado ? 'Copiado!' : 'Copiar'}</span>
+                    </button>
+                    <a
+                      href="mailto:murillokennedy12@gmail.com?subject=Credenciamento%20de%20Unidade%20Hospitalar%20-%20Cuida%C3%AA"
+                      className="px-3 py-1.5 rounded-lg text-[11px] font-sans font-semibold bg-blue-600 hover:bg-blue-700 text-white transition flex items-center gap-1 flex-1 sm:flex-none justify-center"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Abrir E-mail</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <button
+                  type="button"
+                  onClick={() => setModalCredenciamentoAberto(false)}
+                  className="px-5 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition"
+                >
+                  Fechar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div className="max-w-7xl mx-auto space-y-6 pb-20 font-['Inter'] animate-fade-in">
       
@@ -212,12 +464,12 @@ export default function PainelHospitalPage() {
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-300">
-              Barramento SISREG Cuidaê Conectado
+              Barramento SISREG Conectado • {hospitalSessao?.hospital_nome || 'Hospital Regional Dom Moura'}
             </span>
           </div>
           <span className="text-slate-600 hidden sm:inline">•</span>
           <span className="text-xs text-slate-300 hidden sm:inline">
-            Recepção e Central de Acolhimento Hospitalar
+            Resp: {hospitalSessao?.responsavel_nome || 'Corpo Clínico'} ({hospitalSessao?.cargo || 'Triagem'})
           </span>
         </div>
 
@@ -232,7 +484,16 @@ export default function PainelHospitalPage() {
             title="Ativar ou desativar chamador de voz de pacientes"
           >
             {vozAtiva ? <Volume2 className="w-3.5 h-3.5 text-blue-300" /> : <VolumeX className="w-3.5 h-3.5" />}
-            <span className="hidden sm:inline">Chamador de Senhas / Voz: {vozAtiva ? 'Ligado' : 'Mudo'}</span>
+            <span className="hidden sm:inline">Chamador de Senhas: {vozAtiva ? 'Ligado' : 'Mudo'}</span>
+          </button>
+
+          <button
+            onClick={handleLogoutHospital}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-200 border border-red-500/30 transition"
+            title="Sair do Perfil Hospitalar"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Sair do Hospital</span>
           </button>
 
           <Link
@@ -240,7 +501,7 @@ export default function PainelHospitalPage() {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 transition"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Voltar ao App Paciente</span>
+            <span>App Paciente</span>
           </Link>
         </div>
       </div>

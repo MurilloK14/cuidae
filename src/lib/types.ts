@@ -302,4 +302,38 @@ export interface AgendamentoHospitalar {
   updated_at: string
 }
 
+// ----- Autenticação e Perfis Exclusivos de Hospitais -----
 
+export interface UsuarioHospital {
+  id: string
+  email: string
+  senha_hash: string
+  hospital_id: string
+  hospital_nome: string
+  hospital_curto?: string
+  hospital_cidade: string
+  hospital_uf: string
+  cnpj: string
+  responsavel_nome: string
+  cargo: string
+  registro_profissional?: string
+  telefone: string
+  aprovado: boolean
+  aprovado_por?: string
+  data_aprovacao?: string
+  permissoes?: string[]
+}
+
+export interface SessaoHospital {
+  token: string
+  user_id: string
+  email: string
+  hospital_id: string
+  hospital_nome: string
+  hospital_curto?: string
+  hospital_cidade: string
+  hospital_uf: string
+  responsavel_nome: string
+  cargo: string
+  criado_em: string
+}

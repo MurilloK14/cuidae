@@ -1,0 +1,51 @@
+[
+  {
+    "id": "hosp-user-hrdm-01",
+    "email": "hospital.dommoura@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "7a1b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "hospital_nome": "Hospital Regional Dom Moura",
+    "hospital_curto": "HRDM",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "10.572.012/0001-44",
+    "responsavel_nome": "Dr. Roberto Albuquerque",
+    "cargo": "Médico Regulador / Chefe de Triagem",
+    "registro_profissional": "CRM-PE 18452",
+    "telefone": "(87) 3761-8101",
+    "aprovado": true,
+    "aprovado_por": "murillokennedy12@gmail.com",
+    "data_aprovacao": "2026-10-13T00:00:00.000Z",
+    "permissoes": [
+      "triagem",
+      "chamada_voz",
+      "prontuario",
+      "recepcao",
+      "fila_urgencia"
+    ]
+  },
+  {
+    "id": "hosp-user-hips-02",
+    "email": "hospital.palmirasales@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "8b2c4d5e-6f7a-4b8c-9d0e-1f2a3b4c5d6e",
+    "hospital_nome": "Hospital Infantil Palmira Sales",
+    "hospital_curto": "HIPS",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "11.234.567/0001-88",
+    "responsavel_nome": "Dra. Luciana Ferreira",
+    "cargo": "Coordenadora Pediátrica",
+    "registro_profissional": "CRM-PE 22104",
+    "telefone": "(87) 3762-2400",
+    "aprovado": true,
+    "aprovado_por": "murillokennedy12@gmail.com",
+    "data_aprovacao": "2026-10-13T00:00:00.000Z",
+    "permissoes": [
+      "triagem",
+      "chamada_voz",
+      "prontuario",
+      "recepcao"
+    ]
+  }
+]

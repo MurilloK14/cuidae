@@ -2,8 +2,10 @@ import React from 'react';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
-import { LogOut, User, Settings } from 'lucide-react';
+import { getSessionByToken } from '@/lib/db/hospitalAuthStore';
+import { LogOut, User, Settings, Building2 } from 'lucide-react';
 import { signOut } from '@/lib/auth/actions';
 
 export default async function AppLayout({
@@ -11,40 +13,61 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = cookies();
+  const hospitalToken = cookieStore.get('cuidae_hospital_session')?.value;
+  const hospitalSession = hospitalToken ? getSessionByToken(hospitalToken) : null;
+
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (!user && !hospitalSession) {
     redirect('/login');
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('nome_completo, camada')
-    .eq('id', user.id)
-    .single();
+  let nome = 'Usuário';
+  let primeiroNome = 'Usuário';
+  let badge = { text: 'Grátis', color: 'bg-slate-100 text-slate-600' };
 
-  const nome = profile?.nome_completo || user.email?.split('@')[0] || 'Usuário';
-  const primeiroNome = nome.split(' ')[0];
-  const camada = profile?.camada || 'gratuita';
+  if (hospitalSession) {
+    nome = hospitalSession.hospital_nome;
+    primeiroNome = hospitalSession.hospital_curto || hospitalSession.hospital_nome.split(' ')[0];
+    badge = { text: 'Hospital Credenciado', color: 'bg-emerald-100 text-emerald-800' };
+  } else if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('nome_completo, camada')
+      .eq('id', user.id)
+      .single();
 
-  const camadaLabel: Record<string, { text: string; color: string }> = {
-    gratuita: { text: 'Grátis', color: 'bg-slate-100 text-slate-600' },
-    intermediaria: { text: 'Intermediário', color: 'bg-blue-100 text-blue-700' },
-    premium: { text: 'Premium', color: 'bg-amber-100 text-amber-700' },
-  };
+    nome = profile?.nome_completo || user.email?.split('@')[0] || 'Usuário';
+    primeiroNome = nome.split(' ')[0];
+    const camada = profile?.camada || 'gratuita';
 
-  const badge = camadaLabel[camada] || camadaLabel.gratuita;
+    const camadaLabel: Record<string, { text: string; color: string }> = {
+      gratuita: { text: 'Grátis', color: 'bg-slate-100 text-slate-600' },
+      intermediaria: { text: 'Intermediário', color: 'bg-blue-100 text-blue-700' },
+      premium: { text: 'Premium', color: 'bg-amber-100 text-amber-700' },
+    };
 
-  const navLinks = [
-    { label: 'Dashboard', href: '/dashboard', icon: '📊' },
-    { label: 'Nova Triagem', href: '/triagem', icon: '🩺' },
-    { label: 'Agendamentos', href: '/agendamento/meus-agendamentos', icon: '🗓️' },
-    { label: 'Unidades', href: '/unidades', icon: '🏥' },
-    { label: 'Planos', href: '/planos', icon: '⬆️' },
-  ];
+    badge = camadaLabel[camada] || camadaLabel.gratuita;
+  }
+
+  const navLinks = hospitalSession
+    ? [
+        { label: 'Painel Hospital', href: '/hospital/painel', icon: '🏥' },
+        { label: 'Fila de Triagem', href: '/hospital/painel', icon: '🩺' },
+        { label: 'Unidades de Saúde', href: '/unidades', icon: '📍' },
+        { label: 'Visão Paciente', href: '/dashboard', icon: '📊' },
+      ]
+    : [
+        { label: 'Dashboard', href: '/dashboard', icon: '📊' },
+        { label: 'Nova Triagem', href: '/triagem', icon: '🩺' },
+        { label: 'Agendamentos', href: '/agendamento/meus-agendamentos', icon: '🗓️' },
+        { label: 'Unidades', href: '/unidades', icon: '🏥' },
+        { label: 'Planos', href: '/planos', icon: '⬆️' },
+      ];
 
 
   return (
