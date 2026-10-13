@@ -251,7 +251,7 @@ function UnidadesContent() {
 
       {/* Triage Context Banner (if arrived from triage) */}
       {isFromTriage && (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 rounded-2xl p-5 shadow-sm">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-slate-900 border border-blue-200/80 dark:border-blue-900/60 rounded-2xl p-5 shadow-sm">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#2b85ff] text-white flex items-center justify-center shrink-0 shadow-sm">
@@ -259,19 +259,19 @@ function UnidadesContent() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#2b85ff]">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#2b85ff] dark:text-blue-400">
                     Recomendação Personalizada
                   </span>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-[#1a6edb]">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-950/80 text-[#1a6edb] dark:text-blue-300">
                     Baseado na sua triagem
                   </span>
                 </div>
-                <h3 className="text-base font-bold text-[#091426] mt-0.5">
+                <h3 className="text-base font-bold text-[#091426] dark:text-white mt-0.5">
                   {diagnosticoParam ? `Sintoma: "${diagnosticoParam}"` : 'Orientação Médica Cuidaê'}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1">
                   {especialidadeParam && (
-                    <span className="font-semibold text-slate-800 mr-2">
+                    <span className="font-semibold text-slate-800 dark:text-slate-200 mr-2">
                       Especialidade indicada: {especialidadeParam}
                     </span>
                   )}
@@ -282,7 +282,7 @@ function UnidadesContent() {
 
             <Link
               href="/unidades"
-              className="text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 shadow-sm transition whitespace-nowrap"
+              className="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition whitespace-nowrap"
             >
               Ver todas sem filtro de triagem
             </Link>
@@ -291,22 +291,22 @@ function UnidadesContent() {
       )}
 
       {/* Search & Sort Bar */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-4 sm:p-5 space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs p-4 sm:p-5 space-y-4">
         <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
           {/* Search input */}
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
               placeholder="Buscar por unidade, especialidade, bairro ou serviço..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm text-[#091426] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff] transition"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-[#091426] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30 focus:border-[#2b85ff] transition"
             />
             {busca && (
               <button
                 onClick={() => setBusca('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-600 bg-slate-100 rounded-md px-1.5 py-0.5"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-600 bg-slate-100 dark:bg-slate-700 rounded-md px-1.5 py-0.5"
               >
                 Limpar
               </button>
@@ -315,7 +315,7 @@ function UnidadesContent() {
 
           {/* Sort Toggles */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 shrink-0">
-            <span className="text-xs font-semibold text-slate-500 mr-1 flex items-center gap-1">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 mr-1 flex items-center gap-1">
               <ArrowUpDown className="w-3.5 h-3.5" />
               Ordenar:
             </span>
@@ -325,7 +325,7 @@ function UnidadesContent() {
                 className={`px-3 py-2 rounded-xl text-xs font-semibold transition whitespace-nowrap flex items-center gap-1.5 ${
                   ordenacao === 'recomendacao'
                     ? 'bg-[#2b85ff] text-white shadow-sm'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-700'
                 }`}
               >
                 <Sparkles className="w-3.5 h-3.5" />
@@ -337,7 +337,7 @@ function UnidadesContent() {
               className={`px-3 py-2 rounded-xl text-xs font-semibold transition whitespace-nowrap flex items-center gap-1.5 ${
                 ordenacao === 'distancia'
                   ? 'bg-[#2b85ff] text-white shadow-sm'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-700'
               }`}
             >
               <Navigation className="w-3.5 h-3.5" />
@@ -348,7 +348,7 @@ function UnidadesContent() {
               className={`px-3 py-2 rounded-xl text-xs font-semibold transition whitespace-nowrap flex items-center gap-1.5 ${
                 ordenacao === 'avaliacao'
                   ? 'bg-[#2b85ff] text-white shadow-sm'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-700'
               }`}
             >
               <Star className="w-3.5 h-3.5 fill-current" />
@@ -359,7 +359,7 @@ function UnidadesContent() {
               className={`px-3 py-2 rounded-xl text-xs font-semibold transition whitespace-nowrap ${
                 ordenacao === 'nome'
                   ? 'bg-[#2b85ff] text-white shadow-sm'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-700'
               }`}
             >
               Nome (A-Z)
@@ -378,11 +378,11 @@ function UnidadesContent() {
                 onClick={() => setCategoriaAtiva(cat.id)}
                 className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                   isActive
-                    ? 'bg-[#091426] text-white shadow-sm'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
+                    ? 'bg-[#091426] dark:bg-blue-600 text-white shadow-sm'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-700'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#2b85ff]' : 'text-slate-400'}`} />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#2b85ff] dark:text-white' : 'text-slate-400'}`} />
                 {cat.label}
               </button>
             )
@@ -391,12 +391,12 @@ function UnidadesContent() {
       </div>
 
       {/* Results Header */}
-      <div className="flex items-center justify-between text-sm text-slate-600 px-1">
+      <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400 px-1">
         <span>
-          Mostrando <strong className="text-[#091426]">{unidadesProcessadas.length}</strong> unidade{unidadesProcessadas.length !== 1 ? 's' : ''} de saúde
+          Mostrando <strong className="text-[#091426] dark:text-white">{unidadesProcessadas.length}</strong> unidade{unidadesProcessadas.length !== 1 ? 's' : ''} de saúde
         </span>
         {busca && (
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-slate-500 dark:text-slate-400">
             Filtrado por: &quot;{busca}&quot;
           </span>
         )}
@@ -406,12 +406,12 @@ function UnidadesContent() {
       {loading && (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm animate-pulse space-y-4">
-              <div className="h-4 bg-slate-200 rounded w-1/3" />
-              <div className="h-6 bg-slate-200 rounded w-3/4" />
-              <div className="h-4 bg-slate-200 rounded w-full" />
-              <div className="h-16 bg-slate-100 rounded-xl" />
-              <div className="h-9 bg-slate-200 rounded-xl w-full" />
+            <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-6 shadow-sm animate-pulse space-y-4">
+              <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-1/3" />
+              <div className="h-6 bg-slate-200 dark:bg-slate-800 rounded w-3/4" />
+              <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-full" />
+              <div className="h-16 bg-slate-100 dark:bg-slate-800/60 rounded-xl" />
+              <div className="h-9 bg-slate-200 dark:bg-slate-800 rounded-xl w-full" />
             </div>
           ))}
         </div>
@@ -419,10 +419,10 @@ function UnidadesContent() {
 
       {/* Error state */}
       {error && !loading && (
-        <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
+        <div className="bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 rounded-2xl p-6 text-center">
           <AlertTriangle className="w-8 h-8 text-red-500 mx-auto mb-2" />
-          <h3 className="text-base font-bold text-red-900 mb-1">Erro ao carregar unidades</h3>
-          <p className="text-sm text-red-700 mb-4">{error}</p>
+          <h3 className="text-base font-bold text-red-900 dark:text-red-200 mb-1">Erro ao carregar unidades</h3>
+          <p className="text-sm text-red-700 dark:text-red-300 mb-4">{error}</p>
           <button
             onClick={carregarUnidades}
             className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl transition"
@@ -435,10 +435,10 @@ function UnidadesContent() {
 
       {/* Empty state */}
       {!loading && !error && unidadesProcessadas.length === 0 && (
-        <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center shadow-sm">
-          <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-          <h3 className="text-lg font-bold text-[#091426] mb-1">Nenhuma unidade encontrada</h3>
-          <p className="text-sm text-slate-500 max-w-md mx-auto mb-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-12 text-center shadow-sm">
+          <Building2 className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+          <h3 className="text-lg font-bold text-[#091426] dark:text-white mb-1">Nenhuma unidade encontrada</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-6">
             Não encontramos resultados para os filtros selecionados. Tente buscar por outros termos ou remover os filtros de categoria.
           </p>
           <button
@@ -459,32 +459,32 @@ function UnidadesContent() {
           {unidadesProcessadas.map((unidade) => {
             const statusColor =
               unidade.status_color === 'emerald'
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/60'
                 : unidade.status_color === 'amber'
-                ? 'bg-amber-50 text-amber-700 border-amber-200'
-                : 'bg-slate-100 text-slate-700 border-slate-200'
+                ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/60'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
 
             const isRecommended = Boolean(unidade.motivoRecomendacao && isFromTriage)
 
             return (
               <div
                 key={unidade.id}
-                className={`bg-white rounded-2xl border transition-all duration-200 hover:shadow-md flex flex-col justify-between overflow-hidden ${
+                className={`bg-white dark:bg-slate-900 rounded-2xl border transition-all duration-200 hover:shadow-md flex flex-col justify-between overflow-hidden ${
                   isRecommended
-                    ? 'border-blue-300 ring-2 ring-[#2b85ff]/15 shadow-sm'
-                    : 'border-slate-200/80 shadow-xs hover:border-slate-300 hover:shadow-sm'
+                    ? 'border-blue-300 dark:border-blue-700 ring-2 ring-[#2b85ff]/15 shadow-sm'
+                    : 'border-slate-200/80 dark:border-slate-800 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-sm'
                 }`}
               >
                 <div className="p-5 sm:p-6 space-y-4 flex-1">
                   {/* Card Header: Badges */}
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#2b85ff]/10 text-[#2b85ff] capitalize">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#2b85ff]/10 dark:bg-blue-500/20 text-[#2b85ff] dark:text-blue-400 capitalize">
                       {unidade.categoria}
                     </span>
 
                     <div className="flex items-center gap-1.5">
                       {unidade.sus_gratuito && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
                           <ShieldCheck className="w-3 h-3" />
                           100% SUS
                         </span>
@@ -500,20 +500,20 @@ function UnidadesContent() {
 
                   {/* Title & Type */}
                   <div>
-                    <h3 className="text-lg font-bold text-[#091426] leading-snug hover:text-[#2b85ff] transition-colors">
+                    <h3 className="text-lg font-bold text-[#091426] dark:text-white leading-snug hover:text-[#2b85ff] dark:hover:text-blue-400 transition-colors">
                       <Link href={`/unidades/${unidade.id}`}>
                         {unidade.nome}
                       </Link>
                     </h3>
-                    <p className="text-xs text-slate-500 mt-1 line-clamp-1">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">
                       {unidade.tipo_label}
                     </p>
                   </div>
 
                   {/* Highlighted Recommendation Reason Box (if triage) */}
                   {unidade.motivoRecomendacao && isFromTriage && (
-                    <div className="bg-gradient-to-r from-blue-50/90 to-indigo-50/70 border border-blue-200/90 rounded-xl p-3 text-xs text-blue-950 space-y-1">
-                      <div className="flex items-center gap-1.5 font-bold text-[#2b85ff]">
+                    <div className="bg-gradient-to-r from-blue-50/90 to-indigo-50/70 dark:from-blue-950/50 dark:to-slate-900 border border-blue-200/90 dark:border-blue-800/60 rounded-xl p-3 text-xs text-blue-950 dark:text-blue-200 space-y-1">
+                      <div className="flex items-center gap-1.5 font-bold text-[#2b85ff] dark:text-blue-400">
                         <Sparkles className="w-3.5 h-3.5 shrink-0" />
                         <span>Por que é recomendada:</span>
                         {unidade.score !== undefined && (
@@ -522,28 +522,28 @@ function UnidadesContent() {
                           </span>
                         )}
                       </div>
-                      <p className="text-slate-700 leading-relaxed font-medium">
+                      <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                         {unidade.motivoRecomendacao}
                       </p>
                     </div>
                   )}
 
                   {/* Key Info: Address, Phone, Hours, Rating, Distance */}
-                  <div className="space-y-2 text-xs text-slate-600 pt-1 border-t border-slate-50">
+                  <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 pt-1 border-t border-slate-50 dark:border-slate-800">
                     {/* Address & Bairro */}
                     <div className="flex items-start gap-2">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                      <MapPin className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0 mt-0.5" />
                       <span className="line-clamp-2">
-                        {unidade.endereco} • <strong className="text-slate-700 font-semibold">{unidade.bairro}</strong>
+                        {unidade.endereco} • <strong className="text-slate-700 dark:text-slate-200 font-semibold">{unidade.bairro}</strong>
                       </span>
                     </div>
 
                     {/* Phone */}
                     <div className="flex items-center gap-2">
-                      <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <Phone className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
                       <a
                         href={`tel:${unidade.telefone.replace(/\D/g, '')}`}
-                        className="hover:text-[#2b85ff] font-medium transition"
+                        className="hover:text-[#2b85ff] dark:hover:text-blue-400 font-medium transition"
                       >
                         {unidade.telefone}
                       </a>
@@ -551,26 +551,26 @@ function UnidadesContent() {
 
                     {/* Operating Hours */}
                     <div className="flex items-center gap-2">
-                      <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <Clock className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
                       <span className="line-clamp-1">{unidade.horario}</span>
                     </div>
 
                     {/* Ratings & Distance Row */}
-                    <div className="flex items-center justify-between pt-1 text-slate-700 font-medium">
+                    <div className="flex items-center justify-between pt-1 text-slate-700 dark:text-slate-200 font-medium">
                       {/* Rating do Google */}
-                      <div className="flex items-center gap-1.5 bg-amber-50/80 border border-amber-200/60 px-2 py-1 rounded-lg">
+                      <div className="flex items-center gap-1.5 bg-amber-50/80 dark:bg-amber-950/60 border border-amber-200/60 dark:border-amber-800/60 px-2 py-1 rounded-lg">
                         <div className="flex items-center text-amber-500">
                           <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                         </div>
-                        <span className="font-extrabold text-[#091426] text-xs">{unidade.google_rating.toFixed(1)}</span>
-                        <span className="text-[10px] text-slate-500">
+                        <span className="font-extrabold text-[#091426] dark:text-amber-200 text-xs">{unidade.google_rating.toFixed(1)}</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400">
                           no Google ({unidade.google_total_avaliacoes})
                         </span>
                       </div>
 
                       {/* Distance */}
                       {unidade.distanciaKm !== undefined && unidade.distanciaKm !== null && (
-                        <div className="flex items-center gap-1 text-[#2b85ff] bg-blue-50 px-2 py-0.5 rounded-md text-[11px] font-semibold">
+                        <div className="flex items-center gap-1 text-[#2b85ff] dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 border dark:border-blue-800/40 px-2 py-0.5 rounded-md text-[11px] font-semibold">
                           <Navigation className="w-3 h-3" />
                           <span>~{unidade.distanciaKm} km</span>
                         </div>
@@ -585,13 +585,13 @@ function UnidadesContent() {
                         {unidade.especialidades.slice(0, 3).map((esp, idx) => (
                           <span
                             key={idx}
-                            className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-100 text-slate-600 hover:bg-slate-200/60 transition"
+                            className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700 transition"
                           >
                             {esp}
                           </span>
                         ))}
                         {unidade.especialidades.length > 3 && (
-                          <span className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-medium text-slate-400">
+                          <span className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-medium text-slate-400 dark:text-slate-500">
                             +{unidade.especialidades.length - 3} mais
                           </span>
                         )}
@@ -601,7 +601,7 @@ function UnidadesContent() {
                 </div>
 
                 {/* Card Actions Footer */}
-                <div className="p-4 bg-slate-50/80 border-t border-slate-100 flex flex-col gap-2">
+                <div className="p-4 bg-slate-50/80 dark:bg-slate-800/60 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-2">
                   <Link
                     href={`/agendamento?unidadeId=${unidade.id}&especialidade=${encodeURIComponent(especialidadeParam || '')}&diagnostico=${encodeURIComponent(diagnosticoParam || '')}&sintomas=${encodeURIComponent(diagnosticoParam || '')}`}
                     className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-[#2b85ff] hover:bg-blue-600 text-white text-xs font-bold rounded-xl shadow-xs transition"
@@ -615,7 +615,7 @@ function UnidadesContent() {
                       href={unidade.google_maps_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition"
+                      className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl transition"
                     >
                       <span>Maps</span>
                       <ExternalLink className="w-3 h-3 text-slate-400" />
@@ -623,7 +623,7 @@ function UnidadesContent() {
 
                     <Link
                       href={`/unidades/${unidade.id}`}
-                      className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition"
+                      className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl transition"
                     >
                       <span>Detalhes</span>
                       <ChevronRight className="w-3.5 h-3.5" />

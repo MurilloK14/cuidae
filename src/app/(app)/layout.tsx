@@ -32,9 +32,9 @@ export default async function AppLayout({
   const camada = profile?.camada || 'gratuita';
 
   const camadaLabel: Record<string, { text: string; color: string }> = {
-    gratuita: { text: 'Grátis', color: 'bg-slate-100 text-slate-600' },
-    intermediaria: { text: 'Intermediário', color: 'bg-blue-100 text-blue-700' },
-    premium: { text: 'Premium', color: 'bg-amber-100 text-amber-700' },
+    gratuita: { text: 'Grátis', color: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300' },
+    intermediaria: { text: 'Intermediário', color: 'bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300' },
+    premium: { text: 'Premium', color: 'bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300' },
   };
 
   const badge = camadaLabel[camada] || camadaLabel.gratuita;

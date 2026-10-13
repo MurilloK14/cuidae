@@ -375,41 +375,41 @@ export default function TriagemPage() {
     }
   }
 
-  const inputClass = "w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2b85ff] focus:border-[#2b85ff] bg-white text-slate-900"
-  const radioLabelClass = "flex items-center gap-2 cursor-pointer p-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+  const inputClass = "w-full rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2b85ff] focus:border-[#2b85ff] bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-colors"
+  const radioLabelClass = "flex items-center gap-2 cursor-pointer p-3 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 text-slate-800 dark:text-slate-200 transition-colors"
 
   return (
-    <div className="min-h-screen bg-slate-50/60 py-6 sm:py-10 px-4 sm:px-6 lg:px-8 font-jakarta">
+    <div className="min-h-screen bg-slate-50/60 dark:bg-transparent py-6 sm:py-10 px-4 sm:px-6 lg:px-8 font-jakarta">
       <div className="max-w-4xl mx-auto space-y-6">
 
         {/* Top Header & Mode Toggle */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
           <div>
             <div className="flex items-center gap-2">
-              <span className="p-2 bg-blue-50 text-[#2b85ff] rounded-xl">
+              <span className="p-2 bg-blue-50 dark:bg-blue-950/60 text-[#2b85ff] dark:text-blue-400 rounded-xl border dark:border-blue-800/40">
                 <Stethoscope className="w-5 h-5" />
               </span>
-              <h1 className="text-xl sm:text-2xl font-bold text-[#091426]">Triagem Médica Cuidaê</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-[#091426] dark:text-white">Triagem Médica Cuidaê</h1>
             </div>
-            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
               Avaliação de sintomas com inteligência clínica e direcionamento para a rede de saúde.
             </p>
           </div>
 
           {/* Segmented Control */}
-          <div className="flex bg-slate-100 p-1 rounded-xl self-start sm:self-auto border border-slate-200/60">
+          <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl self-start sm:self-auto border border-slate-200/60 dark:border-slate-700">
             <button
               type="button"
               onClick={() => setMode('chat')}
               className={`flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all ${
                 mode === 'chat'
-                  ? 'bg-white text-[#2b85ff] shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-[#2b85ff] dark:text-blue-400 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <Sparkles className="w-4 h-4 text-[#2b85ff]" />
+              <Sparkles className="w-4 h-4 text-[#2b85ff] dark:text-blue-400" />
               Conversar com IA
-              <span className="text-[10px] bg-blue-100 text-[#2b85ff] px-1.5 py-0.5 rounded-full font-bold">
+              <span className="text-[10px] bg-blue-100 dark:bg-blue-950/80 text-[#2b85ff] dark:text-blue-300 px-1.5 py-0.5 rounded-full font-bold">
                 Novo
               </span>
             </button>
@@ -418,8 +418,8 @@ export default function TriagemPage() {
               onClick={() => setMode('formulario')}
               className={`flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all ${
                 mode === 'formulario'
-                  ? 'bg-white text-[#091426] shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-[#091426] dark:text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <FileText className="w-4 h-4" />
@@ -432,7 +432,7 @@ export default function TriagemPage() {
         {/* MODO 1: CHAT CONVERSACIONAL COM AGENTE DE IA (PADRÃO)                     */}
         {/* ========================================================================= */}
         {mode === 'chat' && (
-          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden flex flex-col h-[750px] max-h-[85vh] animate-fade-in-up">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs overflow-hidden flex flex-col h-[750px] max-h-[85vh] animate-fade-in-up">
             
             {/* Chat Bar Header */}
             <div className="bg-gradient-to-r from-[#091426] to-[#122748] px-5 py-4 text-white flex items-center justify-between border-b border-slate-800">
@@ -493,7 +493,7 @@ export default function TriagemPage() {
             </div>
 
             {/* Chat Body - Mensagens */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 bg-[#f8fafc]/60">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 bg-[#f8fafc]/60 dark:bg-slate-950/70">
               
               {/* Mensagens do Diálogo */}
               {mensagens.map((msg) => (
@@ -511,7 +511,7 @@ export default function TriagemPage() {
                     
                     {/* Imagem enviada */}
                     {msg.imagem && (
-                      <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-sm max-w-xs">
+                      <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm max-w-xs">
                         <img src={msg.imagem} alt="Foto de sintoma" className="w-full h-auto object-cover max-h-56" />
                       </div>
                     )}
@@ -522,7 +522,7 @@ export default function TriagemPage() {
                         className={`p-4 rounded-2xl text-sm sm:text-base leading-relaxed shadow-sm ${
                           msg.remetente === 'usuario'
                             ? 'bg-[#2b85ff] text-white rounded-br-xs'
-                            : 'bg-white text-slate-800 border border-slate-200/80 rounded-bl-xs'
+                            : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-slate-700 rounded-bl-xs'
                         }`}
                       >
                         <p className="whitespace-pre-wrap">{msg.texto}</p>
@@ -530,7 +530,7 @@ export default function TriagemPage() {
                         {msg.timestamp && (
                           <span
                             className={`block text-[10px] mt-1.5 ${
-                              msg.remetente === 'usuario' ? 'text-blue-100 text-right' : 'text-slate-400'
+                              msg.remetente === 'usuario' ? 'text-blue-100 text-right' : 'text-slate-400 dark:text-slate-400'
                             }`}
                           >
                             {new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
@@ -541,64 +541,64 @@ export default function TriagemPage() {
 
                     {/* CARD CLÍNICO DE TRIAGEM EM TEMPO REAL */}
                     {msg.triagem && (
-                      <div className="bg-white rounded-2xl border border-slate-200 shadow-md p-4 sm:p-5 space-y-4 animate-fade-in-up">
+                      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md p-4 sm:p-5 space-y-4 animate-fade-in-up">
                         
                         {/* Header do Card com Badge Manchester */}
-                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
-                          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400">
                             Avaliação Clínica de Triagem
                           </span>
 
                           {msg.triagem.nivel_urgencia === 'vermelho' && (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">
-                              <ShieldAlert className="w-3.5 h-3.5 text-red-600" />
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 dark:bg-red-950/70 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800/60">
+                              <ShieldAlert className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
                               Prioridade Vermelha (Emergência)
                             </span>
                           )}
 
                           {msg.triagem.nivel_urgencia === 'amarelo' && (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">
-                              <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60">
+                              <AlertTriangle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                               Prioridade Amarela (Urgente)
                             </span>
                           )}
 
                           {msg.triagem.nivel_urgencia === 'verde' && (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                               Prioridade Verde (Pouco Urgente)
                             </span>
                           )}
                         </div>
 
                         {/* Conteúdo Clínico */}
-                        <div className="space-y-2 text-sm text-slate-700">
+                        <div className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
                           {msg.triagem.recomendacao && (
                             <div>
-                              <span className="text-xs text-slate-400 block">Hipótese Clínica Sugerida</span>
-                              <p className="font-semibold text-slate-900 text-base">{msg.triagem.recomendacao}</p>
+                              <span className="text-xs text-slate-400 dark:text-slate-400 block">Hipótese Clínica Sugerida</span>
+                              <p className="font-semibold text-slate-900 dark:text-white text-base">{msg.triagem.recomendacao}</p>
                             </div>
                           )}
 
                           {msg.triagem.especialidade && (
                             <div className="flex items-center gap-2">
-                              <span className="text-xs text-slate-400">Especialidade:</span>
-                              <span className="font-medium text-[#2b85ff] bg-blue-50 px-2 py-0.5 rounded-md text-xs">
+                              <span className="text-xs text-slate-400 dark:text-slate-400">Especialidade:</span>
+                              <span className="font-medium text-[#2b85ff] dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md text-xs border dark:border-blue-800/40">
                                 {msg.triagem.especialidade}
                               </span>
                             </div>
                           )}
 
                           {msg.triagem.orientacao && (
-                            <div className="bg-blue-50/70 p-3 rounded-xl border border-blue-100 text-xs text-slate-800 leading-relaxed">
-                              <strong className="text-blue-900 block mb-1">💡 Cuidados Imediatos:</strong>
+                            <div className="bg-blue-50/70 dark:bg-blue-950/60 p-3 rounded-xl border border-blue-100 dark:border-blue-900/60 text-xs text-slate-800 dark:text-slate-200 leading-relaxed">
+                              <strong className="text-blue-900 dark:text-blue-300 block mb-1">💡 Cuidados Imediatos:</strong>
                               {msg.triagem.orientacao}
                             </div>
                           )}
                         </div>
 
                         {/* Ações: Agendar no Hospital, Rota no Mapa, Unidades Recomendadas e Acessar Prontuário */}
-                        <div className="space-y-2 pt-2 border-t border-slate-100">
+                        <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
                           {/* Botão de Agendamento em Destaque */}
                           <button
                             type="button"
@@ -628,9 +628,9 @@ export default function TriagemPage() {
                                 if (msg.triagem?.tipoUnidade) params.set('tipo', msg.triagem.tipoUnidade)
                                 router.push(`/unidades?${params.toString()}`)
                               }}
-                              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-50 hover:bg-blue-100 text-[#2b85ff] text-xs font-semibold rounded-xl transition-colors border border-blue-200"
+                              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-[#2b85ff] dark:text-blue-400 text-xs font-semibold rounded-xl transition-colors border border-blue-200 dark:border-blue-800/60"
                             >
-                              <Building2 className="w-3.5 h-3.5 text-[#2b85ff]" />
+                              <Building2 className="w-3.5 h-3.5 text-[#2b85ff] dark:text-blue-400" />
                               <span>Hospitais da Rede</span>
                             </button>
 
@@ -639,9 +639,9 @@ export default function TriagemPage() {
                                 href={msg.mapa.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
+                                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl transition-colors"
                               >
-                                <MapPin className="w-3.5 h-3.5 text-[#2b85ff]" />
+                                <MapPin className="w-3.5 h-3.5 text-[#2b85ff] dark:text-blue-400" />
                                 <span>Ver no Maps</span>
                                 <ExternalLink className="w-3 h-3 text-slate-400" />
                               </a>
@@ -651,7 +651,7 @@ export default function TriagemPage() {
                               <button
                                 type="button"
                                 onClick={() => router.push(`/triagem/resultado/${msg.triagem?.id}`)}
-                                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-all"
+                                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl transition-all"
                               >
                                 <span>Prontuário</span>
                                 <ArrowRight className="w-3 h-3" />
@@ -663,9 +663,8 @@ export default function TriagemPage() {
                     )}
                   </div>
 
-
                   {msg.remetente === 'usuario' && (
-                    <div className="w-8 h-8 rounded-full bg-[#091426] text-white flex items-center justify-center shrink-0 mt-1 shadow-sm">
+                    <div className="w-8 h-8 rounded-full bg-[#091426] dark:bg-slate-800 text-white flex items-center justify-center shrink-0 mt-1 shadow-sm border dark:border-slate-700">
                       <User className="w-4 h-4" />
                     </div>
                   )}
@@ -678,7 +677,7 @@ export default function TriagemPage() {
                   <div className="w-8 h-8 rounded-full bg-[#2b85ff] text-white flex items-center justify-center shrink-0">
                     <Bot className="w-4 h-4" />
                   </div>
-                  <div className="bg-white px-4 py-3 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-2 text-xs font-medium text-slate-600">
+                  <div className="bg-white dark:bg-slate-800 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-300">
                     <Loader2 className="w-4 h-4 text-[#2b85ff] animate-spin" />
                     Assistente Cuidaê está analisando com Inteligência Clínica...
                   </div>
@@ -690,15 +689,15 @@ export default function TriagemPage() {
 
             {/* Chips de Sugestão de Sintomas (se houver poucas mensagens) */}
             {mensagens.length <= 2 && (
-              <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-200/80 overflow-x-auto flex gap-2 no-scrollbar">
-                <span className="text-xs font-semibold text-slate-400 self-center shrink-0">Sugestões:</span>
+              <div className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 overflow-x-auto flex gap-2 no-scrollbar">
+                <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 self-center shrink-0">Sugestões:</span>
                 {SUGESTOES_SINTOMAS.map((chip, i) => (
                   <button
                     key={i}
                     type="button"
                     onClick={() => handleEnviarMensagem(chip)}
                     disabled={isTyping}
-                    className="text-xs bg-white hover:bg-blue-50 hover:text-[#2b85ff] hover:border-blue-200 text-slate-700 px-3 py-1.5 rounded-full border border-slate-200 shadow-xs whitespace-nowrap transition-colors"
+                    className="text-xs bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/60 hover:text-[#2b85ff] dark:hover:text-blue-400 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-xs whitespace-nowrap transition-colors"
                   >
                     {chip}
                   </button>
@@ -712,7 +711,7 @@ export default function TriagemPage() {
                 e.preventDefault()
                 handleEnviarMensagem()
               }}
-              className="p-3 sm:p-4 bg-white border-t border-slate-200/80 flex items-center gap-2"
+              className="p-3 sm:p-4 bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 flex items-center gap-2"
             >
               <input
                 type="file"
@@ -727,7 +726,7 @@ export default function TriagemPage() {
                 onClick={() => chatFileInputRef.current?.click()}
                 disabled={isTyping}
                 title="Enviar foto para análise dermatológica ou lesão"
-                className="p-3 text-slate-500 hover:text-[#2b85ff] hover:bg-blue-50 rounded-2xl border border-slate-200 transition-colors shrink-0"
+                className="p-3 text-slate-500 dark:text-slate-400 hover:text-[#2b85ff] dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 transition-colors shrink-0"
               >
                 <Camera className="w-5 h-5" />
               </button>
@@ -738,7 +737,7 @@ export default function TriagemPage() {
                 onChange={(e) => setInputTexto(e.target.value)}
                 placeholder="Descreva o que está sentindo (ex: febre alta há 2 dias, dor no peito...)"
                 disabled={isTyping}
-                className="flex-1 bg-slate-50 hover:bg-white focus:bg-white text-slate-900 placeholder-slate-400 px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#2b85ff] focus:border-[#2b85ff] text-sm transition-all"
+                className="flex-1 bg-slate-50 dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2b85ff] focus:border-[#2b85ff] text-sm transition-all"
               />
 
               <button
@@ -751,7 +750,7 @@ export default function TriagemPage() {
             </form>
 
             {/* Rodapé Informativo */}
-            <div className="bg-slate-50 px-4 py-2 text-center text-[11px] text-slate-400 border-t border-slate-100">
+            <div className="bg-slate-50 dark:bg-slate-950 px-4 py-2 text-center text-[11px] text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800">
               ⚠️ A triagem por IA é um auxílio informativo e não substitui consulta médica presencial. Em caso de dor no peito intensa, falta de ar severa ou desmaio, ligue <strong>192 (SAMU)</strong>.
             </div>
 
@@ -789,18 +788,18 @@ export default function TriagemPage() {
               </div>
             )}
 
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sm:p-8">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 p-6 sm:p-8">
               
               {/* Step 1 */}
               {step === 1 && (
                 <div className="space-y-6">
-                  <h2 className="text-2xl font-bold text-[#091426] mb-6 flex items-center gap-3">
+                  <h2 className="text-2xl font-bold text-[#091426] dark:text-white mb-6 flex items-center gap-3">
                     <Thermometer className="w-6 h-6 text-[#2b85ff]" />
                     Sintoma Principal
                   </h2>
                   
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                       O que você está sentindo? (Min 10 caracteres)
                     </label>
                     <textarea 
@@ -810,11 +809,11 @@ export default function TriagemPage() {
                       className={`${inputClass} min-h-[120px] resize-y`}
                       maxLength={500}
                     />
-                    <div className="text-right text-xs text-slate-500 mt-1">{sintomaPrincipal.length}/500</div>
+                    <div className="text-right text-xs text-slate-500 dark:text-slate-400 mt-1">{sintomaPrincipal.length}/500</div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                       Há quanto tempo começaram os sintomas?
                     </label>
                     <select 
@@ -832,7 +831,7 @@ export default function TriagemPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2 flex justify-between">
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 flex justify-between">
                       <span>Intensidade do desconforto</span>
                       <span className="font-bold text-[#2b85ff]">{intensidade}/10</span>
                     </label>
@@ -847,7 +846,7 @@ export default function TriagemPage() {
                         background: `linear-gradient(to right, #22c55e, #eab308, #ef4444)`
                       }}
                     />
-                    <div className="flex justify-between text-xs text-slate-500 mt-2">
+                    <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mt-2">
                       <span>Leve (1)</span>
                       <span>Moderada (5)</span>
                       <span>Muito Forte (10)</span>
@@ -859,13 +858,13 @@ export default function TriagemPage() {
               {/* Step 2 */}
               {step === 2 && (
                 <div className="space-y-8">
-                  <h2 className="text-2xl font-bold text-[#091426] mb-6 flex items-center gap-3">
+                  <h2 className="text-2xl font-bold text-[#091426] dark:text-white mb-6 flex items-center gap-3">
                     <Pill className="w-6 h-6 text-[#2b85ff]" />
                     Perguntas de Acompanhamento
                   </h2>
 
                   <div className="space-y-3">
-                    <label className="block text-sm font-medium text-slate-700">Teve febre?</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Teve febre?</label>
                     <div className="flex gap-4">
                       {['Sim', 'Não', 'Não sei'].map(opt => (
                         <label key={opt} className={radioLabelClass}>
@@ -877,7 +876,7 @@ export default function TriagemPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <label className="block text-sm font-medium text-slate-700">Está sentindo dor?</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Está sentindo dor?</label>
                     <div className="flex gap-4">
                       {['Sim', 'Não'].map(opt => (
                         <label key={opt} className={radioLabelClass}>
@@ -900,7 +899,7 @@ export default function TriagemPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <label className="block text-sm font-medium text-slate-700">Toma algum medicamento de uso contínuo?</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Toma algum medicamento de uso contínuo?</label>
                     <div className="flex gap-4">
                       {['Sim', 'Não'].map(opt => (
                         <label key={opt} className={radioLabelClass}>
@@ -923,7 +922,7 @@ export default function TriagemPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <label className="block text-sm font-medium text-slate-700">Possui alguma condição crônica?</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Possui alguma condição crônica?</label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                       {['Diabetes', 'Hipertensão', 'Asma', 'Cardiopatia', 'Nenhuma'].map(cond => (
                         <label key={cond} className={radioLabelClass}>
@@ -940,7 +939,7 @@ export default function TriagemPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <label className="block text-sm font-medium text-slate-700">Está grávida?</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Está grávida?</label>
                     <div className="flex gap-4">
                       {['Sim', 'Não', 'Não se aplica'].map(opt => (
                         <label key={opt} className={radioLabelClass}>
@@ -956,16 +955,16 @@ export default function TriagemPage() {
               {/* Step 3 */}
               {step === 3 && (
                 <div className="space-y-6">
-                  <h2 className="text-2xl font-bold text-[#091426] mb-6 flex items-center gap-3">
+                  <h2 className="text-2xl font-bold text-[#091426] dark:text-white mb-6 flex items-center gap-3">
                     <Camera className="w-6 h-6 text-[#2b85ff]" />
                     Foto da Região Afetada (Opcional)
                   </h2>
 
-                  <p className="text-slate-600 text-sm">
+                  <p className="text-slate-600 dark:text-slate-300 text-sm">
                     Se você tem alguma alteração visível (mancha na pele, corte, inchaço), adicione uma foto para ajudar na avaliação.
                   </p>
 
-                  <div className="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center hover:border-[#2b85ff] transition-colors">
+                  <div className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-6 text-center hover:border-[#2b85ff] transition-colors">
                     {fotoPreview ? (
                       <div className="relative inline-block">
                         <Image src={fotoPreview} alt="Preview" width={200} height={200} className="rounded-xl object-cover" />
@@ -978,20 +977,20 @@ export default function TriagemPage() {
                       </div>
                     ) : (
                       <div className="space-y-4">
-                        <div className="w-16 h-16 bg-blue-50 text-[#2b85ff] rounded-full flex items-center justify-center mx-auto">
+                        <div className="w-16 h-16 bg-blue-50 dark:bg-blue-950/60 text-[#2b85ff] dark:text-blue-400 rounded-full flex items-center justify-center mx-auto border dark:border-blue-800/40">
                           <Upload className="w-8 h-8" />
                         </div>
                         <div>
                           <button 
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
-                            className="font-medium text-[#2b85ff] hover:underline"
+                            className="font-medium text-[#2b85ff] dark:text-blue-400 hover:underline"
                           >
                             Clique para enviar
                           </button>
-                          <span className="text-slate-500"> ou arraste a imagem aqui</span>
+                          <span className="text-slate-500 dark:text-slate-400"> ou arraste a imagem aqui</span>
                         </div>
-                        <p className="text-xs text-slate-400">PNG, JPG até 5MB</p>
+                        <p className="text-xs text-slate-400 dark:text-slate-500">PNG, JPG até 5MB</p>
                       </div>
                     )}
                     <input 
@@ -1005,7 +1004,7 @@ export default function TriagemPage() {
 
                   {foto && (
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                         Descrição da foto (opcional)
                       </label>
                       <input 
@@ -1023,46 +1022,46 @@ export default function TriagemPage() {
               {/* Step 4 */}
               {step === 4 && (
                 <div className="space-y-6">
-                  <h2 className="text-2xl font-bold text-[#091426] mb-6">
+                  <h2 className="text-2xl font-bold text-[#091426] dark:text-white mb-6">
                     Revisão dos Dados
                   </h2>
 
-                  <div className="bg-slate-50 rounded-xl p-5 space-y-4 border border-slate-100">
+                  <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-5 space-y-4 border border-slate-100 dark:border-slate-800">
                     <div>
-                      <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Sintoma Principal</span>
-                      <p className="text-slate-900 font-medium mt-1">{sintomaPrincipal}</p>
+                      <span className="text-xs font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wider block">Sintoma Principal</span>
+                      <p className="text-slate-900 dark:text-white font-medium mt-1">{sintomaPrincipal}</p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Duração</span>
-                        <p className="text-slate-900 mt-1">{duracao}</p>
+                        <span className="text-xs font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wider block">Duração</span>
+                        <p className="text-slate-900 dark:text-white mt-1">{duracao}</p>
                       </div>
                       <div>
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Intensidade</span>
-                        <p className="text-slate-900 mt-1">{intensidade}/10</p>
+                        <span className="text-xs font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wider block">Intensidade</span>
+                        <p className="text-slate-900 dark:text-white mt-1">{intensidade}/10</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Febre</span>
-                        <p className="text-slate-900 mt-1">{temFebre}</p>
+                        <span className="text-xs font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wider block">Febre</span>
+                        <p className="text-slate-900 dark:text-white mt-1">{temFebre}</p>
                       </div>
                       <div>
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Dor</span>
-                        <p className="text-slate-900 mt-1">{temDor} {localDor && `(${localDor})`}</p>
+                        <span className="text-xs font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wider block">Dor</span>
+                        <p className="text-slate-900 dark:text-white mt-1">{temDor} {localDor && `(${localDor})`}</p>
                       </div>
                     </div>
 
                     <div>
-                      <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Condições Crônicas</span>
-                      <p className="text-slate-900 mt-1">{condicoesCronicas.join(', ')}</p>
+                      <span className="text-xs font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wider block">Condições Crônicas</span>
+                      <p className="text-slate-900 dark:text-white mt-1">{condicoesCronicas.join(', ')}</p>
                     </div>
 
                     {fotoPreview && (
                       <div>
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Foto Anexada</span>
+                        <span className="text-xs font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wider block mb-2">Foto Anexada</span>
                         <Image src={fotoPreview} alt="Foto" width={80} height={80} className="rounded-lg object-cover" />
                       </div>
                     )}
@@ -1071,12 +1070,12 @@ export default function TriagemPage() {
               )}
 
               {/* Navigation Buttons do Formulário */}
-              <div className="flex justify-between items-center mt-8 pt-6 border-t border-slate-100">
+              <div className="flex justify-between items-center mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
                 {step > 1 ? (
                   <button 
                     type="button" 
                     onClick={prevStep}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     Voltar

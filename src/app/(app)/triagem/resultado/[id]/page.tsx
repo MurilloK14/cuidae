@@ -19,10 +19,26 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
   const isAmarelo = urgencia === 'amarelo'
   const isVermelho = urgencia === 'vermelho'
 
-  const bgColor = isVerde ? 'bg-emerald-50/80' : isAmarelo ? 'bg-amber-50/80' : 'bg-red-50/80'
-  const borderColor = isVerde ? 'border-emerald-200' : isAmarelo ? 'border-amber-200' : 'border-red-200'
-  const textColor = isVerde ? 'text-emerald-900' : isAmarelo ? 'text-amber-900' : 'text-red-900'
-  const iconColor = isVerde ? 'text-emerald-600' : isAmarelo ? 'text-amber-600' : 'text-red-600'
+  const bgColor = isVerde
+    ? 'bg-emerald-50/80 dark:bg-emerald-950/60'
+    : isAmarelo
+    ? 'bg-amber-50/80 dark:bg-amber-950/60'
+    : 'bg-red-50/80 dark:bg-red-950/60'
+  const borderColor = isVerde
+    ? 'border-emerald-200 dark:border-emerald-800/60'
+    : isAmarelo
+    ? 'border-amber-200 dark:border-amber-800/60'
+    : 'border-red-200 dark:border-red-800/60'
+  const textColor = isVerde
+    ? 'text-emerald-900 dark:text-emerald-200'
+    : isAmarelo
+    ? 'text-amber-900 dark:text-amber-200'
+    : 'text-red-900 dark:text-red-200'
+  const iconColor = isVerde
+    ? 'text-emerald-600 dark:text-emerald-400'
+    : isAmarelo
+    ? 'text-amber-600 dark:text-amber-400'
+    : 'text-red-600 dark:text-red-400'
 
   const showUnidades = recomendacao === 'ubs' || recomendacao === 'upa'
   const showTeleconsulta = recomendacao === 'teleconsulta'
@@ -30,7 +46,7 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
   return (
     <div className="max-w-4xl mx-auto animate-fade-in-up font-jakarta pb-12">
       <div className="mb-6">
-        <Link href="/dashboard" className="text-xs font-semibold text-slate-500 hover:text-slate-900 flex items-center gap-2 w-fit transition-colors">
+        <Link href="/dashboard" className="text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-2 w-fit transition-colors">
           <ArrowLeft className="w-4 h-4" />
           Voltar ao Dashboard
         </Link>
@@ -50,7 +66,7 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
               {isAmarelo && 'Urgência Moderada — Avaliação Recomendada'}
               {isVermelho && 'Urgência Alta — Procure Atendimento Imediato'}
             </h1>
-            <p className="text-slate-700 text-base sm:text-lg leading-relaxed">
+            <p className="text-slate-700 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
               {explicacao}
             </p>
           </div>
@@ -58,14 +74,14 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
       </div>
 
       {/* Symptom Context & AI Insights */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 mb-8 space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-6 mb-8 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
           <div>
-            <p className="text-xs uppercase tracking-wider font-semibold text-slate-400">Sintoma Relatado</p>
-            <p className="text-slate-900 font-semibold text-lg">{triagem.sintoma_principal}</p>
+            <p className="text-xs uppercase tracking-wider font-semibold text-slate-400 dark:text-slate-400">Sintoma Relatado</p>
+            <p className="text-slate-900 dark:text-white font-semibold text-lg">{triagem.sintoma_principal}</p>
           </div>
           {triagem.fonteIA && (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-[#2b85ff] border border-blue-100">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 text-[#2b85ff] dark:text-blue-400 border border-blue-100 dark:border-blue-800/40">
               <span className="w-2 h-2 rounded-full bg-[#2b85ff] animate-pulse"></span>
               {triagem.fonteIA}
             </span>
@@ -73,18 +89,18 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
         </div>
 
         {triagem.especialidade && (
-          <div className="flex items-center gap-2 text-sm text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100">
-            <span className="font-semibold text-slate-900">Especialidade recomendada:</span>
-            <span className="text-[#2b85ff] font-medium">{triagem.especialidade}</span>
+          <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+            <span className="font-semibold text-slate-900 dark:text-white">Especialidade recomendada:</span>
+            <span className="text-[#2b85ff] dark:text-blue-400 font-medium">{triagem.especialidade}</span>
           </div>
         )}
 
         {triagem.orientacao && (
-          <div className="bg-blue-50/60 rounded-xl p-4 border border-blue-100/80">
-            <h3 className="text-sm font-semibold text-blue-900 mb-1 flex items-center gap-1.5">
+          <div className="bg-blue-50/60 dark:bg-blue-950/60 rounded-xl p-4 border border-blue-100/80 dark:border-blue-900/60">
+            <h3 className="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-1 flex items-center gap-1.5">
               💡 Recomendações e Cuidados Imediatos
             </h3>
-            <p className="text-sm text-blue-950 leading-relaxed">
+            <p className="text-sm text-blue-950 dark:text-blue-200 leading-relaxed">
               {triagem.orientacao}
             </p>
           </div>
@@ -104,7 +120,7 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
             </a>
             <Link
               href={`/unidades?diagnostico=${encodeURIComponent(triagem.sintoma_principal || '')}&especialidade=${encodeURIComponent(triagem.especialidade || '')}&tipo=${encodeURIComponent(recomendacao || '')}`}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-[#2b85ff] text-sm font-semibold rounded-xl border border-blue-200 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-[#2b85ff] dark:text-blue-400 text-sm font-semibold rounded-xl border border-blue-200 dark:border-blue-800/60 transition-all"
             >
               <span>🏥</span>
               Ver todas as unidades recomendadas
@@ -124,13 +140,13 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
           </div>
         )}
 
-        <p className="text-xs text-slate-400 pt-1">
+        <p className="text-xs text-slate-400 dark:text-slate-500 pt-1">
           Triagem registrada em: {new Date(triagem.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
         </p>
       </div>
 
       {/* Direct Hospital Scheduling CTA with AI Diagnosis */}
-      <div className="mb-8 bg-gradient-to-br from-[#091426] via-[#122748] to-[#1a386b] rounded-2xl p-6 sm:p-7 text-white shadow-md relative overflow-hidden">
+      <div className="mb-8 bg-gradient-to-br from-[#091426] via-[#122748] to-[#1a386b] rounded-2xl p-6 sm:p-7 text-white shadow-md relative overflow-hidden border border-slate-800">
         <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-1.5 max-w-xl">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#2b85ff]/30 text-blue-200 border border-blue-400/30">
@@ -157,15 +173,14 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
 
       {/* Recommended Health Units CTA */}
       {showUnidades && (
-
-        <div className="mb-8 bg-gradient-to-br from-blue-50/80 via-white to-blue-50/40 rounded-2xl p-6 border border-blue-100 shadow-sm">
+        <div className="mb-8 bg-gradient-to-br from-blue-50/80 via-white to-blue-50/40 dark:from-slate-900 dark:via-slate-900/90 dark:to-blue-950/40 rounded-2xl p-6 border border-blue-100 dark:border-slate-800 shadow-sm">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#2b85ff]/10 text-[#2b85ff] mb-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#2b85ff]/10 text-[#2b85ff] dark:text-blue-400 mb-2">
                 <span>📍</span> Recomendações personalizadas
               </div>
-              <h2 className="text-xl font-bold text-[#091426] mb-1">Unidades de Saúde Recomendadas</h2>
-              <p className="text-sm text-slate-600">
+              <h2 className="text-xl font-bold text-[#091426] dark:text-white mb-1">Unidades de Saúde Recomendadas</h2>
+              <p className="text-sm text-slate-600 dark:text-slate-300">
                 Encontre hospitais, postos de saúde e unidades especializadas mais indicados para o seu caso em Garanhuns.
               </p>
             </div>
@@ -182,16 +197,16 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
 
       {/* Teleconsulta CTA */}
       {showTeleconsulta && (
-        <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm mb-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm mb-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            <h2 className="text-xl font-bold text-[#091426] mb-1">🩻 Agendar Teleconsulta</h2>
-            <p className="text-slate-600">Fale com um médico sem sair de casa.</p>
+            <h2 className="text-xl font-bold text-[#091426] dark:text-white mb-1">🩻 Agendar Teleconsulta</h2>
+            <p className="text-slate-600 dark:text-slate-300">Fale com um médico sem sair de casa.</p>
           </div>
           <div className="flex flex-col items-center sm:items-end gap-2 shrink-0">
-            <span className="text-2xl font-bold text-[#091426]">R$ 39,90</span>
+            <span className="text-2xl font-bold text-[#091426] dark:text-white">R$ 39,90</span>
             <Link
               href="/planos/checkout?plano=intermediaria&tipo=avulsa"
-              className="px-6 py-3 bg-[#091426] hover:bg-[#1a2c4e] text-white font-medium rounded-full text-center transition-colors flex items-center gap-2"
+              className="px-6 py-3 bg-[#091426] dark:bg-blue-600 hover:bg-[#1a2c4e] dark:hover:bg-blue-700 text-white font-medium rounded-full text-center transition-colors flex items-center gap-2"
             >
               Agendar agora <ArrowRight className="w-4 h-4" />
             </Link>
@@ -200,10 +215,10 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
       )}
 
       {/* Bottom Actions */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100 pt-8">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-800 pt-8">
         <button
           disabled
-          className="group relative px-6 py-3 border border-slate-200 text-slate-400 font-medium rounded-full flex items-center gap-2 cursor-not-allowed"
+          className="group relative px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-400 font-medium rounded-full flex items-center gap-2 cursor-not-allowed"
         >
           <Download className="w-4 h-4" />
           Salvar PDF
@@ -214,13 +229,13 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard"
-            className="px-6 py-3 border border-slate-200 hover:bg-slate-50 text-slate-600 font-medium rounded-full transition-colors"
+            className="px-6 py-3 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium rounded-full transition-colors"
           >
             Dashboard
           </Link>
           <Link
             href="/triagem"
-            className="px-6 py-3 bg-[#eef5ff] hover:bg-blue-100 text-[#2b85ff] font-medium rounded-full flex items-center gap-2 transition-colors"
+            className="px-6 py-3 bg-[#eef5ff] dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-[#2b85ff] dark:text-blue-400 font-medium rounded-full flex items-center gap-2 transition-colors border dark:border-blue-800/40"
           >
             Nova Triagem <ArrowRight className="w-4 h-4" />
           </Link>

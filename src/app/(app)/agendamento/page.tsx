@@ -329,9 +329,9 @@ function AgendamentoContent() {
   }
 
   const urgenciaBadgeConfig = {
-    verde: { bg: 'bg-emerald-50 text-emerald-800 border-emerald-200', dot: 'bg-emerald-500', label: 'Prioridade Verde (Pouco Urgente)' },
-    amarelo: { bg: 'bg-amber-50 text-amber-800 border-amber-200', dot: 'bg-amber-500', label: 'Prioridade Amarela (Urgente)' },
-    vermelho: { bg: 'bg-red-50 text-red-800 border-red-200', dot: 'bg-red-500', label: 'Prioridade Vermelha (Emergência)' },
+    verde: { bg: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', dot: 'bg-emerald-500', label: 'Prioridade Verde (Pouco Urgente)' },
+    amarelo: { bg: 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800', dot: 'bg-amber-500', label: 'Prioridade Amarela (Urgente)' },
+    vermelho: { bg: 'bg-red-50 dark:bg-red-950/60 text-red-800 dark:text-red-300 border-red-200 dark:border-red-800', dot: 'bg-red-500', label: 'Prioridade Vermelha (Emergência)' },
   }
 
   const urgenciaAtual = urgenciaBadgeConfig[nivelUrgencia] || urgenciaBadgeConfig.amarelo
@@ -344,20 +344,20 @@ function AgendamentoContent() {
         <div>
           <Link
             href="/triagem"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-[#2b85ff] transition mb-2"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-[#2b85ff] dark:hover:text-blue-400 transition mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
             Voltar para Triagem
           </Link>
           <div className="flex items-center gap-2.5">
-            <span className="p-2.5 bg-blue-50 text-[#2b85ff] rounded-xl shadow-xs">
+            <span className="p-2.5 bg-blue-50 dark:bg-blue-950/60 text-[#2b85ff] dark:text-blue-400 rounded-xl shadow-xs">
               <Calendar className="w-6 h-6" />
             </span>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#091426] tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#091426] dark:text-white tracking-tight">
                 Agendamento Hospitalar Integrado
               </h1>
-              <p className="text-sm text-slate-500 mt-0.5">
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                 Envio direto do agendamento com os <strong>sintomas</strong> e o <strong>diagnóstico da inteligência artificial</strong> para o hospital.
               </p>
             </div>
@@ -366,9 +366,9 @@ function AgendamentoContent() {
 
         <Link
           href="/agendamento/meus-agendamentos"
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs sm:text-sm rounded-xl border border-slate-200 shadow-xs transition self-start sm:self-auto"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs transition self-start sm:self-auto"
         >
-          <FileText className="w-4 h-4 text-[#2b85ff]" />
+          <FileText className="w-4 h-4 text-[#2b85ff] dark:text-blue-400" />
           Meus Agendamentos
         </Link>
       </div>
@@ -393,7 +393,7 @@ function AgendamentoContent() {
       </div>
 
       {erroEnvio && (
-        <div className="p-4 bg-red-50 border border-red-200 text-red-800 rounded-2xl flex items-center gap-3 text-sm font-semibold animate-shake">
+        <div className="p-4 bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 rounded-2xl flex items-center gap-3 text-sm font-semibold animate-shake">
           <AlertTriangle className="w-5 h-5 text-red-600 shrink-0" />
           <p>{erroEnvio}</p>
         </div>
