@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
+
+const defaultUrl = 'https://xidnjvhbiaistpmftwnk.supabase.co'
+const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_URL.startsWith('http'))
+  ? process.env.NEXT_PUBLIC_SUPABASE_URL
+  : defaultUrl
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy'
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
@@ -7,7 +13,33 @@ export async function GET(request: Request) {
   const next = searchParams.get('next') ?? '/dashboard'
 
   if (code) {
-    const supabase = createClient()
+    const redirectUrl = `${origin}${next}`
+    const response = NextResponse.redirect(redirectUrl)
+
+    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+      cookies: {
+        get(name: string) {
+          const cookieHeader = request.headers.get('cookie') || ''
+          const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`))
+          return match ? decodeURIComponent(match[1]) : undefined
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+        },
+        remove(name: string, options: CookieOptions) {
+          response.cookies.set({
+            name,
+            value: '',
+            ...options,
+          })
+        },
+      },
+    })
+
     const { error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error) {
@@ -26,9 +58,12 @@ export async function GET(request: Request) {
         )
       }
 
-      return NextResponse.redirect(`${origin}${next}`)
+      return response
     }
+
+    console.error('[OAuth Callback] Erro ao trocar código por sessão:', error)
   }
 
   return NextResponse.redirect(`${origin}/login?error=Falha+na+autenticacao+Google`)
 }
+

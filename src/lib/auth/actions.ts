@@ -138,6 +138,14 @@ export async function signUp(formData: AuthInput): Promise<AuthActionResult> {
       if (profileError) {
         console.error('Erro ao inserir perfil do usuário na tabela profiles:', profileError)
       }
+
+      // Como confirmação de e-mail está desativada no Supabase, se já tiver sessão ou autentica direto
+      if (!data.session) {
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        })
+      }
     }
 
     return { error: null, success: true }

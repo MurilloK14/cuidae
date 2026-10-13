@@ -122,8 +122,8 @@ export default function CadastroPage() {
       
       const result = await signUp(fd);
       if (result.success) {
-        // Redirect to login or show success message
-        window.location.href = '/login?cadastro=sucesso';
+        // Redireciona diretamente para o dashboard com sessão ativa
+        window.location.href = '/dashboard';
       } else if (result.error) {
         setErrors({ form: result.error });
       }
