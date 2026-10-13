@@ -181,7 +181,13 @@ export async function saveAgendamento(
 
 export async function updateAgendamentoStatus(
   id: string,
-  status: StatusAgendamentoHospital
+  status: StatusAgendamentoHospital,
+  detalhes?: {
+    anotacoes_medicas?: string;
+    chamado_em?: string;
+    sala_atendimento?: string;
+    medico_responsavel?: string;
+  }
 ): Promise<AgendamentoHospitalar | null> {
   ensureDbFile();
   const lista = await getAllAgendamentos();
@@ -189,8 +195,50 @@ export async function updateAgendamentoStatus(
   if (index === -1) return null;
 
   lista[index].status = status;
+  if (detalhes?.anotacoes_medicas !== undefined) {
+    lista[index].anotacoes_medicas = detalhes.anotacoes_medicas;
+  }
+  if (detalhes?.chamado_em) {
+    lista[index].chamado_em = detalhes.chamado_em;
+  }
+  if (detalhes?.sala_atendimento) {
+    lista[index].sala_atendimento = detalhes.sala_atendimento;
+  }
+  if (detalhes?.medico_responsavel) {
+    lista[index].medico_responsavel = detalhes.medico_responsavel;
+  }
   lista[index].updated_at = new Date().toISOString();
 
   fs.writeFileSync(DB_PATH, JSON.stringify(lista, null, 2), 'utf-8');
   return lista[index];
 }
+
+export async function getMetricasHospital(unidadeIdOuNome?: string) {
+  const lista = await getAllAgendamentos();
+  const filtrados = unidadeIdOuNome
+    ? lista.filter(
+        (a) =>
+          a.unidade_id === unidadeIdOuNome ||
+          a.unidade_nome.toLowerCase().includes(unidadeIdOuNome.toLowerCase())
+      )
+    : lista;
+
+  const total = filtrados.length;
+  const aguardando = filtrados.filter((a) => a.status === 'agendado' || a.status === 'confirmado').length;
+  const emAtendimento = filtrados.filter((a) => a.status === 'em_atendimento').length;
+  const concluidos = filtrados.filter((a) => a.status === 'concluido').length;
+  const urgentes = filtrados.filter((a) => a.nivel_urgencia === 'vermelho').length;
+  const amarelos = filtrados.filter((a) => a.nivel_urgencia === 'amarelo').length;
+  const verdes = filtrados.filter((a) => a.nivel_urgencia === 'verde').length;
+
+  return {
+    total,
+    aguardando,
+    emAtendimento,
+    concluidos,
+    urgentes,
+    amarelos,
+    verdes,
+  };
+}
+

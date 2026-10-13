@@ -44,7 +44,7 @@ export async function PATCH(
   try {
     const { id } = params;
     const body = await request.json();
-    const { status } = body;
+    const { status, anotacoes_medicas, chamado_em, sala_atendimento, medico_responsavel } = body;
 
     if (!status) {
       return NextResponse.json(
@@ -53,7 +53,13 @@ export async function PATCH(
       );
     }
 
-    const atualizado = await updateAgendamentoStatus(id, status);
+    const atualizado = await updateAgendamentoStatus(id, status, {
+      anotacoes_medicas,
+      chamado_em,
+      sala_atendimento,
+      medico_responsavel,
+    });
+
     if (!atualizado) {
       return NextResponse.json(
         { success: false, error: 'Agendamento não encontrado para atualização' },

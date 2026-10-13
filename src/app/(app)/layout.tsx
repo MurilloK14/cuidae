@@ -82,9 +82,19 @@ export default async function AppLayout({
 
             {/* Right Side: User Info */}
             <div className="flex items-center gap-3">
-              <span className={`hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${badge.color}`}>
+              <Link
+                href="/hospital/painel"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#091426] hover:bg-slate-800 text-white shadow-xs transition"
+                title="Acessar Central de Recepção e Triagem Hospitalar"
+              >
+                <span>🏥</span>
+                <span>Painel Hospital</span>
+              </Link>
+
+              <span className={`hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${badge.color}`}>
                 {badge.text}
               </span>
+
 
               <div className="flex items-center gap-2 pl-3 border-l border-slate-200">
                 <div className="w-8 h-8 rounded-full bg-[#2b85ff]/10 flex items-center justify-center">

@@ -293,7 +293,13 @@ export interface AgendamentoHospitalar {
   status: StatusAgendamentoHospital
   status_envio_hospital: StatusEnvioHospital
   transmissao_hospital: TransmissaoHospitalDetalhes
+  // Recepção e Conduta Médica do Hospital
+  anotacoes_medicas?: string
+  chamado_em?: string
+  medico_responsavel?: string
+  sala_atendimento?: string
   created_at: string
   updated_at: string
 }
+
 
