@@ -70,10 +70,11 @@ function AgendamentoContent() {
   const [triagemId, setTriagemId] = useState(triagemIdParam)
   const [sintomasCitados, setSintomasCitados] = useState(sintomasParam)
   const [diagnosticoIa, setDiagnosticoIa] = useState(diagnosticoParam)
+  const [hipotesesDiagnosticas, setHipotesesDiagnosticas] = useState<Array<{ nome: string; probabilidade: number }>>([])
   const [nivelUrgencia, setNivelUrgencia] = useState<NivelUrgencia>('amarelo')
   const [prioridadeIa, setPrioridadeIa] = useState('Alta')
   const [orientacaoIa, setOrientacaoIa] = useState('')
-  const [fonteIa, setFonteIa] = useState('Google Gemini 3.8 Flash (Protocolo Cuidaê)')
+  const [fonteIa, setFonteIa] = useState('Google Gemini Flash + Infermedica v3')
 
   // Estado da Análise rápida de IA no próprio formulário
   const [analisandoIa, setAnalisandoIa] = useState(false)
@@ -125,6 +126,7 @@ function AgendamentoContent() {
                 setOrientacaoIa(dadosTriagem.orientacao || dadosTriagem.explicacao || '')
                 if (dadosTriagem.especialidade) setEspecialidade(dadosTriagem.especialidade)
                 if (dadosTriagem.fonteIA) setFonteIa(dadosTriagem.fonteIA)
+                if (dadosTriagem.hipotesesDiagnosticas) setHipotesesDiagnosticas(dadosTriagem.hipotesesDiagnosticas)
               }
             }
           } catch (e) {
@@ -297,6 +299,7 @@ function AgendamentoContent() {
         paciente_email: pacienteEmail.trim() || '',
         sintomas_citados: sintomasCitados.trim(),
         diagnostico_ia: diagnosticoIa.trim(),
+        hipoteses_diagnosticas: hipotesesDiagnosticas,
         nivel_urgencia: nivelUrgencia,
         prioridade: prioridadeIa,
         orientacao_ia: orientacaoIa.trim() || 'Apresentar documento de identificação na recepção central.',
@@ -742,6 +745,26 @@ function AgendamentoContent() {
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs sm:text-sm font-bold text-[#091426] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2b85ff]/30"
                     required
                   />
+                  {hipotesesDiagnosticas.length > 0 && (
+                    <div className="mt-2 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-700/80 space-y-1.5">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+                        📊 Diagnóstico Diferencial (Infermedica API):
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {hipotesesDiagnosticas.map((h, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 dark:bg-blue-950/70 text-[#2b85ff] dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60"
+                          >
+                            <span>• {h.nome}</span>
+                            <span className="text-[10px] font-bold bg-blue-200/60 dark:bg-blue-900/80 px-1 rounded">
+                              {h.probabilidade}%
+                            </span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div>

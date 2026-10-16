@@ -1339,11 +1339,21 @@ export default function PainelHospitalPage() {
 
                       <div className="flex items-start gap-1.5">
                         <Sparkles className="w-3.5 h-3.5 text-[#2b85ff] dark:text-blue-400 shrink-0 mt-0.5" />
-                        <strong className="text-[#2b85ff] dark:text-blue-400 shrink-0">🧠 Hipótese IA (Gemini):</strong>
+                        <strong className="text-[#2b85ff] dark:text-blue-400 shrink-0">🧠 Hipótese IA (Infermedica + Gemini):</strong>
                         <span className="font-bold text-slate-900 dark:text-white">
                           {ag.diagnostico_ia}
                         </span>
                       </div>
+
+                      {ag.hipoteses_diagnosticas && ag.hipoteses_diagnosticas.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 pt-0.5">
+                          {ag.hipoteses_diagnosticas.map((h, idx) => (
+                            <span key={idx} className="text-[10px] font-bold bg-blue-100/70 dark:bg-blue-950/80 text-[#2b85ff] dark:text-blue-300 px-2 py-0.5 rounded-md border border-blue-200/60 dark:border-blue-800/40">
+                              {h.nome} ({h.probabilidade}%)
+                            </span>
+                          ))}
+                        </div>
+                      )}
 
                       {ag.anotacoes_medicas && (
                         <div className="flex items-start gap-1.5 pt-1 border-t border-slate-200/60 dark:border-slate-700 text-emerald-800 dark:text-emerald-300">
@@ -1452,14 +1462,33 @@ export default function PainelHospitalPage() {
             {/* Ficha Clínica da IA na Íntegra */}
             <div className="space-y-4">
               
-              <div className="bg-blue-50/60 dark:bg-blue-950/40 rounded-2xl p-4 border border-blue-100 dark:border-blue-900/60 space-y-1.5">
+              <div className="bg-blue-50/60 dark:bg-blue-950/40 rounded-2xl p-4 border border-blue-100 dark:border-blue-900/60 space-y-2">
                 <span className="text-xs font-extrabold uppercase text-[#2b85ff] dark:text-blue-400 flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4" />
-                  Hipótese Diagnóstica Preliminar (Google Gemini):
+                  Hipótese Diagnóstica Preliminar (Infermedica + Gemini):
                 </span>
                 <p className="text-base font-bold text-[#091426] dark:text-white">
                   {pacienteSelecionado.diagnostico_ia}
                 </p>
+
+                {pacienteSelecionado.hipoteses_diagnosticas && pacienteSelecionado.hipoteses_diagnosticas.length > 0 && (
+                  <div className="pt-2 border-t border-blue-200/60 dark:border-blue-900/40 space-y-1.5">
+                    <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
+                      📊 Diagnóstico Diferencial (Motor Infermedica API):
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {pacienteSelecionado.hipoteses_diagnosticas.map((h, i) => (
+                        <span key={i} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-white dark:bg-slate-900 text-[#2b85ff] dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                          <span>• {h.nome}</span>
+                          <span className="bg-blue-100 dark:bg-blue-950 px-1.5 py-0.5 rounded text-[11px] text-blue-700 dark:text-blue-300 font-extrabold">
+                            {h.probabilidade}%
+                          </span>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   Especialidade indicada: <strong>{pacienteSelecionado.especialidade}</strong> • Fonte: {pacienteSelecionado.fonte_ia}
                 </p>

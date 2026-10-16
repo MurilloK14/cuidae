@@ -1,6 +1,7 @@
 import { getTriagemResultado } from '@/lib/triagem/actions'
 import { ShieldCheck, AlertTriangle, AlertOctagon, MapPin, Phone, ExternalLink, Download, ArrowRight, ArrowLeft, Calendar, Sparkles } from 'lucide-react'
 import Link from 'next/link'
+import { BotoesCompartilhamentoTriagem } from '@/components/BotoesCompartilhamentoTriagem'
 
 import { notFound } from 'next/navigation'
 
@@ -92,6 +93,24 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
           <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
             <span className="font-semibold text-slate-900 dark:text-white">Especialidade recomendada:</span>
             <span className="text-[#2b85ff] dark:text-blue-400 font-medium">{triagem.especialidade}</span>
+          </div>
+        )}
+
+        {triagem.hipotesesDiagnosticas && triagem.hipotesesDiagnosticas.length > 0 && (
+          <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200/70 dark:border-slate-700 space-y-2">
+            <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
+              📊 Diagnóstico Diferencial (Motor Infermedica API):
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {triagem.hipotesesDiagnosticas.map((hip: any, idx: number) => (
+                <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-slate-900 text-[#2b85ff] dark:text-blue-300 border border-blue-200/80 dark:border-blue-800">
+                  <span>• {hip.nome}</span>
+                  <span className="bg-blue-100 dark:bg-blue-950 px-1.5 py-0.5 rounded text-[11px] text-blue-700 dark:text-blue-300 font-extrabold">
+                    {hip.probabilidade}%
+                  </span>
+                </span>
+              ))}
+            </div>
           </div>
         )}
 
@@ -216,16 +235,7 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
 
       {/* Bottom Actions */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-800 pt-8">
-        <button
-          disabled
-          className="group relative px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-400 font-medium rounded-full flex items-center gap-2 cursor-not-allowed"
-        >
-          <Download className="w-4 h-4" />
-          Salvar PDF
-          <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-            Em breve
-          </span>
-        </button>
+        <BotoesCompartilhamentoTriagem triagem={triagem as any} />
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard"

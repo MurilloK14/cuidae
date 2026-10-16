@@ -283,6 +283,7 @@ export interface AgendamentoHospitalar {
   triagem_id?: string
   sintomas_citados: string
   diagnostico_ia: string
+  hipoteses_diagnosticas?: Array<{ nome: string; probabilidade: number }>
   nivel_urgencia: NivelUrgencia
   prioridade: string
   orientacao_ia: string

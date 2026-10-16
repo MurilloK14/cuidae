@@ -1,5 +1,38 @@
 [
   {
+    "id": "fdad0c0c-f9ad-4abc-b9d3-5b28280699c2",
+    "user_id": "anonimo",
+    "sintoma_principal": "🤕 Dor de cabeça forte persistente",
+    "duracao": "Recente",
+    "intensidade": 4,
+    "respostas": [],
+    "nivel_urgencia": "verde",
+    "recomendacao": "teleconsulta",
+    "especialidade": "Clínico Geral / Medicina da Família",
+    "explicacao": "Olá! Aqui é o assistente SaúdePraTodos / Cuidaê do SUS. Compreendi pelo seu relato que você está sentindo uma dor de cabeça forte há cerca de 3 dias. Com base nos seus sintomas, nossa triagem sugere a possibilidade de Enxaqueca (Migraine), mas lembre-se de que isso não substitui uma avaliação médica definitiva. Como a recomendação para o seu caso é de consulta, sugerimos que você procure uma Unidade Básica de Saúde (UBS) para uma avaliação detalhada com um profissional, descanse em um ambiente calmo e evite luzes fortes. Caso os sintomas piorem de repente, procure atendimento de urgência.",
+    "orientacao": "Repouso em ambiente com pouca luz e baixo ruído, hidratação adequada e agendamento de consulta na UBS.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (Anamnese) + Infermedica v3",
+    "hipotesesDiagnosticas": [
+      {
+        "nome": "Enxaqueca",
+        "probabilidade": 25
+      }
+    ],
+    "sintomasInfermedica": [
+      "Dor de cabeça forte"
+    ],
+    "created_at": "2026-10-16T18:43:13.160Z"
+  },
+  {
     "id": "4be10440-245f-4964-ae10-aa30e5e5cf4b",
     "user_id": "anonimo",
     "sintoma_principal": "🤒 Febre alta e dores pelo corpo",

@@ -21,20 +21,140 @@ const headers = {
 };
 
 /**
+ * Tradução e normalização abrangente PT-BR -> EN clínico.
+ * As expressões mais longas e específicas vêm primeiro para evitar conflitos de substituição.
+ */
+const DICIONARIO_PT_EN = [
+  // Pele / Manchas
+  { pt: /\bmanchas?\s+(?:na|de|pela)\s+pele\b/gi, en: 'skin rash' },
+  { pt: /\bmanchas?\s+vermelhas?\b/gi, en: 'red spots on skin' },
+  { pt: /\berup[cç][aã]o\s+cut[aâ]nea\b/gi, en: 'skin rash' },
+  { pt: /\bvermelhid[aã]o\b/gi, en: 'redness' },
+  { pt: /\bpele\s+amarelada\b|\bicter[ií]cia\b/gi, en: 'jaundice' },
+  { pt: /\bpele\s+p[aá]lida\b|\bpalidez\b/gi, en: 'skin pallor' },
+  { pt: /\bcoceira\b|\bprurido\b/gi, en: 'itching' },
+
+  // Dores e corpo
+  { pt: /\bdores?\s+(?:no|pelo)\s+corpo\b|\bdor\s+muscular\b|\bmialgia\b/gi, en: 'generalized body aches' },
+  { pt: /\bdores?\s+nas?\s+articula[cç][oõ]es\b|\bdor\s+nas?\s+juntas\b|\bartralgia\b/gi, en: 'joint pain' },
+  { pt: /\bdor\s+de\s+cabe[cç]a\s+forte\b|\benxaqueca\b/gi, en: 'severe headache' },
+  { pt: /\bdor\s+de\s+cabe[cç]a\b|\bcefaleia\b/gi, en: 'headache' },
+  { pt: /\bdor\s+no\s+peito\s+(?:muito\s+forte|intensa|apertando)\b|\bdor\s+tor[aá]cica\s+grave\b/gi, en: 'severe crushing chest pain' },
+  { pt: /\bdor\s+no\s+peito\b|\bdor\s+tor[aá]cica\b/gi, en: 'chest pain' },
+  { pt: /\bdor\s+ao\s+engolir\b|\bdor\s+na\s+garganta\b|\bdor\s+de\s+garganta\b/gi, en: 'sore throat' },
+  { pt: /\bdor\s+abdominal\s+forte\b|\bc[oó]lica\s+forte\b/gi, en: 'severe abdominal pain' },
+  { pt: /\bdor\s+abdominal\b|\bdor\s+de\s+barriga\b|\bdor\s+no\s+est[oô]mago\b/gi, en: 'abdominal pain' },
+
+  // Febre e respiratório
+  { pt: /\bfebre\s+alta\b/gi, en: 'high fever' },
+  { pt: /\bfebre\b/gi, en: 'fever' },
+  { pt: /\bcalafrios?\b/gi, en: 'chills' },
+  { pt: /\btosse\s+com\s+(?:sangue|escarro\s+com\s+sangue)\b/gi, en: 'coughing up blood' },
+  { pt: /\btosse\s+com\s+(?:catarro|secre[cç][aã]o)\b|\btosse\s+produtiva\b/gi, en: 'cough with phlegm' },
+  { pt: /\btosse\s+seca\b/gi, en: 'dry cough' },
+  { pt: /\btosse\b/gi, en: 'cough' },
+  { pt: /\bfalta\s+de\s+ar\b|\bdificuldade\s+para\s+respirar\b|\bdispneia\b/gi, en: 'shortness of breath' },
+  { pt: /\bcoriza\b|\bnariz\s+escorrendo\b/gi, en: 'runny nose' },
+  { pt: /\bnariz\s+entupido\b|\bcongest[aã]o\s+nasal\b/gi, en: 'nasal congestion' },
+  { pt: /\bespirros?\b/gi, en: 'sneezing' },
+
+  // Gastrointestinal e geral
+  { pt: /\bn[aá]useas?\b|\benjoos?\b/gi, en: 'nausea' },
+  { pt: /\bv[oô]mitos?\b/gi, en: 'vomiting' },
+  { pt: /\bdiarreia\b|\bdiarr[eé]ia\b/gi, en: 'diarrhea' },
+  { pt: /\bperda\s+de\s+apetite\b|\bsem\s+fome\b/gi, en: 'loss of appetite' },
+  { pt: /\btontura\b|\bvertigem\b/gi, en: 'dizziness' },
+  { pt: /\bcansa[cç]o\b|\bfadiga\b|\bmoleza\b/gi, en: 'fatigue' },
+  { pt: /\bsuor\s+frio\b|\bsudorese\b/gi, en: 'cold sweats' },
+  { pt: /\bdesmaio\b|\bs[ií]ncope\b/gi, en: 'fainting' }
+];
+
+// Tradução de termos médicos comuns do inglês para português
+const NOMES_CONDICOES_PT = {
+  'Common cold': 'Resfriado Comum',
+  'Acute viral throat infection': 'Faringite Viral Aguda',
+  'Acute viral pharyngitis': 'Faringite Viral',
+  'Acute streptococcal pharyngitis': 'Faringite Estreptocócica (Bacteriana)',
+  'Influenza': 'Gripe (Influenza)',
+  'Dengue': 'Dengue',
+  'Dengue fever': 'Dengue',
+  'Chikungunya': 'Chikungunya',
+  'Zika fever': 'Febre Zika',
+  'COVID-19': 'COVID-19',
+  'Gastroenteritis': 'Gastroenterite',
+  'Viral gastroenteritis': 'Virose Gastrointestinal',
+  'Bacterial gastroenteritis': 'Infecção Gastrointestinal Bacteriana',
+  'Migraine': 'Enxaqueca',
+  'Tension headache': 'Cefaleia Tensional',
+  'Acute sinusitis': 'Sinusite Aguda',
+  'Pneumonia': 'Pneumonia',
+  'Heart attack': 'Infarto Agudo do Miocárdio',
+  'Myocardial infarction': 'Infarto Agudo do Miocárdio',
+  'Angina pectoris': 'Angina de Peito',
+  'Asthma exacerbation': 'Crise de Asma',
+  'Measles': 'Sarampo',
+  'Rubella': 'Rubéola',
+  'Chickenpox': 'Varicela (Catapora)',
+  'Allergic reaction': 'Reação Alérgica'
+};
+
+const NOMES_SINTOMAS_PT = {
+  'Fever': 'Febre',
+  'Fever between 38°C and 40°C or between 100.4 and 104°F': 'Febre (38°C a 40°C)',
+  'High fever': 'Febre Alta',
+  'Headache': 'Dor de cabeça',
+  'Headache, severe': 'Dor de cabeça forte',
+  'Severe headache': 'Dor de cabeça forte',
+  'Headache, throbbing': 'Dor de cabeça latejante',
+  'Headache, pressing': 'Pressão ou aperto na cabeça',
+  'Abdominal pain': 'Dor abdominal',
+  'Stomach pain': 'Dor de estômago',
+  'Muscle pain': 'Dor muscular',
+  'Body aches': 'Dores no corpo',
+  'Generalized body aches': 'Dores generalizadas no corpo',
+  'Skin rash': 'Manchas ou erupções na pele',
+  'Skin changes': 'Alterações na pele',
+  'Cough': 'Tosse',
+  'Sore throat': 'Dor de garganta',
+  'Nausea': 'Náusea/Enjoo',
+  'Vomiting': 'Vômito',
+  'Diarrhea': 'Diarreia',
+  'Shortness of breath': 'Falta de ar',
+  'Joint pain': 'Dor nas articulações/juntas',
+  'Fatigue': 'Fadiga/Cansaço',
+  'Dizziness': 'Tontura',
+  'Chest pain': 'Dor no peito',
+  'Runny nose': 'Coriza',
+  'Chills': 'Calafrios'
+};
+
+export function traduzirParaInglesClinico(texto) {
+  let resultado = texto;
+  for (const { pt, en } of DICIONARIO_PT_EN) {
+    resultado = resultado.replace(pt, en);
+  }
+  return resultado;
+}
+
+export function traduzirNomeCondicao(nome) {
+  return NOMES_CONDICOES_PT[nome] || nome;
+}
+
+export function traduzirNomeSintoma(nome) {
+  return NOMES_SINTOMAS_PT[nome] || nome;
+}
+
+/**
  * Usa o NLP da Infermedica para extrair sintomas de um texto.
- * Aceita texto em português.
- * 
- * @param {string} texto - Texto com sintomas (ex: "dor de cabeça e febre")
- * @param {number} idade - Idade do paciente (padrão 30)
- * @param {string} sexo - "male" ou "female" (padrão "male")
- * @returns {Array} Lista de evidências no formato { id, choice_id, name }
  */
 export async function parseSintomas(texto, idade = 30, sexo = 'male') {
+  const textoTraduzido = traduzirParaInglesClinico(texto);
+
   const res = await fetch(`${BASE_URL}/parse`, {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      text: texto,
+      text: textoTraduzido,
       age: { value: idade },
       sex: sexo
     })
@@ -47,7 +167,6 @@ export async function parseSintomas(texto, idade = 30, sexo = 'male') {
 
   const data = await res.json();
 
-  // Converte as "mentions" em "evidence" para usar no /diagnosis
   return data.mentions.map((m) => ({
     id: m.id,
     choice_id: m.choice_id,
@@ -57,12 +176,6 @@ export async function parseSintomas(texto, idade = 30, sexo = 'male') {
 
 /**
  * Envia os sintomas estruturados para o endpoint de diagnóstico.
- * Retorna as condições mais prováveis e pode sugerir perguntas de follow-up.
- * 
- * @param {Array} evidencias - Lista de { id, choice_id }
- * @param {number} idade
- * @param {string} sexo
- * @returns {object} { conditions, question, should_stop }
  */
 export async function getDiagnostico(evidencias, idade = 30, sexo = 'male') {
   const res = await fetch(`${BASE_URL}/diagnosis`, {
@@ -85,12 +198,6 @@ export async function getDiagnostico(evidencias, idade = 30, sexo = 'male') {
 
 /**
  * Faz a triagem de urgência com base nos sintomas.
- * Retorna o nível: emergency, consultation, self_care.
- * 
- * @param {Array} evidencias
- * @param {number} idade
- * @param {string} sexo
- * @returns {object} { triage_level, serious, description }
  */
 export async function getTriagem(evidencias, idade = 30, sexo = 'male') {
   const res = await fetch(`${BASE_URL}/triage`, {
@@ -112,17 +219,94 @@ export async function getTriagem(evidencias, idade = 30, sexo = 'male') {
 }
 
 /**
+ * Formata os resultados clínicos da Infermedica exibindo as principais hipóteses diagnósticas em português.
+ */
+export function formatarResultadoInfermedica(resultadoMedico) {
+  const { evidencias, diagnostico, triagem } = resultadoMedico;
+
+  const mapaPrioridade = {
+    emergency_ambulance: 'Urgente',
+    emergency: 'Urgente',
+    consultation_24: 'Alta',
+    consultation: 'Média',
+    self_care: 'Normal'
+  };
+
+  const mapaUnidade = {
+    emergency_ambulance: 'SAMU',
+    emergency: 'UPA',
+    consultation_24: 'UPA',
+    consultation: 'UBS',
+    self_care: 'UBS'
+  };
+
+  const prioridade = mapaPrioridade[triagem?.triage_level] || 'Normal';
+  const tipoUnidade = mapaUnidade[triagem?.triage_level] || 'UBS';
+
+  // Obtém as 3 condições mais prováveis identificadas pela Infermedica
+  const condicoes = (diagnostico?.conditions || []).slice(0, 3);
+  const condicaoPrincipal = condicoes[0];
+  const nomePrincipalPT = condicaoPrincipal ? traduzirNomeCondicao(condicaoPrincipal.common_name || condicaoPrincipal.name) : 'Condição em investigação';
+  const probPrincipal = condicaoPrincipal ? `${(condicaoPrincipal.probability * 100).toFixed(0)}%` : '';
+
+  // Lista de sintomas traduzidos
+  const sintomasFormatados = (evidencias || [])
+    .map(e => traduzirNomeSintoma(e.name))
+    .join(', ');
+
+  const textoSintomas = sintomasFormatados
+    ? `os sintomas: ${sintomasFormatados}`
+    : 'as queixas relatadas';
+
+  // Lista de hipóteses diagnósticas para mostrar ao paciente
+  const listaHipoteses = condicoes
+    .map(c => `• ${traduzirNomeCondicao(c.common_name || c.name)} (${(c.probability * 100).toFixed(0)}%)`)
+    .join('\n');
+
+  const blocoHipoteses = listaHipoteses
+    ? `\n\nHipóteses diagnósticas avaliadas:\n${listaHipoteses}\n\n`
+    : '\n\n';
+
+  let mensagem = '';
+  if (prioridade === 'Urgente') {
+    mensagem = `⚠️ ALERTA DE URGÊNCIA: A análise clínica da Infermedica identificou sinais que requerem atenção médica imediata.\n\n` +
+      `Sintomas identificados: ${sintomasFormatados || 'Sintomas agudos'}.${blocoHipoteses}` +
+      `Por favor, procure a unidade de emergência mais próxima (UPA ou Hospital) ou acione o SAMU 192 imediatamente.`;
+  } else if (prioridade === 'Alta') {
+    mensagem = `A análise clínica da Infermedica identificou ${textoSintomas}.${blocoHipoteses}` +
+      `Recomendamos avaliação médica presencial em até 24 horas (em uma UPA ou AMA) para realização de exames complementares e conduta adequada.`;
+  } else if (prioridade === 'Média') {
+    mensagem = `A análise clínica da Infermedica avaliou ${textoSintomas}.${blocoHipoteses}` +
+      `É recomendada consulta em uma Unidade Básica de Saúde (UBS) ou agendamento clínico para acompanhamento.`;
+  } else {
+    mensagem = `A análise clínica da Infermedica avaliou ${textoSintomas}.${blocoHipoteses}` +
+      `O quadro atual é de baixa gravidade. Se os sintomas persistirem, se agravarem ou surgirem novos sinais de alerta, procure a UBS mais próxima.`;
+  }
+
+  let orientacao = 'Mantenha repouso, hidratação frequente e monitore a temperatura.';
+  if (triagem?.triage_level === 'emergency_ambulance' || triagem?.triage_level === 'emergency') {
+    orientacao = 'Não faça esforço físico e dirija-se imediatamente à emergência mais próxima.';
+  } else if (triagem?.triage_level === 'consultation_24') {
+    orientacao = 'Mantenha hidratação oral contínua e procure atendimento médico em até 24 horas.';
+  }
+
+  return {
+    mensagem,
+    recomendacao: `Avaliação clínica para ${nomePrincipalPT} (${probPrincipal})`,
+    especialidade: tipoUnidade === 'SAMU' || tipoUnidade === 'UPA' ? 'Clínica Médica / Emergencista' : 'Clínico Geral / Medicina da Família',
+    prioridade,
+    orientacao,
+    tipoUnidade
+  };
+}
+
+/**
  * Fluxo completo: texto → parse → diagnóstico + triagem.
- * 
- * @param {string} texto - Sintomas em texto livre
- * @param {object} dadosPaciente - { idade, sexo }
- * @returns {object} Resultado completo com evidências, diagnóstico e triagem
  */
 export async function fluxoCompleto(texto, dadosPaciente = {}) {
   const idade = dadosPaciente.idade || 30;
   const sexo = dadosPaciente.sexo || 'male';
 
-  // 1. Extrai sintomas do texto
   const evidencias = await parseSintomas(texto, idade, sexo);
 
   if (evidencias.length === 0) {
@@ -134,7 +318,6 @@ export async function fluxoCompleto(texto, dadosPaciente = {}) {
     };
   }
 
-  // 2. Busca diagnóstico e triagem em paralelo
   const [diagnostico, triagem] = await Promise.all([
     getDiagnostico(evidencias, idade, sexo),
     getTriagem(evidencias, idade, sexo)

@@ -23,6 +23,8 @@ export interface TriageRecord {
   cidade_snapshot: string;
   uf_snapshot: string;
   fonteIA?: string;
+  hipotesesDiagnosticas?: Array<{ nome: string; probabilidade: number }>;
+  sintomasInfermedica?: string[];
   created_at: string;
 }
 
@@ -95,6 +97,8 @@ export async function saveTriagemToStore(dados: Partial<TriageRecord>): Promise<
     cidade_snapshot: dados.cidade_snapshot || 'São Paulo',
     uf_snapshot: dados.uf_snapshot || 'SP',
     fonteIA: dados.fonteIA || 'Google Gemini Flash',
+    hipotesesDiagnosticas: dados.hipotesesDiagnosticas || [],
+    sintomasInfermedica: dados.sintomasInfermedica || [],
     created_at: dados.created_at || new Date().toISOString(),
   };
 

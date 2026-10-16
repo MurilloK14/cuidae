@@ -37,3 +37,8 @@ server/uploads/
 Thumbs.db
 *.py
 tripo_page.html
+
+# Anamneses geradas em tempo de execucao
+data/anamneses/*.json
+!data/anamneses/.gitkeep
+
