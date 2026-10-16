@@ -95,7 +95,7 @@ export async function updateSession(request: NextRequest) {
     url.pathname = pathname.startsWith('/admin') ? '/admin/login' : '/login'
     const redirectRes = NextResponse.redirect(url)
     supabaseResponse.cookies.getAll().forEach((cookie) => {
-      redirectRes.cookies.set(cookie.name, cookie.value)
+      redirectRes.cookies.set(cookie)
     })
     return redirectRes
   }
@@ -106,7 +106,7 @@ export async function updateSession(request: NextRequest) {
     url.pathname = '/dashboard'
     const redirectRes = NextResponse.redirect(url)
     supabaseResponse.cookies.getAll().forEach((cookie) => {
-      redirectRes.cookies.set(cookie.name, cookie.value)
+      redirectRes.cookies.set(cookie)
     })
     return redirectRes
   }

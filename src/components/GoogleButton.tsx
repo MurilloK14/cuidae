@@ -1,50 +1,52 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import React, { useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
 
 interface GoogleButtonProps {
-  label?: string
+  label?: string;
+  className?: string;
 }
 
-export function GoogleButton({ label = 'Continuar com o Google' }: GoogleButtonProps) {
-  const [loading, setLoading] = useState(false)
+export function GoogleButton({ label = 'Continuar com o Google', className = '' }: GoogleButtonProps) {
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     try {
-      setLoading(true)
-      const supabase = createClient()
+      setLoading(true);
+      const supabase = createClient();
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
           queryParams: {
             access_type: 'offline',
+            prompt: 'select_account',
           },
         },
-      })
+      });
       if (error) {
-        console.error('Erro ao conectar com Google:', error.message)
-        alert('Erro ao autenticar com o Google: ' + error.message)
-        setLoading(false)
+        console.error('Erro ao conectar com Google:', error.message);
+        alert('Erro ao autenticar com o Google: ' + error.message);
+        setLoading(false);
       }
     } catch (err: any) {
-      console.error(err)
-      setLoading(false)
+      console.error(err);
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <button
       type="button"
       onClick={handleLogin}
       disabled={loading}
-      className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-200 font-medium text-sm transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600 disabled:opacity-60 cursor-pointer"
+      className={`w-full h-12 flex items-center justify-center gap-3 px-4 rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-white hover:bg-slate-50 dark:bg-slate-800/90 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-100 font-semibold text-sm transition-all duration-150 shadow-xs hover:shadow-sm active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer ${className}`}
     >
       {loading ? (
-        <div className="h-5 w-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+        <div className="h-5 w-5 border-2 border-slate-400 dark:border-slate-300 border-t-transparent rounded-full animate-spin" />
       ) : (
-        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
           <path
             fill="#4285F4"
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -65,5 +67,5 @@ export function GoogleButton({ label = 'Continuar com o Google' }: GoogleButtonP
       )}
       <span>{label}</span>
     </button>
-  )
+  );
 }

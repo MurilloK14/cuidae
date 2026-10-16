@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,33 +17,27 @@ export async function GET(request: Request) {
 
   if (code) {
     const cookieStore = cookies()
-    const redirectUrl = `${origin}${next}`
+    const forwardedHost = request.headers.get('x-forwarded-host')
+    const isLocalEnv = process.env.NODE_ENV === 'development'
+
+    // Garante redirecionamento consistente em localhost e em produção com proxy (ex: Vercel)
+    const targetOrigin = isLocalEnv
+      ? origin
+      : (forwardedHost ? `https://${forwardedHost}` : origin)
+
+    const targetPath = next.startsWith('/') ? next : `/${next}`
+    const redirectUrl = `${targetOrigin}${targetPath}`
     const response = NextResponse.redirect(redirectUrl)
 
     const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
+        getAll() {
+          return cookieStore.getAll()
         },
-        set(name: string, value: string, options: CookieOptions) {
-          cookieStore.set({ name, value, ...options })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-            path: '/',
-            sameSite: 'lax',
-            secure: process.env.NODE_ENV === 'production',
-          })
-        },
-        remove(name: string, options: CookieOptions) {
-          cookieStore.delete({ name, ...options })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-            path: '/',
-            maxAge: 0,
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            cookieStore.set(name, value, options)
+            response.cookies.set(name, value, options)
           })
         },
       },
@@ -55,26 +49,21 @@ export async function GET(request: Request) {
       // Garante que o perfil do usuário Google seja criado automaticamente na tabela profiles
       const user = data.session.user
       if (user) {
-        await supabase.from('profiles').upsert(
-          {
-            id: user.id,
-            nome_completo: user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'Usuário',
-            cidade: user.user_metadata?.cidade || 'Não informada',
-            uf: user.user_metadata?.uf || 'PE',
-            camada: 'gratuita',
-          },
-          { onConflict: 'id' }
-        )
+        try {
+          await supabase.from('profiles').upsert(
+            {
+              id: user.id,
+              nome_completo: user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'Usuário',
+              cidade: user.user_metadata?.cidade || 'Não informada',
+              uf: user.user_metadata?.uf || 'PE',
+              camada: 'gratuita',
+            },
+            { onConflict: 'id' }
+          )
+        } catch (profileErr) {
+          console.warn('[OAuth Callback] Aviso ao criar perfil inicial:', profileErr)
+        }
       }
-
-      // Copia todos os cookies existentes na store para a resposta de redirect
-      cookieStore.getAll().forEach((c) => {
-        response.cookies.set(c.name, c.value, {
-          path: '/',
-          sameSite: 'lax',
-          secure: process.env.NODE_ENV === 'production',
-        })
-      })
 
       return response
     }

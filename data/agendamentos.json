@@ -30,7 +30,7 @@
     "especialidade_recomendada_ia": "Clínica Médica / Infectologia",
     "fonte_ia": "Google Gemini 3.8 Flash (Protocolo Clínico Cuidaê)",
     "resumo_clinico_hospital": "Paciente: Maria Silva Santos • Sintomas Citados: 'Febre alta de 39ºC há 3 dias com cefaleia intensa, dor retro-orbital e mialgia generalizada.' • Diagnóstico Preliminar IA: 'Suspeita de Arbovirose (Dengue Clássica em investigação)' • Manchester: AMARELO • Especialidade: Clínica Médica.",
-    "status": "agendado",
+    "status": "concluido",
     "status_envio_hospital": "transmitido_com_sucesso",
     "transmissao_hospital": {
       "data_envio": "2026-10-12T23:30:00.000Z",
@@ -41,6 +41,9 @@
       "status_prontuario": "Prontuário pré-cadastrado e anexado com sintomas e diagnóstico da IA"
     },
     "created_at": "2026-10-12T23:30:00.000Z",
-    "updated_at": "2026-10-12T23:30:00.000Z"
+    "updated_at": "2026-10-16T18:46:51.055Z",
+    "chamado_em": "2026-10-16T18:46:42.319Z",
+    "sala_atendimento": "Consultório 1 - Acolhimento",
+    "medico_responsavel": "Equipe de Acolhimento e Triagem Hospitalar"
   }
 ]
