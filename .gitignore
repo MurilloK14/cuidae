@@ -8,7 +8,8 @@ dist-ssr/
 
 # Variáveis de ambiente (Segurança e configurações locais)
 .env
-.env*
+.env.local
+!.env.example
 
 # Uploads locais de imagens do backend
 server/uploads/
