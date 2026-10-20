@@ -1,39 +1,45 @@
 import { Router } from 'express';
 import upload from '../middleware/upload.js';
-import { gerarRelatorioFormal, gerarRelatorioImagem, humanizarResultadoFinal } from '../services/geminiService.js';
-import { fluxoCompleto, formatarResultadoInfermedica } from '../services/infermedicaService.js';
+import { aiStatus } from '../config/aiConfig.js';
+import {
+  gerarRelatorioFormal,
+  gerarRelatorioImagem,
+  humanizarResultadoFinal,
+  gerarPerguntaInvestigativa,
+  interpretarRespostaPaciente
+} from '../services/geminiService.js';
+import {
+  parseSintomas,
+  executarPassoDiagnostico,
+  fluxoCompleto,
+  formatarResultadoInfermedica
+} from '../services/infermedicaService.js';
 import { getLocal, gerarLinkMaps } from '../services/locationService.js';
 
 const router = Router();
 
-const GEMINI_ATIVO = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'SUA_CHAVE_AQUI');
-const INFERMEDICA_ATIVA = Boolean(
-  process.env.INFERMEDICA_APP_ID &&
-  process.env.INFERMEDICA_APP_ID !== 'SEU_APP_ID_AQUI' &&
-  process.env.INFERMEDICA_APP_KEY &&
-  process.env.INFERMEDICA_APP_KEY !== 'SUA_APP_KEY_AQUI'
-);
-
-console.log(`[Config] Gemini: ${GEMINI_ATIVO ? '✅' : '❌'} | Infermedica: ${INFERMEDICA_ATIVA ? '✅' : '❌'}`);
-console.log(`[Config] Modo integrado (Gemini -> Infermedica -> Gemini): ${GEMINI_ATIVO && INFERMEDICA_ATIVA ? '✅ ATIVO' : '⚠️ Parcial'}`);
+console.log(`[Config] Gemini: ${aiStatus.isGeminiActive ? '✅' : '❌'} | Infermedica: ${aiStatus.isInfermedicaActive ? '✅' : '❌'}`);
+console.log(`[Config] Modo integrado (Gemini -> Infermedica -> Gemini): ${aiStatus.isIntegratedMode ? '✅ ATIVO' : '⚠️ Parcial'}`);
 
 /**
  * GET /api/triage/welcome
  */
 router.get('/welcome', (_req, res) => {
   res.json({
-    texto: "Olá! Sou o assistente de triagem médica do SaúdePraTodos. Descreva com suas palavras o que você está sentindo ou envie uma foto, e nosso sistema médico (Gemini + Infermedica) fará sua triagem completa!"
+    texto: "Olá! Sou o assistente de triagem médica do SaúdePraTodos. Descreva com suas palavras o que você está sentindo ou envie uma foto. Nosso sistema médico inteligente fará perguntas específicas para identificar seu caso com precisão!"
   });
 });
 
 /**
  * POST /api/triage/symptoms
  * 
- * FLUXO INTEGRADO:
- * 1. O paciente envia o relato (em linguagem natural/informal em PT).
- * 2. O Gemini processa o relato e constrói um RELATÓRIO FORMAL MÉDICO em inglês clínico.
- * 3. O relatório formal alimenta o motor de diagnóstico da Infermedica v3 (/parse -> /diagnosis -> /triage).
- * 4. O Gemini recebe o resultado da Infermedica e responde de forma empática e humanizada com o encaminhamento e mapa.
+ * INÍCIO DO CICLO DIAGNÓSTICO:
+ * 1. O paciente envia o relato inicial em linguagem natural.
+ * 2. O Gemini extrai relatório formal e termos em inglês médico.
+ * 3. A Infermedica detecta as menções de sintomas (/parse).
+ * 4. A Infermedica avalia as condições iniciais (/diagnosis).
+ * 5. Se já houver certeza clínica, finaliza.
+ *    Senão, o Gemini formula a primeira pergunta investigativa para afunilar as hipóteses.
  */
 router.post('/symptoms', async (req, res) => {
   const { sintoma, camada, lat, lng } = req.body;
@@ -45,7 +51,7 @@ router.post('/symptoms', async (req, res) => {
   const camadaValida = ['Gratuito', 'Intermediário', 'Premium'].includes(camada) ? camada : 'Gratuito';
 
   try {
-    console.log('\n--- [NOVO ATENDIMENTO DE SINTOMAS] ---');
+    console.log('\n--- [INÍCIO DE TRIAGEM - SINTOMAS INICIAIS] ---');
     console.log('1. Mensagem do paciente:', sintoma);
 
     // ETAPA 1: Gemini elabora o relatório médico formal
@@ -54,47 +60,105 @@ router.post('/symptoms', async (req, res) => {
     console.log('   Relatório gerado:', relatorioGemini.relatorioClinico);
     console.log('   Sintomas identificados:', relatorioGemini.sintomasExtraidosPT.join(', '));
 
-    // ETAPA 2: Infermedica processa o relatório formal
-    console.log('3. [Infermedica] Consultando motor clínico de diagnóstico e triagem...');
-    const resultadoInfermedica = await fluxoCompleto(relatorioGemini.relatorioClinico, {
+    // ETAPA 2: Infermedica extrai menções estruturadas
+    const evidenciasIniciais = await parseSintomas(
+      relatorioGemini.relatorioClinico,
+      relatorioGemini.idade,
+      relatorioGemini.sexo
+    );
+
+    if (evidenciasIniciais.length === 0) {
+      return res.json({
+        remetente: 'bot',
+        finalizado: true,
+        texto: 'Não consegui identificar sintomas médicos específicos na sua descrição. Você poderia detalhar um pouco mais o que está sentindo (por exemplo: onde dói, se tem febre, enjoo ou manchas)?',
+        triagem: null,
+        fonteIA: 'Gemini + Infermedica',
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    const evidenciasComSource = evidenciasIniciais.map(e => ({
+      ...e,
+      source: 'initial'
+    }));
+
+    // ETAPA 3: Infermedica roda o 1º passo do diagnóstico
+    console.log('3. [Infermedica] Executando rodada de diagnóstico...');
+    const passo = await executarPassoDiagnostico(evidenciasComSource, {
       idade: relatorioGemini.idade,
       sexo: relatorioGemini.sexo
     });
 
-    let formatado;
-    // ETAPA 3: Humanização da resposta final (tenta Gemini humanizando; se falhar, usa formatador direto)
-    try {
-      console.log('4. [Gemini] Humanizando diagnóstico final para o paciente...');
-      formatado = await humanizarResultadoFinal(sintoma, relatorioGemini, resultadoInfermedica, camadaValida);
-    } catch (errHumanizacao) {
-      console.warn('⚠️ Fallback na humanização (usando formatador interno):', errHumanizacao.message);
-      formatado = formatarResultadoInfermedica(resultadoInfermedica);
+    // Caso já tenha chegado a uma certeza suficiente logo de início
+    if (passo.finalizado) {
+      console.log('4. [Infermedica] Diagnóstico afunilado imediatamente!');
+      let formatado;
+      try {
+        formatado = await humanizarResultadoFinal(
+          sintoma,
+          relatorioGemini,
+          { diagnostico: passo.diagnostico, triagem: passo.triagem },
+          camadaValida
+        );
+      } catch (errHumanizacao) {
+        formatado = formatarResultadoInfermedica({
+          evidencias: passo.evidencias,
+          diagnostico: passo.diagnostico,
+          triagem: passo.triagem
+        });
+      }
+
+      const tipoUnidade = formatado.tipoUnidade || 'UBS';
+      const local = getLocal(camadaValida, formatado.prioridade, tipoUnidade);
+      const linkMaps = gerarLinkMaps(lat, lng, tipoUnidade);
+
+      return res.json({
+        remetente: 'bot',
+        finalizado: true,
+        texto: formatado.mensagem,
+        triagem: {
+          recomendacao: formatado.recomendacao,
+          especialidade: formatado.especialidade,
+          local,
+          prioridade: formatado.prioridade,
+          orientacao: formatado.orientacao
+        },
+        mapa: linkMaps,
+        fonteIA: 'Gemini 1.5 Flash + Infermedica v3',
+        timestamp: new Date().toISOString()
+      });
     }
 
-    const tipoUnidade = formatado.tipoUnidade || 'UBS';
-    const local = getLocal(camadaValida, formatado.prioridade, tipoUnidade);
-    const linkMaps = gerarLinkMaps(lat, lng, tipoUnidade);
-
-    console.log('5. ✅ Triagem concluída com sucesso!');
+    // Se o motor precisa de mais dados para desempatar:
+    console.log('4. [Gemini] Formulando pergunta investigativa a partir da Infermedica...');
+    const perguntaGemini = await gerarPerguntaInvestigativa(
+      sintoma,
+      passo.condicoes,
+      passo.question.text
+    );
 
     return res.json({
       remetente: 'bot',
-      texto: formatado.mensagem,
-      triagem: {
-        recomendacao: formatado.recomendacao,
-        especialidade: formatado.especialidade,
-        local,
-        prioridade: formatado.prioridade,
-        orientacao: formatado.orientacao
+      finalizado: false,
+      texto: perguntaGemini.perguntaHumanizada,
+      explicacao: perguntaGemini.explicacaoBreve,
+      opcoes: perguntaGemini.opcoesRapidas || ['Sim', 'Não', 'Não tenho certeza'],
+      sessao: {
+        evidencias: passo.evidencias,
+        perguntaAtual: passo.question,
+        relatoOriginal: sintoma,
+        relatorioClinico: relatorioGemini.relatorioClinico,
+        idade: relatorioGemini.idade,
+        sexo: relatorioGemini.sexo,
+        condicoes: passo.condicoes
       },
-      mapa: linkMaps,
-      fonteIA: 'Gemini 3.5 Flash + Infermedica v3',
-      relatorioFormal: relatorioGemini.relatorioClinico,
+      fonteIA: 'Gemini 1.5 Flash + Infermedica v3 (Entrevista Dinâmica)',
       timestamp: new Date().toISOString()
     });
 
   } catch (err) {
-    console.error('❌ Erro no fluxo integrado:', err.message);
+    console.error('❌ Erro no fluxo de sintomas:', err.message);
     return res.status(500).json({
       remetente: 'bot',
       texto: `🚨 Erro no processamento de triagem: ${err.message}`,
@@ -106,11 +170,135 @@ router.post('/symptoms', async (req, res) => {
 });
 
 /**
- * POST /api/triage/image
+ * POST /api/triage/reply
  * 
- * 1. Gemini analisa a foto e gera o relatório dermatológico formal.
- * 2. O relatório alimenta a Infermedica.
- * 3. Humanização e encaminhamento geolocalizado.
+ * CONTINUAÇÃO DA ENTREVISTA DIAGNÓSTICA (LOOP):
+ * 1. O paciente responde à pergunta investigativa (via texto ou botão).
+ * 2. O Gemini interpreta a resposta e mapeia para escolhas clínicas (present/absent/unknown).
+ * 3. As novas evidências são incorporadas ao prontuário da sessão.
+ * 4. A Infermedica recalcula as probabilidades de cada doença.
+ * 5. Se o diagnóstico estiver afunilado (ou atingir critério de parada):
+ *      -> Gera resultado final com conduta e UBS/UPA geolocalizada.
+ *    Senão:
+ *      -> Gemini formula a próxima pergunta investigativa da Infermedica.
+ */
+router.post('/reply', async (req, res) => {
+  const { resposta, sessao, camada, lat, lng } = req.body;
+
+  if (!resposta || !sessao || !sessao.evidencias) {
+    return res.status(400).json({ error: 'Resposta e sessão válida são obrigatórias.' });
+  }
+
+  const camadaValida = ['Gratuito', 'Intermediário', 'Premium'].includes(camada) ? camada : 'Gratuito';
+
+  try {
+    console.log('\n--- [AVANÇO DA ENTREVISTA DIAGNÓSTICA] ---');
+    console.log('1. Resposta do paciente:', resposta);
+    console.log('2. Pergunta clínica de referência:', sessao.perguntaAtual?.text);
+
+    // ETAPA 1: Interpretar a resposta com Gemini
+    const escolhas = await interpretarRespostaPaciente(
+      resposta,
+      sessao.perguntaAtual?.items || []
+    );
+    console.log('3. Escolhas mapeadas para a Infermedica:', JSON.stringify(escolhas));
+
+    // Adiciona as novas respostas como evidências da entrevista
+    const novasEvidencias = escolhas.map(e => ({
+      id: e.id,
+      choice_id: e.choice_id
+    }));
+
+    const idsNovos = new Set(novasEvidencias.map(n => n.id));
+    const evidenciasFiltradas = sessao.evidencias.filter(e => !idsNovos.has(e.id));
+    const evidenciasAtualizadas = [...evidenciasFiltradas, ...novasEvidencias];
+
+    // ETAPA 2: Infermedica reavalia o diagnóstico com as novas evidências
+    console.log('4. [Infermedica] Recalculando probabilidades com novas evidências...');
+    const passo = await executarPassoDiagnostico(evidenciasAtualizadas, {
+      idade: sessao.idade,
+      sexo: sessao.sexo
+    });
+
+    // Se o diagnóstico afunilou ou encerrou o limite de perguntas
+    if (passo.finalizado) {
+      console.log('5. ✅ Diagnóstico final afunilado e consolidado!');
+      let formatado;
+      try {
+        formatado = await humanizarResultadoFinal(
+          sessao.relatoOriginal,
+          { relatorioClinico: sessao.relatorioClinico },
+          { diagnostico: passo.diagnostico, triagem: passo.triagem },
+          camadaValida
+        );
+      } catch (errHumanizacao) {
+        formatado = formatarResultadoInfermedica({
+          evidencias: passo.evidencias,
+          diagnostico: passo.diagnostico,
+          triagem: passo.triagem
+        });
+      }
+
+      const tipoUnidade = formatado.tipoUnidade || 'UBS';
+      const local = getLocal(camadaValida, formatado.prioridade, tipoUnidade);
+      const linkMaps = gerarLinkMaps(lat, lng, tipoUnidade);
+
+      return res.json({
+        remetente: 'bot',
+        finalizado: true,
+        texto: formatado.mensagem,
+        triagem: {
+          recomendacao: formatado.recomendacao,
+          especialidade: formatado.especialidade,
+          local,
+          prioridade: formatado.prioridade,
+          orientacao: formatado.orientacao
+        },
+        mapa: linkMaps,
+        fonteIA: 'Gemini 1.5 Flash + Infermedica v3 (Diagnóstico Refinado)',
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    // Se ainda restam dúvidas: Gemini formula a próxima pergunta investigativa
+    console.log('5. [Gemini] Formulando próxima pergunta de afunilamento...');
+    const perguntaGemini = await gerarPerguntaInvestigativa(
+      sessao.relatoOriginal,
+      passo.condicoes,
+      passo.question.text
+    );
+
+    return res.json({
+      remetente: 'bot',
+      finalizado: false,
+      texto: perguntaGemini.perguntaHumanizada,
+      explicacao: perguntaGemini.explicacaoBreve,
+      opcoes: perguntaGemini.opcoesRapidas || ['Sim', 'Não', 'Não tenho certeza'],
+      sessao: {
+        ...sessao,
+        evidencias: passo.evidencias,
+        perguntaAtual: passo.question,
+        condicoes: passo.condicoes
+      },
+      fonteIA: 'Gemini 1.5 Flash + Infermedica v3 (Entrevista Dinâmica)',
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (err) {
+    console.error('❌ Erro no avanço da entrevista:', err.message);
+    return res.status(500).json({
+      remetente: 'bot',
+      texto: `🚨 Erro ao processar resposta: ${err.message}`,
+      triagem: null,
+      fonteIA: 'erro-api',
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+/**
+ * POST /api/triage/image
+ * Análise de foto dermatológica
  */
 router.post('/image', upload.single('imagem'), async (req, res) => {
   if (!req.file) {
@@ -148,6 +336,7 @@ router.post('/image', upload.single('imagem'), async (req, res) => {
 
     return res.json({
       remetente: 'bot',
+      finalizado: true,
       texto: formatado.mensagem,
       triagem: {
         recomendacao: formatado.recomendacao,
@@ -157,7 +346,7 @@ router.post('/image', upload.single('imagem'), async (req, res) => {
         orientacao: formatado.orientacao
       },
       mapa: linkMaps,
-      fonteIA: 'Gemini (Visão) + Infermedica v3',
+      fonteIA: 'Gemini 1.5 Flash (Visão) + Infermedica v3',
       arquivoRecebido: req.file.originalname,
       timestamp: new Date().toISOString()
     });

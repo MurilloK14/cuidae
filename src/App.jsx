@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { fetchBoasVindas, enviarSintomas, enviarImagem } from './services/api.js';
+import { fetchBoasVindas, enviarSintomas, enviarRespostaTriagem, enviarImagem } from './services/api.js';
 import './App.css';
 
 let nextId = 1;
@@ -9,6 +9,8 @@ export default function App() {
   const [mensagens, setMensagens] = useState([]);
   const [inputTexto, setInputTexto] = useState('');
   const [resultadoTriagem, setResultadoTriagem] = useState(null);
+  const [sessaoAtiva, setSessaoAtiva] = useState(null);
+  const [opcoesRapidas, setOpcoesRapidas] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [localizacao, setLocalizacao] = useState(null);
   const [locStatus, setLocStatus] = useState('solicitando'); // solicitando | ativa | negada
@@ -34,9 +36,11 @@ export default function App() {
     );
   }, []);
 
-  // Busca a mensagem de boas-vindas
+  // Busca a mensagem de boas-vindas e reseta o chat
   const iniciarChat = async () => {
     setResultadoTriagem(null);
+    setSessaoAtiva(null);
+    setOpcoesRapidas([]);
     try {
       const data = await fetchBoasVindas();
       setMensagens([{ id: nextId++, remetente: 'bot', texto: data.texto }]);
@@ -60,40 +64,82 @@ export default function App() {
   // Rolagem automática
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [mensagens, isTyping]);
+  }, [mensagens, isTyping, opcoesRapidas]);
 
-  // Processa a resposta da API (triagem + mapa)
+  // Processa a resposta da API (pergunta investigativa ou resultado final)
   const processarResposta = (data) => {
     setMensagens((prev) => [
       ...prev,
-      { id: nextId++, remetente: 'bot', texto: data.texto }
+      {
+        id: nextId++,
+        remetente: 'bot',
+        texto: data.texto,
+        explicacao: data.explicacao || null
+      }
     ]);
 
-    if (data.triagem) {
-      setResultadoTriagem({ ...data.triagem, mapa: data.mapa || null });
+    if (data.finalizado) {
+      setSessaoAtiva(null);
+      setOpcoesRapidas([]);
+      if (data.triagem) {
+        setResultadoTriagem({ ...data.triagem, mapa: data.mapa || null });
+      }
+    } else {
+      setSessaoAtiva(data.sessao || null);
+      setOpcoesRapidas(data.opcoes || ['Sim', 'Não', 'Não tenho certeza']);
     }
   };
 
-  // Enviar mensagem de texto
+  // Enviar mensagem de texto (inicial ou resposta na entrevista)
   const handleEnviarMensagem = async (e) => {
     e.preventDefault();
     if (!inputTexto.trim()) return;
 
     const textoEnviado = inputTexto;
+    setInputTexto('');
+    setOpcoesRapidas([]);
     setMensagens((prev) => [
       ...prev,
       { id: nextId++, remetente: 'usuario', texto: textoEnviado }
     ]);
-    setInputTexto('');
     setIsTyping(true);
 
     try {
-      const data = await enviarSintomas(textoEnviado, camada, localizacao);
+      let data;
+      if (sessaoAtiva) {
+        data = await enviarRespostaTriagem(textoEnviado, sessaoAtiva, camada, localizacao);
+      } else {
+        data = await enviarSintomas(textoEnviado, camada, localizacao);
+      }
       processarResposta(data);
     } catch (err) {
       setMensagens((prev) => [
         ...prev,
         { id: nextId++, remetente: 'bot', texto: `⚠️ Erro: ${err.message}. Tente novamente.` }
+      ]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  // Responder clicando em um dos botões rápidos
+  const handleResponderOpcao = async (opcao) => {
+    if (!sessaoAtiva || isTyping) return;
+
+    setOpcoesRapidas([]);
+    setMensagens((prev) => [
+      ...prev,
+      { id: nextId++, remetente: 'usuario', texto: opcao }
+    ]);
+    setIsTyping(true);
+
+    try {
+      const data = await enviarRespostaTriagem(opcao, sessaoAtiva, camada, localizacao);
+      processarResposta(data);
+    } catch (err) {
+      setMensagens((prev) => [
+        ...prev,
+        { id: nextId++, remetente: 'bot', texto: `⚠️ Erro ao enviar resposta: ${err.message}. Tente novamente.` }
       ]);
     } finally {
       setIsTyping(false);
@@ -175,6 +221,9 @@ export default function App() {
           <div key={msg.id} className={`msg-row ${msg.remetente === 'bot' ? 'bot' : 'user'}`}>
             <div className={`msg-bubble ${msg.remetente === 'bot' ? 'bot' : 'user'}`}>
               {msg.texto && <p>{msg.texto}</p>}
+              {msg.explicacao && (
+                <span className="msg-hint">💡 {msg.explicacao}</span>
+              )}
               {msg.imagem && <img src={msg.imagem} alt="Sintoma enviado pelo usuário" />}
             </div>
           </div>
@@ -182,12 +231,28 @@ export default function App() {
         {isTyping && (
           <div className="msg-row bot">
             <div className="msg-bubble bot">
-              <p className="typing-indicator">Analisando...</p>
+              <p className="typing-indicator">Afunilando diagnóstico clínico...</p>
             </div>
           </div>
         )}
         <div ref={chatEndRef} />
       </main>
+
+      {/* BOTÕES RÁPIDOS DA ENTREVISTA DIAGNÓSTICA */}
+      {opcoesRapidas.length > 0 && !isTyping && (
+        <div className="quick-replies">
+          {opcoesRapidas.map((opcao) => (
+            <button
+              key={opcao}
+              type="button"
+              className="quick-reply-btn"
+              onClick={() => handleResponderOpcao(opcao)}
+            >
+              {opcao}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* ÁREA DE INPUT */}
       <form onSubmit={handleEnviarMensagem} className="input-area">
@@ -195,7 +260,7 @@ export default function App() {
           type="text"
           value={inputTexto}
           onChange={(e) => setInputTexto(e.target.value)}
-          placeholder="Descreva seu sintoma..."
+          placeholder={sessaoAtiva ? "Responda a pergunta acima ou clique nas opções..." : "Descreva seu sintoma..."}
           className="text-input"
         />
 
