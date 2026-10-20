@@ -3,6 +3,8 @@
 import React, { useState } from 'react'
 import { Printer, Share2, Copy, Check, MessageSquare } from 'lucide-react'
 
+import { buildWhatsappUrl, formatarWhatsappTriagem } from '@/lib/whatsapp'
+
 interface BotoesCompartilhamentoProps {
   triagem: {
     id: string
@@ -21,27 +23,7 @@ interface BotoesCompartilhamentoProps {
 export function BotoesCompartilhamentoTriagem({ triagem }: BotoesCompartilhamentoProps) {
   const [copiado, setCopiado] = useState(false)
 
-  const urgenciaTexto =
-    triagem.nivel_urgencia === 'vermelho'
-      ? '🔴 Emergência (Alta Prioridade)'
-      : triagem.nivel_urgencia === 'amarelo'
-      ? '🟡 Urgente (Prioridade Moderada)'
-      : '🟢 Pouco Urgente (Atenção Básica)'
-
-  const listaHipoteses = triagem.hipotesesDiagnosticas?.length
-    ? triagem.hipotesesDiagnosticas.map((h) => `  • ${h.nome}: ${h.probabilidade}%`).join('\n')
-    : ''
-
-  const textoResumo =
-    `🏥 *Laudo de Triagem Cuidaê / SUS*\n` +
-    `📅 Data: ${new Date(triagem.created_at || Date.now()).toLocaleDateString('pt-BR')}\n\n` +
-    `📋 *Queixa Relatada:* ${triagem.sintoma_principal}\n` +
-    `🚦 *Classificação de Risco:* ${urgenciaTexto}\n` +
-    `🩺 *Hipótese Principal:* ${triagem.recomendacao || triagem.explicacao}\n` +
-    (listaHipoteses ? `📊 *Diagnóstico Diferencial (Infermedica):*\n${listaHipoteses}\n` : '') +
-    (triagem.especialidade ? `👨‍⚕️ *Especialidade Indicada:* ${triagem.especialidade}\n` : '') +
-    (triagem.orientacao ? `💡 *Orientações:* ${triagem.orientacao}\n` : '') +
-    `\nValidação Clínica: Motor Infermedica API v3 + Google Gemini`
+  const textoResumo = formatarWhatsappTriagem(triagem)
 
   const handleCopiar = async () => {
     try {
@@ -59,7 +41,7 @@ export function BotoesCompartilhamentoTriagem({ triagem }: BotoesCompartilhament
     }
   }
 
-  const urlWhatsapp = `https://api.whatsapp.com/send?text=${encodeURIComponent(textoResumo)}`
+  const urlWhatsapp = buildWhatsappUrl(textoResumo)
 
   return (
     <div className="flex flex-wrap items-center gap-2.5 print:hidden">

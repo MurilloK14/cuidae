@@ -114,26 +114,6 @@ export default async function DashboardPage() {
         },
       ];
 
-  const camadaInfo: Record<string, { label: string; desc: string; color: string }> = {
-    gratuita: {
-      label: 'Plano Gratuito',
-      desc: 'Triagens ilimitadas + histórico básico',
-      color: 'from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800/80 border-slate-200 dark:border-slate-800',
-    },
-    intermediaria: {
-      label: 'Plano Intermediário',
-      desc: 'Teleconsultas avulsas disponíveis',
-      color: 'from-blue-50 to-blue-100/50 dark:from-blue-950/40 dark:to-slate-900 border-blue-200 dark:border-blue-800/60',
-    },
-    premium: {
-      label: 'Plano Premium',
-      desc: 'Consultas ilimitadas + vínculo clínica',
-      color: 'from-amber-50 to-amber-100/50 dark:from-amber-950/40 dark:to-slate-900 border-amber-200 dark:border-amber-800/60',
-    },
-  };
-
-  const plano = camadaInfo[camada] || camadaInfo.gratuita;
-
   function formatDate(dateStr: string) {
     return new Date(dateStr).toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -159,39 +139,56 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick Actions Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Quick Action 1: Start Triage */}
         <Link
           href="/triagem"
-          className="group flex items-center gap-4 p-5 sm:p-6 bg-[#091426] dark:bg-slate-900 border border-[#091426] dark:border-slate-800 rounded-2xl text-white shadow-sm hover:shadow-md dark:hover:border-[#2b85ff]/50 transition-all duration-200 hover:-translate-y-0.5"
+          className="group flex items-center gap-3.5 p-5 bg-[#091426] dark:bg-slate-900 border border-[#091426] dark:border-slate-800 rounded-2xl text-white shadow-sm hover:shadow-md dark:hover:border-[#2b85ff]/50 transition-all duration-200 hover:-translate-y-0.5"
         >
-          <div className="w-12 h-12 rounded-xl bg-white/10 dark:bg-blue-600/20 border border-white/10 dark:border-blue-500/30 flex items-center justify-center shrink-0 text-[#2b85ff] dark:text-blue-400">
-            <Stethoscope className="w-6 h-6 text-white dark:text-blue-400" />
+          <div className="w-11 h-11 rounded-xl bg-white/10 dark:bg-blue-600/20 border border-white/10 dark:border-blue-500/30 flex items-center justify-center shrink-0 text-[#2b85ff] dark:text-blue-400">
+            <Stethoscope className="w-5 h-5 text-white dark:text-blue-400" />
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="text-base sm:text-lg font-bold text-white">Iniciar Nova Triagem</h2>
-            <p className="text-xs sm:text-sm text-slate-300 dark:text-slate-400 mt-0.5">
-              Descreva seus sintomas e receba orientação de urgência com IA
+            <h2 className="text-sm sm:text-base font-bold text-white truncate">Nova Triagem</h2>
+            <p className="text-xs text-slate-300 dark:text-slate-400 mt-0.5 line-clamp-1">
+              Avalie sintomas com IA
             </p>
           </div>
-          <ArrowUpRight className="w-5 h-5 text-white/50 dark:text-slate-500 group-hover:text-white dark:group-hover:text-blue-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+          <ArrowUpRight className="w-4 h-4 text-white/50 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
         </Link>
 
         {/* Quick Action 2: Schedule at Hospital */}
         <Link
           href="/agendamento"
-          className="group flex items-center gap-4 p-5 sm:p-6 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl text-slate-900 dark:text-white shadow-xs hover:border-[#2b85ff]/50 dark:hover:border-[#2b85ff]/50 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+          className="group flex items-center gap-3.5 p-5 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl text-slate-900 dark:text-white shadow-xs hover:border-[#2b85ff]/50 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
         >
-          <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-800/50 flex items-center justify-center shrink-0 text-[#2b85ff] dark:text-blue-400">
-            <Calendar className="w-6 h-6" />
+          <div className="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-800/50 flex items-center justify-center shrink-0 text-[#2b85ff] dark:text-blue-400">
+            <Calendar className="w-5 h-5" />
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="text-base sm:text-lg font-bold text-[#091426] dark:text-white">Agendar no Hospital</h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              Transmita sintomas e laudo da triagem para a recepção hospitalar
+            <h2 className="text-sm sm:text-base font-bold text-[#091426] dark:text-white truncate">Agendar no Hospital</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+              Transmita diagnóstico à recepção
             </p>
           </div>
-          <ArrowUpRight className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-[#2b85ff] dark:group-hover:text-blue-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+          <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-[#2b85ff] group-hover:translate-x-0.5 transition-all" />
+        </Link>
+
+        {/* Quick Action 3: Vacinas */}
+        <Link
+          href="/vacinas"
+          className="group flex items-center gap-3.5 p-5 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl text-slate-900 dark:text-white shadow-xs hover:border-emerald-500/50 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+        >
+          <div className="w-11 h-11 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-100 dark:border-emerald-800/50 flex items-center justify-center shrink-0 text-emerald-600 dark:text-emerald-400">
+            <Syringe className="w-5 h-5" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h2 className="text-sm sm:text-base font-bold text-[#091426] dark:text-white truncate">Carteira de Vacinas</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+              Digitalizar Meu SUS & Caderneta
+            </p>
+          </div>
+          <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
         </Link>
       </div>
 
@@ -369,24 +366,29 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          {/* Plan Badge */}
-          <div className={`rounded-2xl border bg-gradient-to-br ${plano.color} p-5`}>
+          {/* Cartão SUS 100% Gratuito */}
+          <div className="rounded-2xl border border-emerald-200/90 dark:border-emerald-800/70 bg-gradient-to-br from-emerald-50/80 via-teal-50/40 to-slate-50 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 p-5 shadow-xs">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-semibold text-slate-900 dark:text-white">{plano.label}</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{plano.desc}</p>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 mb-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  SUS • 100% Gratuito
+                </div>
+                <p className="text-sm font-bold text-slate-900 dark:text-white">Saúde Digital Universal</p>
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                  Triagens com IA, caderneta de vacinas e agendamentos hospitalares sem taxas nem mensalidades.
+                </p>
               </div>
-              <Sparkles className="w-5 h-5 text-amber-400" />
+              <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
             </div>
-            {camada === 'gratuita' && (
-              <Link
-                href="/planos"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[#2b85ff] dark:text-blue-400 hover:underline"
-              >
-                Fazer upgrade
-                <ArrowUpRight className="w-3.5 h-3.5" />
+            <div className="mt-4 pt-3 border-t border-emerald-200/60 dark:border-emerald-900/40 flex items-center justify-between text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+              <Link href="/vacinas" className="hover:underline flex items-center gap-1">
+                <span>💉 Ver Vacinas</span>
               </Link>
-            )}
+              <Link href="/triagem" className="hover:underline flex items-center gap-1">
+                <span>🩺 Nova Triagem</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

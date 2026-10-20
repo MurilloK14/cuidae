@@ -23,25 +23,17 @@ export default async function AppLayout({
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('nome_completo, camada')
+    .select('nome_completo')
     .eq('id', user.id)
     .single();
 
   const nome = profile?.nome_completo || user.email?.split('@')[0] || 'Usuário';
   const primeiroNome = nome.split(' ')[0];
-  const camada = profile?.camada || 'gratuita';
-
-  const camadaLabel: Record<string, { text: string; color: string }> = {
-    gratuita: { text: 'Grátis', color: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300' },
-    intermediaria: { text: 'Intermediário', color: 'bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300' },
-    premium: { text: 'Premium', color: 'bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300' },
-  };
-
-  const badge = camadaLabel[camada] || camadaLabel.gratuita;
 
   const navLinks = [
     { label: 'Dashboard', href: '/dashboard', icon: '📊' },
     { label: 'Nova Triagem', href: '/triagem', icon: '🩺' },
+    { label: 'Vacinas', href: '/vacinas', icon: '💉' },
     { label: 'Agendamentos', href: '/agendamento/meus-agendamentos', icon: '🗓️' },
     { label: 'Unidades', href: '/unidades', icon: '🏥' },
     { label: 'Configurações', href: '/configuracoes', icon: '⚙️' },
@@ -85,8 +77,9 @@ export default async function AppLayout({
             <div className="flex items-center gap-2.5">
               <ThemeToggle />
 
-              <span className={`hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badge.color} border-current/15`}>
-                {badge.text}
+              <span className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                SUS • 100% Gratuito
               </span>
 
               <Link

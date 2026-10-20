@@ -1,34 +1,31 @@
 'use client'
 
-import { Suspense } from 'react'
-import { CheckCircle2, ArrowRight } from 'lucide-react'
+import React, { Suspense } from 'react'
+import { CheckCircle2, ArrowRight, ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
 
 function SucessoContent() {
-  const searchParams = useSearchParams()
-  const plano = searchParams.get('plano')
-  const planoNome = plano === 'premium' ? 'Premium' : plano === 'intermediaria' ? 'Intermediário' : plano === 'avulsa' ? 'Teleconsulta' : 'Plano'
-
   return (
     <div className="max-w-md mx-auto px-4 py-16 text-center animate-fade-in-up font-jakarta">
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-8 shadow-xs">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 p-8 shadow-xs">
         <div className="mb-6 flex justify-center">
-          <div className="bg-emerald-50 border border-emerald-100 w-20 h-20 rounded-full flex items-center justify-center text-emerald-600 shadow-xs">
+          <div className="bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-100 dark:border-emerald-800 w-20 h-20 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-xs">
             <CheckCircle2 className="w-10 h-10" />
           </div>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#091426] tracking-tight mb-2">Assinatura Ativada!</h1>
-        <p className="text-sm text-slate-600 mb-8 leading-relaxed">
-          Seu plano <strong>{planoNome}</strong> está pronto para uso com todos os recursos liberados.
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#091426] dark:text-white tracking-tight mb-2">
+          Acesso Gratuito Ativo!
+        </h1>
+        <p className="text-sm text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
+          Sua conta no <strong>Cuidaê SUS</strong> está 100% configurada. Todos os serviços de saúde, IA e vacinas são livres de custos.
         </p>
         
         <Link 
           href="/dashboard"
-          className="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-[#091426] hover:bg-[#1a2c4e] text-white font-semibold text-sm rounded-full transition-all shadow-xs hover:shadow hover:-translate-y-0.5"
+          className="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-[#2b85ff] hover:bg-blue-600 text-white font-semibold text-sm rounded-xl transition-all shadow-xs"
         >
           <span>Ir para o Dashboard</span>
-          <ArrowRight className="w-4 h-4 text-[#2b85ff]" />
+          <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
     </div>

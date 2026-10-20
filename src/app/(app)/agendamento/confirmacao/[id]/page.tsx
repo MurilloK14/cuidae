@@ -23,9 +23,13 @@ import {
   User,
   HeartPulse,
   Download,
-  Info
+  Info,
+  MessageSquare,
+  QrCode
 } from 'lucide-react'
 import type { AgendamentoHospitalar } from '@/lib/types'
+import { FichaEncaminhamentoClinico } from '@/components/FichaEncaminhamentoClinico'
+import { buildWhatsappUrl, formatarWhatsappAgendamento } from '@/lib/whatsapp'
 
 export default function ConfirmacaoAgendamentoPage() {
   const params = useParams()
@@ -36,6 +40,7 @@ export default function ConfirmacaoAgendamentoPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [copiado, setCopiado] = useState(false)
+  const [modoVisualizacao, setModoVisualizacao] = useState<'comprovante' | 'ficha_oficial'>('comprovante')
 
   useEffect(() => {
     if (!id) return
@@ -144,35 +149,78 @@ export default function ConfirmacaoAgendamentoPage() {
     <div className="max-w-4xl mx-auto space-y-8 animate-fade-in pb-16 font-jakarta">
       
       {/* Botões Superiores de Navegação */}
-      <div className="flex items-center justify-between no-print">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 no-print">
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-[#2b85ff] dark:hover:text-blue-400 transition"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-[#2b85ff] dark:hover:text-blue-400 transition w-fit"
         >
           <ArrowLeft className="w-4 h-4" />
           Voltar ao Dashboard
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Alternar modo de visualização */}
+          <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex items-center text-xs font-semibold">
+            <button
+              type="button"
+              onClick={() => setModoVisualizacao('comprovante')}
+              className={`px-3 py-1.5 rounded-lg transition ${
+                modoVisualizacao === 'comprovante'
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-2xs font-bold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+              }`}
+            >
+              Visão Tela
+            </button>
+            <button
+              type="button"
+              onClick={() => setModoVisualizacao('ficha_oficial')}
+              className={`px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 ${
+                modoVisualizacao === 'ficha_oficial'
+                  ? 'bg-white dark:bg-slate-900 text-[#2b85ff] dark:text-blue-400 shadow-2xs font-bold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+              }`}
+            >
+              <QrCode className="w-3.5 h-3.5" />
+              Ficha A4 (QR Code)
+            </button>
+          </div>
+
+          {/* Salvar no WhatsApp - 100% Gratuito */}
+          <a
+            href={buildWhatsappUrl(formatarWhatsappAgendamento(agendamento))}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition"
+            title="Salvar comprovante no WhatsApp gratuitamente"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            <span>Salvar no WhatsApp</span>
+          </a>
+
           <button
             onClick={handleDownloadICS}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs transition"
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs transition"
           >
             <Calendar className="w-3.5 h-3.5 text-[#2b85ff] dark:text-blue-400" />
-            Salvar no Calendário (.ics)
+            <span>.ics</span>
           </button>
 
           <button
             onClick={handleImprimir}
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#2b85ff] hover:bg-blue-600 text-white text-xs font-bold rounded-xl shadow-xs transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#2b85ff] hover:bg-blue-600 text-white text-xs font-bold rounded-xl shadow-xs transition"
           >
             <Printer className="w-3.5 h-3.5" />
-            Imprimir Comprovante
+            <span>Imprimir</span>
           </button>
         </div>
       </div>
 
-      {/* COMPROVANTE OFICIAL DE ENCAMINHAMENTO HOSPITALAR */}
+      {/* Renderização condicional: Ficha Oficial A4 ou Comprovante Padrão */}
+      {modoVisualizacao === 'ficha_oficial' ? (
+        <FichaEncaminhamentoClinico agendamento={agendamento} />
+      ) : (
+      /* COMPROVANTE OFICIAL DE ENCAMINHAMENTO HOSPITALAR */
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-sm overflow-hidden printable-area">
         
         {/* Faixa de Cabeçalho / Sucesso */}
@@ -441,6 +489,7 @@ export default function ConfirmacaoAgendamentoPage() {
         </div>
 
       </div>
+      )}
 
       {/* Ações Inferiores */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200 dark:border-slate-800 no-print">
