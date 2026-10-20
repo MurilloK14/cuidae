@@ -4,14 +4,20 @@ import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import upload from '../middleware/upload.js';
+import { aiStatus } from '../config/aiConfig.js';
 import {
   conduzirAnamneseOuDiagnostico,
+  gerarRelatorioFormal,
   gerarRelatorioImagem,
   humanizarResultadoFinal,
+  gerarPerguntaInvestigativa,
+  interpretarRespostaPaciente,
   avaliarSintomas,
   avaliarImagem
 } from '../services/geminiService.js';
 import {
+  parseSintomas,
+  executarPassoDiagnostico,
   fluxoCompleto,
   formatarResultadoInfermedica,
   traduzirNomeCondicao,
@@ -39,23 +45,8 @@ function salvarJsonAnamneseLocal(dados) {
 
 const router = Router();
 
-const GEMINI_ATIVO = Boolean(
-  process.env.GEMINI_API_KEY &&
-  process.env.GEMINI_API_KEY !== 'SUA_CHAVE_AQUI' &&
-  process.env.GEMINI_API_KEY !== 'sua_chave_gemini_aqui'
-);
-
-const INFERMEDICA_ATIVA = Boolean(
-  process.env.INFERMEDICA_APP_ID &&
-  process.env.INFERMEDICA_APP_ID !== 'SEU_APP_ID_AQUI' &&
-  process.env.INFERMEDICA_APP_ID !== 'seu_app_id_aqui' &&
-  process.env.INFERMEDICA_APP_KEY &&
-  process.env.INFERMEDICA_APP_KEY !== 'SUA_APP_KEY_AQUI' &&
-  process.env.INFERMEDICA_APP_KEY !== 'sua_app_key_aqui'
-);
-
-console.log(`[Config Express] Gemini: ${GEMINI_ATIVO ? '✅' : '❌'} | Infermedica: ${INFERMEDICA_ATIVA ? '✅' : '❌'}`);
-console.log(`[Config Express] Modo integrado (Gemini -> Infermedica -> Gemini): ${GEMINI_ATIVO && INFERMEDICA_ATIVA ? '✅ ATIVO' : '⚠️ Parcial'}`);
+console.log(`[Config] Gemini: ${aiStatus.isGeminiActive ? '✅' : '❌'} | Infermedica: ${aiStatus.isInfermedicaActive ? '✅' : '❌'}`);
+console.log(`[Config] Modo integrado (Gemini -> Infermedica -> Gemini): ${aiStatus.isIntegratedMode ? '✅ ATIVO' : '⚠️ Parcial'}`);
 
 // Mapeia prioridade para nível de urgência do SUS/Manchester
 function mapearUrgencia(prioridade) {
@@ -110,12 +101,10 @@ router.get('/resultado/:id', (req, res) => {
 /**
  * POST /api/triage/symptoms
  * 
- * FLUXO INTEGRADO COM ECONOMIA DE CHAMADAS DA INFERMEDICA:
+ * FLUXO INTEGRADO:
  * 1. O paciente envia o relato.
- * 2. O Gemini conduz a anamnese conversacional.
- * 3. Se ainda faltam dados, responde com perguntas sem acionar a Infermedica (ECONOMIA DE API).
- * 4. Quando pronto para o diagnóstico, gera o arquivo JSON com os achados clínicos.
- * 5. Envia o JSON clínico para a Infermedica e humaniza com o Gemini.
+ * 2. Anamnese conversacional ou extração clínica de sintomas.
+ * 3. A Infermedica avalia as condições iniciais e define se necessita de afunilamento.
  */
 router.post('/symptoms', async (req, res) => {
   const { sintoma, camada, lat, lng, user_id, historico = [] } = req.body;
@@ -127,174 +116,185 @@ router.post('/symptoms', async (req, res) => {
   const camadaValida = ['Gratuito', 'Intermediário', 'Premium'].includes(camada) ? camada : 'Gratuito';
 
   try {
-    console.log('\n--- [NOVO ATENDIMENTO DE SINTOMAS - EXPRESS] ---');
+    console.log('\n--- [INÍCIO DE TRIAGEM - SINTOMAS INICIAIS] ---');
     console.log('1. Mensagem do paciente:', sintoma);
 
-    let anamnese = null;
+    // ETAPA 1: Condução da anamnese ou geração de relatório formal
+    let relatorioGemini = null;
+    try {
+      relatorioGemini = await gerarRelatorioFormal(sintoma);
+    } catch {
+      relatorioGemini = {
+        relatorioClinico: sintoma,
+        resumoPT: sintoma,
+        sintomasExtraidosPT: [sintoma],
+        idade: 30,
+        sexo: 'male'
+      };
+    }
 
-    if (GEMINI_ATIVO) {
+    const relatorioClinico = relatorioGemini.relatorioClinico || sintoma;
+    const idade = relatorioGemini.idade || 30;
+    const sexo = relatorioGemini.sexo || 'male';
+
+    // ETAPA 2: Infermedica extrai menções estruturadas de sintomas
+    let evidenciasIniciais = [];
+    if (aiStatus.isInfermedicaActive) {
       try {
-        anamnese = await conduzirAnamneseOuDiagnostico(sintoma, historico);
-        console.log(`[Express Anamnese] Pronto para diagnóstico? ${anamnese.prontoParaDiagnostico ? 'SIM' : 'NÃO (Continuar conversa)'}`);
-      } catch (errAnamnese) {
-        console.warn('[Express Anamnese] Erro:', errAnamnese.message);
+        evidenciasIniciais = await parseSintomas(relatorioClinico, idade, sexo);
+      } catch (errParse) {
+        console.warn('⚠️ [Infermedica] Falha no parse:', errParse.message);
       }
     }
 
-    // FASE CONVERSACIONAL (Economia de chamadas Infermedica)
-    if (anamnese && !anamnese.prontoParaDiagnostico) {
+    if (evidenciasIniciais.length === 0) {
+      // Se não encontrou menções estruturadas na Infermedica, usa avaliação direta
+      const direto = await avaliarSintomas(sintoma, historico);
+      const tipoUnidade = direto.tipoUnidade || 'UBS';
+      const local = getLocal(camadaValida, direto.prioridade, tipoUnidade);
+      const linkMaps = gerarLinkMaps(lat, lng, tipoUnidade);
+      const mapeamento = mapearUrgencia(direto.prioridade);
+
+      const salvaNoBanco = saveTriagem({
+        user_id: user_id || 'anonimo',
+        sintoma_principal: sintoma,
+        duracao: req.body.duracao || 'Não informada',
+        intensidade: req.body.intensidade || 5,
+        respostas: [{ pergunta: 'sintoma_principal', resposta: sintoma }],
+        nivel_urgencia: mapeamento.nivel_urgencia,
+        recomendacao: mapeamento.recomendacao,
+        especialidade: direto.especialidade,
+        explicacao: direto.mensagem,
+        orientacao: direto.orientacao,
+        tipoUnidade,
+        mapa: linkMaps,
+        fonteIA: direto.fonteIA || 'Google Gemini Flash',
+        cidade_snapshot: req.body.cidade || 'São Paulo',
+        uf_snapshot: req.body.uf || 'SP'
+      });
+
       return res.json({
+        id: salvaNoBanco.id,
         remetente: 'bot',
-        texto: anamnese.mensagem,
-        triagem: null,
-        prontoParaDiagnostico: false,
-        timestamp: new Date().toISOString()
+        finalizado: true,
+        texto: direto.mensagem,
+        triagem: {
+          id: salvaNoBanco.id,
+          recomendacao: direto.recomendacao,
+          especialidade: direto.especialidade,
+          local,
+          prioridade: direto.prioridade,
+          orientacao: direto.orientacao,
+          tipoUnidade,
+          nivel_urgencia: mapeamento.nivel_urgencia
+        },
+        mapa: linkMaps,
+        fonteIA: direto.fonteIA || 'Google Gemini Flash',
+        timestamp: salvaNoBanco.created_at
       });
     }
 
-    // FASE DE DIAGNÓSTICO
-    const triageId = crypto.randomUUID();
+    const evidenciasComSource = evidenciasIniciais.map(e => ({
+      ...e,
+      source: 'initial'
+    }));
 
-    // Consolida todas as falas do paciente para não perder a queixa inicial em respostas curtas (ex: "4", "sim")
-    const falasHistorico = (historico || [])
-      .filter((m) => m && m.remetente === 'usuario' && m.texto)
-      .map((m) => m.texto);
-    if (!falasHistorico.includes(sintoma)) {
-      falasHistorico.push(sintoma);
-    }
-    const queixaCompleta = falasHistorico.join('. ');
+    // ETAPA 3: Infermedica executa a 1ª rodada do diagnóstico
+    console.log('3. [Infermedica] Executando rodada de diagnóstico...');
+    const passo = await executarPassoDiagnostico(evidenciasComSource, { idade, sexo });
 
-    const relatorioValido = anamnese?.relatorioClinico &&
-      anamnese.relatorioClinico.trim().length > 4 &&
-      !/^\d+$/.test(anamnese.relatorioClinico.trim());
-
-    const relatorioClinico = relatorioValido
-      ? anamnese.relatorioClinico
-      : queixaCompleta;
-
-    const idade = anamnese?.idade || 30;
-    const sexo = anamnese?.sexo || 'male';
-
-    // Salva o arquivo JSON com o relato e os termos médicos compilados
-    salvarJsonAnamneseLocal({
-      id: triageId,
-      timestamp: new Date().toISOString(),
-      sintomaRelatado: falasHistorico[0] || sintoma,
-      detalhesAdicionais: sintoma,
-      historicoConversa: historico,
-      anamneseGemini: {
-        relatorioClinico,
-        resumoPT: anamnese?.resumoPT || queixaCompleta,
-        sintomasExtraidosPT: anamnese?.sintomasExtraidosPT || falasHistorico,
-        idade,
-        sexo,
-        urgenciaPercebida: anamnese?.urgenciaPercebida || 'Normal'
-      },
-      infermedicaPayload: {
-        text: relatorioClinico,
-        age: { value: idade },
-        sexo
-      }
-    });
-
-    let formatado = null;
-    let fonteIA = 'Gemini 3.5 Flash + Infermedica v3';
-    let resultadoInfermedica = null;
-
-    if (INFERMEDICA_ATIVA) {
+    // Se o diagnóstico já estiver afunilado
+    if (passo.finalizado) {
+      console.log('4. [Infermedica] Diagnóstico afunilado imediatamente!');
+      let formatado;
       try {
-        console.log('2. [Infermedica] Consultando motor clínico com os dados JSON...');
-        resultadoInfermedica = await fluxoCompleto(relatorioClinico, { idade, sexo });
-
-        try {
-          console.log('3. [Gemini] Humanizando diagnóstico final para o paciente...');
-          formatado = await humanizarResultadoFinal(sintoma, relatorioClinico, resultadoInfermedica, camadaValida);
-        } catch (errHumanizacao) {
-          console.warn('⚠️ Fallback na humanização (usando formatador interno):', errHumanizacao.message);
-          formatado = formatarResultadoInfermedica(resultadoInfermedica);
-        }
-      } catch (pipelineErr) {
-        console.warn('⚠️ Falha no pipeline Infermedica:', pipelineErr.message);
+        formatado = await humanizarResultadoFinal(
+          sintoma,
+          relatorioGemini,
+          { diagnostico: passo.diagnostico, triagem: passo.triagem },
+          camadaValida
+        );
+      } catch {
+        formatado = formatarResultadoInfermedica({
+          evidencias: passo.evidencias,
+          diagnostico: passo.diagnostico,
+          triagem: passo.triagem
+        });
       }
-    }
 
-    if (!formatado) {
-      console.log('ℹ️ Usando avaliação de sintomas direta');
-      const direto = await avaliarSintomas(sintoma, historico);
-      formatado = direto;
-      fonteIA = direto.fonteIA || 'Google Gemini Flash';
-    }
+      const tipoUnidade = formatado.tipoUnidade || 'UBS';
+      const local = getLocal(camadaValida, formatado.prioridade, tipoUnidade);
+      const linkMaps = gerarLinkMaps(lat, lng, tipoUnidade);
+      const mapeamento = mapearUrgencia(formatado.prioridade);
 
-    const tipoUnidade = formatado.tipoUnidade || 'UBS';
-    const local = getLocal(camadaValida, formatado.prioridade, tipoUnidade);
-    const linkMaps = gerarLinkMaps(lat, lng, tipoUnidade);
-    const mapeamento = mapearUrgencia(formatado.prioridade);
-
-    const salvaNoBanco = saveTriagem({
-      id: triageId,
-      user_id: user_id || 'anonimo',
-      sintoma_principal: falasHistorico[0] || sintoma,
-      duracao: req.body.duracao || 'Não informada',
-      intensidade: req.body.intensidade || 5,
-      respostas: req.body.respostas || [{ pergunta: 'sintoma_principal', resposta: sintoma }],
-      nivel_urgencia: mapeamento.nivel_urgencia,
-      recomendacao: mapeamento.recomendacao,
-      especialidade: formatado.especialidade,
-      explicacao: formatado.mensagem,
-      orientacao: formatado.orientacao,
-      tipoUnidade,
-      mapa: linkMaps,
-      fonteIA,
-      cidade_snapshot: req.body.cidade || 'São Paulo',
-      uf_snapshot: req.body.uf || 'SP'
-    });
-
-    let hipotesesDiagnosticas = resultadoInfermedica?.diagnostico?.conditions
-      ? resultadoInfermedica.diagnostico.conditions
-          .filter((c) => c.probability >= 0.15)
-          .slice(0, 3)
-          .map((c) => ({
-            nome: traduzirNomeCondicao(c.common_name || c.name),
-            probabilidade: Math.round(c.probability * 100)
-          }))
-      : [];
-
-    if (hipotesesDiagnosticas.length === 0 && Array.isArray(formatado?.hipotesesClinicas) && formatado.hipotesesClinicas.length > 0) {
-      hipotesesDiagnosticas = formatado.hipotesesClinicas.map((nomeHip) => ({
-        nome: nomeHip,
-        probabilidade: null
-      }));
-    }
-
-    const sintomasInfermedica = resultadoInfermedica?.evidencias
-      ? resultadoInfermedica.evidencias.map((e) => traduzirNomeSintoma(e.name))
-      : [];
-
-    return res.json({
-      id: salvaNoBanco.id,
-      remetente: 'bot',
-      texto: formatado.mensagem,
-      triagem: {
-        id: salvaNoBanco.id,
-        recomendacao: formatado.recomendacao,
+      const salvaNoBanco = saveTriagem({
+        user_id: user_id || 'anonimo',
+        sintoma_principal: sintoma,
+        duracao: req.body.duracao || 'Não informada',
+        intensidade: req.body.intensidade || 5,
+        respostas: [{ pergunta: 'sintoma_principal', resposta: sintoma }],
+        nivel_urgencia: mapeamento.nivel_urgencia,
+        recomendacao: mapeamento.recomendacao,
         especialidade: formatado.especialidade,
-        local,
-        prioridade: formatado.prioridade,
+        explicacao: formatado.mensagem,
         orientacao: formatado.orientacao,
         tipoUnidade,
-        nivel_urgencia: mapeamento.nivel_urgencia,
-        hipotesesDiagnosticas,
-        sintomasInfermedica
+        mapa: linkMaps,
+        fonteIA: 'Gemini 3.5 Flash + Infermedica v3',
+        cidade_snapshot: req.body.cidade || 'São Paulo',
+        uf_snapshot: req.body.uf || 'SP'
+      });
+
+      return res.json({
+        id: salvaNoBanco.id,
+        remetente: 'bot',
+        finalizado: true,
+        texto: formatado.mensagem,
+        triagem: {
+          id: salvaNoBanco.id,
+          recomendacao: formatado.recomendacao,
+          especialidade: formatado.especialidade,
+          local,
+          prioridade: formatado.prioridade,
+          orientacao: formatado.orientacao,
+          tipoUnidade,
+          nivel_urgencia: mapeamento.nivel_urgencia
+        },
+        mapa: linkMaps,
+        fonteIA: 'Gemini 3.5 Flash + Infermedica v3',
+        timestamp: salvaNoBanco.created_at
+      });
+    }
+
+    // Se precisa de mais informações: Gemini formula a pergunta investigativa
+    console.log('4. [Gemini] Formulando pergunta investigativa a partir da Infermedica...');
+    const perguntaGemini = await gerarPerguntaInvestigativa(
+      sintoma,
+      passo.condicoes,
+      passo.question.text
+    );
+
+    return res.json({
+      remetente: 'bot',
+      finalizado: false,
+      texto: perguntaGemini.perguntaHumanizada,
+      explicacao: perguntaGemini.explicacaoBreve,
+      opcoes: perguntaGemini.opcoesRapidas || ['Sim', 'Não', 'Não tenho certeza'],
+      sessao: {
+        evidencias: passo.evidencias,
+        perguntaAtual: passo.question,
+        relatoOriginal: sintoma,
+        relatorioClinico,
+        idade,
+        sexo,
+        condicoes: passo.condicoes
       },
-      mapa: linkMaps,
-      fonteIA,
-      prontoParaDiagnostico: true,
-      relatorioFormal: relatorioClinico,
-      timestamp: salvaNoBanco.created_at
+      fonteIA: 'Gemini 3.5 Flash + Infermedica v3 (Entrevista Dinâmica)',
+      timestamp: new Date().toISOString()
     });
 
   } catch (err) {
-    console.error('❌ Erro no fluxo integrado:', err.message);
+    console.error('❌ Erro no fluxo de sintomas:', err.message);
     return res.status(500).json({
       remetente: 'bot',
       texto: `🚨 Erro no processamento de triagem: ${err.message}`,
@@ -306,7 +306,168 @@ router.post('/symptoms', async (req, res) => {
 });
 
 /**
+ * POST /api/triage/reply
+ * 
+ * CONTINUAÇÃO DA ENTREVISTA DIAGNÓSTICA (LOOP):
+ * 1. O paciente responde à pergunta investigativa (via texto ou botão).
+ * 2. O Gemini interpreta a resposta e mapeia para escolhas clínicas.
+ * 3. As novas evidências são incorporadas e a Infermedica recalcula.
+ * 4. Ao afunilar, salva no banco de dados e retorna o laudo final.
+ */
+router.post('/reply', async (req, res) => {
+  const { resposta, sessao, camada, lat, lng, user_id } = req.body;
+
+  if (!resposta || !sessao || !sessao.evidencias) {
+    return res.status(400).json({ error: 'Resposta e sessão válida são obrigatórias.' });
+  }
+
+  const camadaValida = ['Gratuito', 'Intermediário', 'Premium'].includes(camada) ? camada : 'Gratuito';
+
+  try {
+    console.log('\n--- [AVANÇO DA ENTREVISTA DIAGNÓSTICA] ---');
+    console.log('1. Resposta do paciente:', resposta);
+    console.log('2. Pergunta clínica de referência:', sessao.perguntaAtual?.text);
+
+    // ETAPA 1: Interpretar a resposta com Gemini
+    const escolhas = await interpretarRespostaPaciente(
+      resposta,
+      sessao.perguntaAtual?.items || []
+    );
+    console.log('3. Escolhas mapeadas para a Infermedica:', JSON.stringify(escolhas));
+
+    const novasEvidencias = escolhas.map(e => ({
+      id: e.id,
+      choice_id: e.choice_id
+    }));
+
+    const idsNovos = new Set(novasEvidencias.map(n => n.id));
+    const evidenciasFiltradas = sessao.evidencias.filter(e => !idsNovos.has(e.id));
+    const evidenciasAtualizadas = [...evidenciasFiltradas, ...novasEvidencias];
+
+    // ETAPA 2: Infermedica reavalia com as novas evidências
+    console.log('4. [Infermedica] Recalculando probabilidades com novas evidências...');
+    const passo = await executarPassoDiagnostico(evidenciasAtualizadas, {
+      idade: sessao.idade,
+      sexo: sessao.sexo
+    });
+
+    // Se o diagnóstico afunilou
+    if (passo.finalizado) {
+      console.log('5. ✅ Diagnóstico final afunilado e consolidado!');
+      let formatado;
+      try {
+        formatado = await humanizarResultadoFinal(
+          sessao.relatoOriginal,
+          { relatorioClinico: sessao.relatorioClinico },
+          { diagnostico: passo.diagnostico, triagem: passo.triagem },
+          camadaValida
+        );
+      } catch (errHumanizacao) {
+        formatado = formatarResultadoInfermedica({
+          evidencias: passo.evidencias,
+          diagnostico: passo.diagnostico,
+          triagem: passo.triagem
+        });
+      }
+
+      const tipoUnidade = formatado.tipoUnidade || 'UBS';
+      const local = getLocal(camadaValida, formatado.prioridade, tipoUnidade);
+      const linkMaps = gerarLinkMaps(lat, lng, tipoUnidade);
+      const mapeamento = mapearUrgencia(formatado.prioridade);
+
+      const triageId = crypto.randomUUID();
+
+      salvarJsonAnamneseLocal({
+        id: triageId,
+        timestamp: new Date().toISOString(),
+        sintomaRelatado: sessao.relatoOriginal,
+        anamneseGemini: {
+          relatorioClinico: sessao.relatorioClinico,
+          idade: sessao.idade,
+          sexo: sessao.sexo
+        },
+        diagnosticoFinal: passo.condicoes
+      });
+
+      const salvaNoBanco = saveTriagem({
+        id: triageId,
+        user_id: user_id || 'anonimo',
+        sintoma_principal: sessao.relatoOriginal,
+        duracao: 'Informada na anamnese',
+        intensidade: 5,
+        respostas: [{ pergunta: 'entrevista_diagnostica', resposta }],
+        nivel_urgencia: mapeamento.nivel_urgencia,
+        recomendacao: mapeamento.recomendacao,
+        especialidade: formatado.especialidade,
+        explicacao: formatado.mensagem,
+        orientacao: formatado.orientacao,
+        tipoUnidade,
+        mapa: linkMaps,
+        fonteIA: 'Gemini 3.5 Flash + Infermedica v3 (Diagnóstico Refinado)',
+        cidade_snapshot: req.body.cidade || 'São Paulo',
+        uf_snapshot: req.body.uf || 'SP'
+      });
+
+      return res.json({
+        id: salvaNoBanco.id,
+        remetente: 'bot',
+        finalizado: true,
+        texto: formatado.mensagem,
+        triagem: {
+          id: salvaNoBanco.id,
+          recomendacao: formatado.recomendacao,
+          especialidade: formatado.especialidade,
+          local,
+          prioridade: formatado.prioridade,
+          orientacao: formatado.orientacao,
+          tipoUnidade,
+          nivel_urgencia: mapeamento.nivel_urgencia
+        },
+        mapa: linkMaps,
+        fonteIA: 'Gemini 3.5 Flash + Infermedica v3 (Diagnóstico Refinado)',
+        timestamp: salvaNoBanco.created_at
+      });
+    }
+
+    // Se ainda restam dúvidas: próxima pergunta
+    console.log('5. [Gemini] Formulando próxima pergunta de afunilamento...');
+    const perguntaGemini = await gerarPerguntaInvestigativa(
+      sessao.relatoOriginal,
+      passo.condicoes,
+      passo.question.text
+    );
+
+    return res.json({
+      remetente: 'bot',
+      finalizado: false,
+      texto: perguntaGemini.perguntaHumanizada,
+      explicacao: perguntaGemini.explicacaoBreve,
+      opcoes: perguntaGemini.opcoesRapidas || ['Sim', 'Não', 'Não tenho certeza'],
+      sessao: {
+        ...sessao,
+        evidencias: passo.evidencias,
+        perguntaAtual: passo.question,
+        condicoes: passo.condicoes
+      },
+      fonteIA: 'Gemini 3.5 Flash + Infermedica v3 (Entrevista Dinâmica)',
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (err) {
+    console.error('❌ Erro no avanço da entrevista:', err.message);
+    return res.status(500).json({
+      remetente: 'bot',
+      texto: `🚨 Erro ao processar resposta: ${err.message}`,
+      triagem: null,
+      fonteIA: 'erro-api',
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+/**
  * POST /api/triage/image
+ * Análise de foto dermatológica
  */
 router.post('/image', upload.single('imagem'), async (req, res) => {
   if (!req.file) {
@@ -319,11 +480,11 @@ router.post('/image', upload.single('imagem'), async (req, res) => {
   const camadaValida = ['Gratuito', 'Intermediário', 'Premium'].includes(camada) ? camada : 'Gratuito';
 
   try {
-    console.log('\n--- [NOVO ATENDIMENTO DE IMAGEM - EXPRESS] ---');
+    console.log('\n--- [NOVO ATENDIMENTO DE IMAGEM] ---');
     let formatado = null;
     let fonteIA = 'Gemini (Visão) + Infermedica v3';
 
-    if (GEMINI_ATIVO && INFERMEDICA_ATIVA) {
+    if (aiStatus.isIntegratedMode) {
       try {
         console.log('1. [Gemini] Analisando imagem e criando laudo visual formal...');
         const relatorioImagem = await gerarRelatorioImagem(req.file.path, req.file.mimetype);
@@ -380,6 +541,7 @@ router.post('/image', upload.single('imagem'), async (req, res) => {
     return res.json({
       id: salvaNoBanco.id,
       remetente: 'bot',
+      finalizado: true,
       texto: formatado.mensagem,
       triagem: {
         id: salvaNoBanco.id,

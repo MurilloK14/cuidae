@@ -65,3 +65,25 @@ export async function fetchHistoricoTriagens() {
   }
   return res.json();
 }
+
+/**
+ * Envia uma resposta para a pergunta investigativa da entrevista diagnóstica.
+ */
+export async function enviarRespostaTriagem(resposta, sessao, camada, localizacao) {
+  const body = { resposta, sessao, camada };
+  if (localizacao) {
+    body.lat = localizacao.lat;
+    body.lng = localizacao.lng;
+  }
+
+  const res = await fetch(`${API_BASE}/triage/reply`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || err.texto || 'Erro ao processar resposta');
+  }
+  return res.json();
+}

@@ -1,20 +1,26 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import { geminiConfig } from '../config/aiConfig.js';
+import { traduzirParaInglesClinico } from './infermedicaService.js';
 import { analisarSintomas, analisarImagem as analisarImagemFallback } from './triageService.js';
 
 dotenv.config();
 
-const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
+const genAI = geminiConfig.apiKey ? new GoogleGenerativeAI(geminiConfig.apiKey) : null;
+
+/**
+ * Modelos candidatos em ordem de prioridade.
+ * Se o modelo principal sofrer pico de demanda (503), alterna automaticamente para flash-lite.
+ */
 const CANDIDATE_MODELS = [
+  geminiConfig.model || 'gemini-3.5-flash-lite',
   'gemini-3.5-flash-lite',
   'gemini-flash-lite-latest',
-  'gemini-3-flash-preview',
-  'gemini-3.6-flash',
   'gemini-3.5-flash',
   'gemini-3.8-flash',
   'gemini-flash-latest'
-];
+].filter((m, i, arr) => Boolean(m) && arr.indexOf(m) === i);
 
 const PROMPT_ANAMNESE_CONVERSACIONAL = `Você é o assistente virtual médico de triagem "Cuidaê" do SUS.
 Seu papel é conduzir uma ANAMNESE CLÍNICA CONVERSACIONAL natural, empática e inteligente, como um médico acolhedor faria em uma consulta real.
@@ -56,53 +62,39 @@ DIRETRIZES DE DECISÃO:
    -> NÃO faça perguntas nestes casos para não atrasar o socorro.
 
 2. TURNO 1 (queixa inicial):
-   -> OBRIGATORIAMENTE "prontoParaDiagnostico": false (exceto red flags acima)
-   -> Faça 1-2 perguntas investigativas direcionadas para começar a mapear as possíveis causas.
+   -> OBRIGATORIAMENTE "prontoParaDiagnostico": false (exceto red flags acima).
+   -> Faça 1 a 2 perguntas essenciais para caracterizar a queixa.
 
-3. REGRAS PARA INVESTIGAÇÃO vs ENCERRAMENTO DA ANAMNESE:
-   A) QUANDO CONTINUAR PERGUNTANDO ("prontoParaDiagnostico": false):
-      - Se você AINDA NÃO TEM dados clínicos suficientes para delinear causas e hipóteses diagnósticas claras;
-      - O paciente precisa de uma avaliação precisa: faça perguntas clínicas direcionadas para afunilar as possibilidades (ex: características da lesão/dor, formato/relevo, evolução no tempo, fatores de melhora ou piora, contato com substâncias/produtos, novos medicamentos tomados, sintomas associados);
-      - NUNCA encerre a anamnese de forma precipitada com apenas 1 ou 2 respostas monossilábicas ou vagas. Continue perguntando com acolhimento até ter um quadro com possíveis causas.
+3. TURNOS SEGUINTES:
+   -> Você decide autonomamente quando já tem dados suficientes (geralmente entre 1 e 3 perguntas bem direcionadas).
+   -> Quando tiver caracterizado adequadamente: "prontoParaDiagnostico": true.
 
-   B) QUANDO FECHAR A ANAMNESE ("prontoParaDiagnostico": true):
-      Feche a anamnese SOMENTE quando uma das condições abaixo for atendida:
-      1. Você já colheu informações clínicas suficientes e consistentes que permitam apontar com clareza as causas e hipóteses diagnósticas mais prováveis;
-      2. OU o paciente já enviou um relato detalhado, completo e elucidativo desde o início;
-      3. OU o paciente pediu explicitamente o resultado ou conclusão ("o que eu tenho?", "qual o diagnóstico?", "pode concluir");
-      4. OU já foram feitas diversas perguntas investigativas (4 ou mais turnos com respostas do paciente no histórico) e, mesmo com a investigação aprofundada, o quadro permanece atípico.
-   Quando fechar:
-   - "relatorioClinico": termos concisos em INGLÊS MÉDICO para alimentar o motor clínico Infermedica (ex: "substernal chest pain, duration 2 days, mild intensity, worse with movement, no fever")
-   - "resumoPT": síntese clínica em português
-   - "sintomasExtraidosPT": array de sintomas em português
-   - "idade": idade informada (ou 30 se não mencionou)
-   - "sexo": "male" ou "female" (ou "male" se não mencionou)
-   - "urgenciaPercebida": "Normal" | "Média" | "Alta" | "Urgente"
-   - "mensagem": frase acolhedora indicando que compreendeu e está gerando a avaliação
+4. SE O PACIENTE DER RESPOSTA CURTA (ex: "sim", "não", "4 dias", "nota 7"):
+   -> Ele está RESPONDENDO à sua pergunta anterior! Consolide essa resposta com todo o contexto do histórico de conversa.
+   -> NUNCA descarte a queixa original em respostas curtas.
 
-FORMATO DE RESPOSTA (retorne APENAS JSON válido):
-Se ainda conversando:
+FORMATO DE RESPOSTA OBRIGATÓRIO (retorne APENAS um JSON válido, sem markdown, sem crases):
 {
   "prontoParaDiagnostico": false,
-  "mensagem": "Sua resposta empática com pergunta(s) investigativa(s)"
+  "mensagem": "Sua resposta empática acolhendo a fala e fazendo a(s) pergunta(s) necessária(s), NUNCA iniciando com olá/oi/cumprimentos."
 }
 
-Se pronto para diagnóstico:
+OU (quando pronto para diagnosticar):
 {
   "prontoParaDiagnostico": true,
-  "mensagem": "Frase acolhedora de transição",
-  "relatorioClinico": "termos médicos em inglês",
-  "resumoPT": "resumo em português",
-  "sintomasExtraidosPT": ["sintoma 1", "sintoma 2"],
+  "mensagem": "Sua mensagem empática de transição avisando que vai analisar todas as informações...",
+  "relatorioClinico": "descrição concisa e objetiva em INGLÊS MÉDICO apenas dos sintomas que o paciente AFIRMOU ter",
+  "resumoPT": "resumo conciso em português para o paciente",
+  "sintomasExtraidosPT": ["lista", "de", "sintomas", "em", "português"],
   "idade": 30,
   "sexo": "male",
-  "urgenciaPercebida": "Normal"
+  "urgenciaPercebida": "Normal | Média | Alta | Urgente"
 }`;
 
 const PROMPT_IMAGEM_RELATORIO = `Você é um médico dermatologista de triagem.
 Analise a imagem enviada pelo paciente e descreva com precisão médica as alterações visíveis (ex: erupção cutânea, vermelhidão, mácula, pústula, edema, etc.).
 
-Retorne APENAS um JSON válido:
+Retorne APENAS um JSON válido (sem blocos markdown, sem crases):
 {
   "relatorioClinico": "descrição clínica objetiva em inglês médico dos achados visuais (ex: erythematous maculopapular rash on skin, redness)",
   "resumoPT": "descrição acolhedora em português do que foi visualizado na imagem",
@@ -111,91 +103,92 @@ Retorne APENAS um JSON válido:
   "sexo": "male"
 }`;
 
-const PROMPT_DIAGNOSTICO_DIRETO = `Você é o assistente de triagem "Cuidaê / SaúdePraTodos" do sistema de saúde brasileiro (SUS).
+const PROMPT_DIAGNOSTICO_DIRETO = `Você é o médico assistente de triagem do SUS na plataforma "Cuidaê".
+Analise os sintomas descritos pelo paciente e gere uma avaliação clínica completa de triagem médica.
 
-Você deve analisar os sintomas do paciente (descritos em texto ou inferidos de uma imagem) e gerar uma avaliação de triagem completa e humanizada.
+Considere com muito cuidado:
+- Vermelhidão, coceira, manchas, lesões na pele -> Especialidade: Dermatologia, Unidade: UBS (se leve/moderada).
+- Dor no peito, falta de ar severa, suspeita de infarto, sintomas de AVC -> Especialidade: Cardiologia / Emergência, Prioridade: Urgente, Unidade: UPA ou SAMU.
+- Febre alta com dor no corpo, suspeita de dengue/arboviroses -> Prioridade: Alta, Unidade: UPA.
+- Dores crônicas leves, sintomas gripais leves -> Prioridade: Normal, Unidade: UBS.
 
-REGRAS:
-1. NUNCA faça diagnóstico definitivo. Diga "há uma possibilidade de" ou "os sintomas sugerem que pode ser".
-2. Sempre recomende buscar atendimento médico presencial se houver piora.
-3. Se detectar possível emergência (dor no peito, dor irradiada para o braço, falta de ar grave, AVC, hemorragia intensa, parada respiratória, fratura exposta), marque prioridade como "Urgente" e tipoUnidade como "SAMU" ou "UPA".
-4. Seja empático, mas direto e acolhedor (3 a 4 frases no máximo para a mensagem principal).
-5. Mencione o nome da condição provável em linguagem simples.
-6. Inclua uma orientação prática e clara de cuidado imediato.
-
-Retorne APENAS um JSON válido com esta estrutura exata:
+Retorne APENAS um JSON válido (sem blocos markdown, sem crases):
 {
-  "mensagem": "Sua fala humanizada e acolhedora para o paciente",
-  "recomendacao": "Possível condição clínica (ex: Avaliação para Arbovirose / Dengue)",
-  "especialidade": "Especialidade médica indicada (ex: Clínico Geral / Infectologia)",
+  "mensagem": "Explicação acolhedora e clara para o paciente sobre o que ele está sentindo",
+  "recomendacao": "Avaliação para [Condição Provável]",
+  "especialidade": "Clínico Geral | Dermatologia | Cardiologia | etc",
   "prioridade": "Normal | Média | Alta | Urgente",
-  "orientacao": "Cuidados imediatos e orientação preventiva que o paciente deve tomar",
-  "tipoUnidade": "UBS | UPA | CAPS | SAMU"
+  "orientacao": "Instrução clara de autocuidado e o que fazer a seguir",
+  "tipoUnidade": "UBS | UPA | SAMU"
 }`;
 
-async function executarComModelos(fn) {
-  let ultimoErro = null;
-  for (const modelName of CANDIDATE_MODELS) {
-    for (let tentativa = 0; tentativa < 2; tentativa++) {
-      try {
-        const model = genAI.getGenerativeModel({
-          model: modelName,
-          generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 500, temperature: 0.5 }
-        });
-        return await fn(model, modelName);
-      } catch (err) {
-        ultimoErro = err;
-        console.warn(`[Gemini] Falha no modelo ${modelName} (tentativa ${tentativa + 1}):`, err.message);
-        if (tentativa === 0) {
-          await new Promise((r) => setTimeout(r, 1000));
-        }
-      }
-    }
-  }
-  throw ultimoErro || new Error('Nenhum modelo Gemini respondeu');
-}
-
-export function removerSaudacaoRepetida(texto) {
-  if (!texto) return texto;
-  const limpo = texto
-    .replace(/^(olá|ola|oi|bom dia|boa tarde|boa noite|saudações)[!,\.\s\-]+/i, '')
-    .replace(/^(olá|ola|oi),?\s*(tudo bem|como vai|como você está|sou a cuidaê|sou o cuidaê)[!,\.\s\-?]+/i, '')
+function removerSaudacaoRepetida(texto) {
+  if (!texto || typeof texto !== 'string') return texto;
+  return texto
+    .replace(/^(?:ol[áa]|oi|bom dia|boa tarde|boa noite|tudo bem[?!.]*|como vai[?!.]*)[,\s!.-]*/i, '')
     .trim();
-  return limpo ? limpo.charAt(0).toUpperCase() + limpo.slice(1) : texto;
 }
 
 /**
- * Conduz anamnese clínica conversacional.
+ * Tenta executar a chamada usando a lista de modelos candidatos em ordem com fallback automático.
  */
-export async function conduzirAnamneseOuDiagnostico(sintomaAtual, historico = []) {
+async function executarComModelos(fn) {
   if (!genAI) throw new Error('GEMINI_API_KEY não configurada');
 
-  const mensagensUsuario = historico.filter(m => m.remetente === 'usuario').length + 1;
+  let ultimoErro = null;
 
-  let contextoHistorico = '';
-  if (Array.isArray(historico) && historico.length > 0) {
-    const historicoTexto = historico
-      .filter((m) => m && m.texto)
-      .slice(-8)
-      .map((m) => `${m.remetente === 'usuario' ? 'Paciente' : 'Assistente Cuidaê'}: ${m.texto}`)
-      .join('\n');
-    contextoHistorico = `HISTÓRICO DA CONVERSA:\n${historicoTexto}\n\n`;
+  for (const modelName of CANDIDATE_MODELS) {
+    for (let tentativa = 1; tentativa <= 2; tentativa++) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName });
+        return await fn(model, modelName);
+      } catch (err) {
+        ultimoErro = err;
+        const msg = err.message || '';
+        const isTemporary = msg.includes('503') || msg.includes('429') || msg.includes('high demand') || msg.includes('temporarily');
+
+        if (isTemporary && tentativa === 1) {
+          await new Promise(r => setTimeout(r, 500));
+          continue;
+        }
+
+        console.warn(`[Gemini] Modelo ${modelName} falhou: ${msg.slice(0, 100)}. Tentando próximo...`);
+        break;
+      }
+    }
   }
 
-  const promptFinal = `${contextoHistorico}NOVA MENSAGEM DO PACIENTE (Turno ${mensagensUsuario}):\n"${sintomaAtual}"\n
-OBSERVAÇÃO DO TURNO:
-O paciente já enviou ${mensagensUsuario} mensagem(ns) nesta sessão.
-${mensagensUsuario >= 3 ? 'Atenção: Já foram feitas perguntas suficientes. Defina "prontoParaDiagnostico": true para não cansar o paciente, a menos que a mensagem seja completamente sem sentido.' : 'Avalie se ainda é necessário fazer 1 pergunta ou se o quadro já é claro o bastante para fechar a anamnese.'}`;
+  throw ultimoErro;
+}
+
+/**
+ * Conduz a anamnese clínica conversacional passo a passo.
+ */
+export async function conduzirAnamneseOuDiagnostico(sintomaAtual, historico = []) {
+  if (!genAI) {
+    throw new Error('GEMINI_API_KEY não configurada');
+  }
+
+  const historicoFormatado = (historico || [])
+    .filter((m) => m && m.texto)
+    .map((m) => `${m.remetente === 'usuario' ? 'Paciente' : 'Médico Cuidaê'}: ${m.texto}`)
+    .join('\n');
+
+  const promptFinal = `${PROMPT_ANAMNESE_CONVERSACIONAL}
+
+HISTÓRICO DA CONVERSA ATÉ O MOMENTO:
+${historicoFormatado || '(Início da consulta)'}
+
+NOVA FALA DO PACIENTE:
+"${sintomaAtual}"`;
+
+  const mensagensUsuario = (historico || []).filter((m) => m && m.remetente === 'usuario').length + 1;
 
   try {
     return await executarComModelos(async (model) => {
-      const result = await model.generateContent([
-        { text: PROMPT_ANAMNESE_CONVERSACIONAL },
-        { text: promptFinal }
-      ]);
-
-      const texto = result.response.text();
-      const jsonLimpo = texto.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      const result = await model.generateContent(promptFinal);
+      const raw = result.response.text();
+      const jsonLimpo = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       const parsed = JSON.parse(jsonLimpo);
       if (parsed && parsed.mensagem) {
         parsed.mensagem = removerSaudacaoRepetida(parsed.mensagem);
@@ -203,8 +196,8 @@ ${mensagensUsuario >= 3 ? 'Atenção: Já foram feitas perguntas suficientes. De
       return parsed;
     });
   } catch (err) {
-    console.warn('[Gemini Anamnese] Ativando protocolo clínico de anamnese de fallback:', err.message);
-    // Consolida todas as falas do paciente no histórico para não perder a queixa principal
+    console.warn('[Gemini Anamnese] Ativando protocolo de anamnese de fallback:', err.message);
+
     const falasPaciente = (historico || [])
       .filter((m) => m && m.remetente === 'usuario' && m.texto)
       .map((m) => m.texto);
@@ -212,23 +205,15 @@ ${mensagensUsuario >= 3 ? 'Atenção: Já foram feitas perguntas suficientes. De
       falasPaciente.push(sintomaAtual);
     }
     const queixaCompleta = falasPaciente.join(', ');
-
     const s = queixaCompleta.toLowerCase();
 
-    // Emergência crítica evidente (quando o paciente já descreveu colapso ou múltiplos sinais clássicos de IAM/AVC)
-    const temColapsoOuInconsciencia = s.includes('desmaio') || s.includes('desmaiei') || s.includes('inconsciente') || s.includes('convuls');
-    const temAvcEvidente = (s.includes('boca torta') || s.includes('perda de forca') || s.includes('perda de força')) || (s.includes('avc') && s.includes('lado'));
-    const temHemorragiaGrave = s.includes('hemorragia') || s.includes('sangue pela boca') || s.includes('vomitando sangue');
-    const temIamClassicoCompleto = (s.includes('peito') || s.includes('toracica') || s.includes('torácica')) &&
-      (s.includes('braço') || s.includes('braco') || s.includes('mandibula') || s.includes('mandíbula') || s.includes('irradi')) &&
-      (s.includes('insuportavel') || s.includes('insuportável') || s.includes('falta de ar') || s.includes('suor frio') || s.includes('aperta'));
-
-    const isEmergenciaCatastrofica = temColapsoOuInconsciencia || temAvcEvidente || temHemorragiaGrave || temIamClassicoCompleto;
+    const isEmergenciaCatastrofica = s.includes('desmaio') || s.includes('inconsciente') || s.includes('convuls') ||
+      (s.includes('peito') && (s.includes('braço') || s.includes('mandíbula') || s.includes('suor frio')));
 
     if (isEmergenciaCatastrofica) {
       return {
         prontoParaDiagnostico: true,
-        mensagem: 'Identifiquei sintomas com sinais de alerta crítico imediato. Estou gerando sua triagem de urgência para direcionamento imediato ao serviço de emergência (SAMU 192 / UPA).',
+        mensagem: 'Identifiquei sinais que requerem atenção médica imediata. Estou gerando seu encaminhamento para o serviço de emergência (SAMU 192 / UPA).',
         relatorioClinico: queixaCompleta,
         resumoPT: queixaCompleta,
         sintomasExtraidosPT: falasPaciente,
@@ -238,18 +223,10 @@ ${mensagensUsuario >= 3 ? 'Atenção: Já foram feitas perguntas suficientes. De
       };
     }
 
-    // Se é o primeiro turno do paciente e relatou dor no peito sem duração ou intensidade:
-    if (mensagensUsuario < 2 && (s.includes('peito') || s.includes('toracica') || s.includes('torácica'))) {
-      return {
-        prontoParaDiagnostico: false,
-        mensagem: 'Compreendo sua preocupação com essa dor no peito. Para avaliarmos com segurança e precisão: há quanto tempo ela começou (minutos, horas ou dias), de 0 a 10 qual é a intensidade (e se é aperto, queimação ou pontada), e se você sente que ela espalha para o braço/mandíbula ou se piora ao apertar o peito / respirar fundo?'
-      };
-    }
-
     if (mensagensUsuario < 2 && queixaCompleta.length < 80) {
       return {
         prontoParaDiagnostico: false,
-        mensagem: 'Entendo o que você está sentindo. Para que possamos te orientar com precisão: há quantos dias esse sintoma começou, de 0 a 10 qual a intensidade do incômodo e você notou febre ou outra queixa associada?'
+        mensagem: 'Entendo o que você está sentindo. Para que possamos te orientar com precisão: há quantos dias esse sintoma começou e você notou febre ou outra queixa associada?'
       };
     }
 
@@ -262,6 +239,34 @@ ${mensagensUsuario >= 3 ? 'Atenção: Já foram feitas perguntas suficientes. De
       idade: 30,
       sexo: 'male',
       urgenciaPercebida: s.includes('peito') ? 'Alta' : 'Média'
+    };
+  }
+}
+
+/**
+ * Gemini escuta o paciente e monta o relatório clínico formal para a Infermedica.
+ */
+export async function gerarRelatorioFormal(relatoPaciente) {
+  try {
+    return await executarComModelos(async (model) => {
+      const result = await model.generateContent([
+        { text: geminiConfig.prompts.relatorioFormal },
+        { text: `Relato do paciente: "${relatoPaciente}"` }
+      ]);
+      const texto = result.response.text();
+      const jsonLimpo = texto.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      return JSON.parse(jsonLimpo);
+    });
+  } catch (err) {
+    console.warn('⚠️ [Gemini] Ativando tradutor clínico interno de resiliência:', err.message);
+    const inglesClinico = traduzirParaInglesClinico(relatoPaciente);
+
+    return {
+      relatorioClinico: inglesClinico,
+      resumoPT: `Relato registrado: ${relatoPaciente}`,
+      sintomasExtraidosPT: [relatoPaciente],
+      idade: 30,
+      sexo: 'male'
     };
   }
 }
@@ -283,13 +288,12 @@ export async function gerarRelatorioImagem(caminhoImagem, mimeType) {
     }
   };
 
-  return executarComModelos(async (model) => {
+  return await executarComModelos(async (model) => {
     const result = await model.generateContent([
       { text: PROMPT_IMAGEM_RELATORIO },
       imagePart,
       { text: "Analise a imagem dermatológica para o relatório da Infermedica." }
     ]);
-
     const texto = result.response.text();
     const jsonLimpo = texto.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     return JSON.parse(jsonLimpo);
@@ -304,64 +308,22 @@ export async function humanizarResultadoFinal(relatoOriginal, relatorioClinicoOu
 
   const relatorioClinico = typeof relatorioClinicoOuGemini === 'string'
     ? relatorioClinicoOuGemini
-    : relatorioClinicoOuGemini.relatorioClinico;
+    : (relatorioClinicoOuGemini?.relatorioClinico || relatoOriginal);
 
-  // Filtra hipóteses com probabilidade estatística relevante (>= 15%)
-  // Hipóteses residuais abaixo de 15% (como 7% de Resfriado Comum para manchas de pele)
-  // são ruído bayesiano de base da Infermedica e não devem contaminar o laudo.
-  const condicoesRelevantes = (resultadoInfermedica.diagnostico?.conditions || [])
+  const condicoesRelevantes = (resultadoInfermedica?.diagnostico?.conditions || [])
     .filter((c) => c.probability >= 0.15)
     .slice(0, 5);
 
-  const diagnosticoTexto = condicoesRelevantes.length > 0
-    ? JSON.stringify(condicoesRelevantes, null, 2)
-    : 'A Infermedica não atingiu limiar estatístico (>= 15%) para as evidências pontuais. Como médico assistente de triagem, analise o conjunto de sintomas e o histórico clínico para levantar as 2 a 4 hipóteses diagnósticas e possíveis causas mais prováveis.';
+  const prompt = geminiConfig.prompts.humanizacao(
+    relatoOriginal,
+    relatorioClinico,
+    condicoesRelevantes.length > 0 ? condicoesRelevantes : (resultadoInfermedica?.diagnostico?.conditions?.slice(0, 3) || []),
+    resultadoInfermedica?.triagem?.triage_level,
+    camada
+  );
 
-  const promptHumanizacao = `Você é o assistente clínico médico "Cuidaê" do SUS, responsável por realizar a avaliação diagnóstica compreensiva e humanizada para o paciente.
-
-DADOS RECEBIDOS:
-- Relato do paciente: "${relatoOriginal}"
-- Relatório clínico da anamnese: ${relatorioClinico}
-- Hipóteses diagnósticas do motor clínico Infermedica:
-${diagnosticoTexto}
-- Nível de triagem Infermedica: ${resultadoInfermedica.triagem?.triage_level || 'consultation'}
-- Sintomas identificados: ${JSON.stringify(resultadoInfermedica.evidencias?.map((e) => e.name) || [])}
-
-REGRAS ABSOLUTAS:
-1. NUNCA DEIXE COMO "A ESCLARECER" OU SEM CAUSAS PROVÁVEIS:
-   - É TERMINANTEMENTE PROIBIDO responder "Quadro clínico a esclarecer", "Avaliação a esclarecer" ou termos evasivos vazios.
-   - O paciente busca entender o que pode estar causando seu problema. Você DEVE SEMPRE elencar e explicar as 2 a 4 hipóteses clínicas mais prováveis (possíveis causas) para o quadro apresentado!
-   - Se a Infermedica não tiver trazido hipóteses fortes, use seu raciocínio médico para indicar as causas mais comuns e plausíveis (ex: para mancha na pele sem outros sintomas: Dermatite de Contato, Reação Alérgica / Farmacodermia, Urticária ou Pitiríase; para dor no peito sem sinais agudos: Dor Musculoesquelética / Costocondrite ou Refluxo Gastroesofágico; para dor de cabeça: Cefaleia Tensional ou Enxaqueca).
-   - NUNCA sugira resfriado comum para manchas isoladas na pele.
-
-2. TUDO OBRIGATORIAMENTE EM PORTUGUÊS DO BRASIL:
-   - É terminantemente proibido exibir qualquer termo em inglês. Traduza todos os termos médicos.
-
-3. A "mensagem" deve ser COMPLETA e DETALHADA (mínimo 4-6 frases):
-   - Comece acolhendo o paciente e reconhecendo o quadro detalhado que ele descreveu;
-   - Explique detalhadamente cada uma das POSSÍVEIS CAUSAS clínicas consideradas e o que cada uma significa em linguagem simples;
-   - Informe com clareza o nível de urgência e o tipo de unidade recomendada (UBS, UPA ou SAMU);
-   - Finalize com orientações práticas imediatas de cuidado e sinais de alerta para procurar emergência.
-
-4. A "recomendacao" DEVE conter o nome das principais possíveis causas em português claro (ex: "Avaliação para Dermatite de Contato / Reação Alérgica Cutânea" ou "Avaliação para Cefaleia Tensional / Enxaqueca").
-
-5. O campo "hipotesesClinicas" DEVE ser uma lista (array de strings) com as 2 a 4 possíveis causas diagnósticas em português (ex: ["Dermatite de Contato", "Reação Alérgica Cutânea", "Farmacodermia"]).
-
-6. A "orientacao" deve incluir cuidados práticos específicos para o caso (não genéricos) e sinais de alerta.
-
-Retorne APENAS um JSON válido:
-{
-  "mensagem": "Explicação completa, humanizada e detalhada descrevendo as possíveis causas clínicas (4-6 frases)",
-  "recomendacao": "Avaliação para [Causas Principais Prováveis em Português Claro]",
-  "especialidade": "Especialidade médica indicada (ex: Dermatologia, Clínica Geral, Neurologia)",
-  "prioridade": "Normal | Média | Alta | Urgente",
-  "orientacao": "Orientações específicas de cuidado imediato e sinais de alerta",
-  "tipoUnidade": "UBS | UPA | SAMU",
-  "hipotesesClinicas": ["Possível Causa 1", "Possível Causa 2", "Possível Causa 3"]
-}`;
-
-  return executarComModelos(async (model) => {
-    const result = await model.generateContent(promptHumanizacao);
+  return await executarComModelos(async (model) => {
+    const result = await model.generateContent(prompt);
     const texto = result.response.text();
     const jsonLimpo = texto.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     return JSON.parse(jsonLimpo);
@@ -369,27 +331,77 @@ Retorne APENAS um JSON válido:
 }
 
 /**
+ * Gemini formula uma pergunta investigativa acolhedora em PT-BR para afunilar as hipóteses.
+ */
+export async function gerarPerguntaInvestigativa(relatoPaciente, condicoes, perguntaClinica) {
+  try {
+    const prompt = geminiConfig.prompts.perguntaInvestigativa(relatoPaciente, condicoes, perguntaClinica);
+    return await executarComModelos(async (model) => {
+      const result = await model.generateContent(prompt);
+      const texto = result.response.text();
+      const jsonLimpo = texto.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      return JSON.parse(jsonLimpo);
+    });
+  } catch (err) {
+    console.warn('⚠️ Fallback ao gerar pergunta investigativa:', err.message);
+    return {
+      perguntaHumanizada: `Para entender melhor seu caso: você apresenta ${perguntaClinica}?`,
+      explicacaoBreve: 'Isso nos ajuda a diferenciar melhor as possíveis causas.',
+      opcoesRapidas: ['Sim', 'Não', 'Não tenho certeza']
+    };
+  }
+}
+
+/**
+ * Gemini interpreta a resposta em linguagem natural do paciente e mapeia para escolhas da Infermedica.
+ */
+export async function interpretarRespostaPaciente(respostaPaciente, itensSintomas) {
+  const respostaLimpa = (respostaPaciente || '').trim().toLowerCase();
+
+  if (['sim', 's', 'positivo', 'tenho', 'com certeza'].includes(respostaLimpa)) {
+    return (itensSintomas || []).map(item => ({ id: item.id, choice_id: 'present' }));
+  }
+  if (['não', 'nao', 'n', 'negativo', 'não tenho', 'nada'].includes(respostaLimpa)) {
+    return (itensSintomas || []).map(item => ({ id: item.id, choice_id: 'absent' }));
+  }
+  if (['não sei', 'nao sei', 'não tenho certeza', 'talvez', 'duvida', 'dúvida'].includes(respostaLimpa)) {
+    return (itensSintomas || []).map(item => ({ id: item.id, choice_id: 'unknown' }));
+  }
+
+  try {
+    const prompt = geminiConfig.prompts.interpretarResposta(respostaPaciente, itensSintomas);
+    return await executarComModelos(async (model) => {
+      const result = await model.generateContent(prompt);
+      const texto = result.response.text();
+      const jsonLimpo = texto.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      const data = JSON.parse(jsonLimpo);
+      if (Array.isArray(data.respostas) && data.respostas.length > 0) {
+        return data.respostas;
+      }
+      return (itensSintomas || []).map(item => ({ id: item.id, choice_id: 'present' }));
+    });
+  } catch (err) {
+    console.warn('⚠️ Fallback ao interpretar resposta:', err.message);
+  }
+
+  return (itensSintomas || []).map(item => ({ id: item.id, choice_id: 'present' }));
+}
+
+/**
  * Avaliação direta de sintomas (fallback quando Infermedica estiver indisponível)
  */
 export async function avaliarSintomas(textoOriginal, historico = []) {
   if (genAI) {
-    let contextoPaciente = `Relato do paciente: "${textoOriginal}"`;
-    if (Array.isArray(historico) && historico.length > 0) {
-      const historicoTexto = historico
-        .filter(m => m.texto)
-        .slice(-6)
-        .map(m => `${m.remetente === 'usuario' ? 'Paciente' : 'Assistente Cuidaê'}: ${m.texto}`)
-        .join('\n');
-      contextoPaciente = `Histórico prévio da conversa:\n${historicoTexto}\n\nNova mensagem do paciente: "${textoOriginal}"\n\nResponda de forma humanizada e atualize a triagem médica considerando o contexto acumulado.`;
-    }
-
     try {
-      return await executarComModelos(async (model, modelName) => {
-        const result = await model.generateContent([
-          { text: PROMPT_DIAGNOSTICO_DIRETO },
-          { text: contextoPaciente }
-        ]);
+      const historicoTexto = (historico || [])
+        .filter((m) => m && m.texto)
+        .map((m) => `${m.remetente === 'usuario' ? 'Paciente' : 'Atendente'}: ${m.texto}`)
+        .join('\n');
 
+      const promptFinal = `${PROMPT_DIAGNOSTICO_DIRETO}\n\nHistórico:\n${historicoTexto}\n\nSintoma atual do paciente: "${textoOriginal}"`;
+
+      return await executarComModelos(async (model, modelName) => {
+        const result = await model.generateContent(promptFinal);
         const raw = result.response.text();
         const jsonLimpo = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
         const parsed = JSON.parse(jsonLimpo);
@@ -404,7 +416,6 @@ export async function avaliarSintomas(textoOriginal, historico = []) {
     }
   }
 
-  // Fallback clínico local
   const fallback = analisarSintomas(textoOriginal, 'Gratuito');
   return {
     mensagem: fallback.mensagem,

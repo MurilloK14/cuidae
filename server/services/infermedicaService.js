@@ -9,17 +9,22 @@
  * Docs: https://developer.infermedica.com/docs/v3
  */
 
-import dotenv from 'dotenv';
-dotenv.config();
+import { infermedicaConfig } from '../config/aiConfig.js';
 
-const BASE_URL = 'https://api.infermedica.com/v3';
 
-const headers = {
-  'App-Id': process.env.INFERMEDICA_APP_ID,
-  'App-Key': process.env.INFERMEDICA_APP_KEY,
-  'Content-Type': 'application/json'
-};
-
+/**
+ * Sanitiza evidências para a Infermedica, aceitando apenas fontes válidas pela API:
+ * 'initial', 'suggest' e 'predefined'. Qualquer outra é omitida.
+ */
+export function sanitizarEvidencias(evidencias) {
+  return (evidencias || []).map(({ id, choice_id, source }) => {
+    const item = { id, choice_id };
+    if (source === 'initial' || source === 'suggest' || source === 'predefined') {
+      item.source = source;
+    }
+    return item;
+  });
+}
 /**
  * Tradução e normalização abrangente PT-BR -> EN clínico.
  * As expressões mais longas e específicas vêm primeiro para evitar conflitos de substituição.
@@ -237,12 +242,12 @@ export function traduzirNomeSintoma(nome) {
 /**
  * Usa o NLP da Infermedica para extrair sintomas de um texto.
  */
-export async function parseSintomas(texto, idade = 30, sexo = 'male') {
+export async function parseSintomas(texto, idade = infermedicaConfig.defaultPatient.age, sexo = infermedicaConfig.defaultPatient.sex) {
   const textoTraduzido = traduzirParaInglesClinico(texto);
 
-  const res = await fetch(`${BASE_URL}/parse`, {
+  const res = await fetch(`${infermedicaConfig.baseUrl}/parse`, {
     method: 'POST',
-    headers,
+    headers: infermedicaConfig.headers,
     body: JSON.stringify({
       text: textoTraduzido,
       age: { value: idade },
@@ -267,14 +272,14 @@ export async function parseSintomas(texto, idade = 30, sexo = 'male') {
 /**
  * Envia os sintomas estruturados para o endpoint de diagnóstico.
  */
-export async function getDiagnostico(evidencias, idade = 30, sexo = 'male') {
-  const res = await fetch(`${BASE_URL}/diagnosis`, {
+export async function getDiagnostico(evidencias, idade = infermedicaConfig.defaultPatient.age, sexo = infermedicaConfig.defaultPatient.sex) {
+  const res = await fetch(`${infermedicaConfig.baseUrl}/diagnosis`, {
     method: 'POST',
-    headers,
+    headers: infermedicaConfig.headers,
     body: JSON.stringify({
       sex: sexo,
       age: { value: idade },
-      evidence: evidencias.map(({ id, choice_id }) => ({ id, choice_id }))
+      evidence: sanitizarEvidencias(evidencias)
     })
   });
 
@@ -289,14 +294,14 @@ export async function getDiagnostico(evidencias, idade = 30, sexo = 'male') {
 /**
  * Faz a triagem de urgência com base nos sintomas.
  */
-export async function getTriagem(evidencias, idade = 30, sexo = 'male') {
-  const res = await fetch(`${BASE_URL}/triage`, {
+export async function getTriagem(evidencias, idade = infermedicaConfig.defaultPatient.age, sexo = infermedicaConfig.defaultPatient.sex) {
+  const res = await fetch(`${infermedicaConfig.baseUrl}/triage`, {
     method: 'POST',
-    headers,
+    headers: infermedicaConfig.headers,
     body: JSON.stringify({
       sex: sexo,
       age: { value: idade },
-      evidence: evidencias.map(({ id, choice_id }) => ({ id, choice_id }))
+      evidence: sanitizarEvidencias(evidencias)
     })
   });
 
@@ -333,23 +338,19 @@ export function formatarResultadoInfermedica(resultadoMedico) {
   const prioridade = mapaPrioridade[triagem?.triage_level] || 'Normal';
   const tipoUnidade = mapaUnidade[triagem?.triage_level] || 'UBS';
 
-  // Filtra hipóteses com probabilidade estatística clinicamente relevante (>= 15%).
-  // Hipóteses residuais abaixo de 15% (ex: 7% de Resfriado Comum para mancha isolada)
-  // são ruído bayesiano da Infermedica e não devem ser apresentadas como diagnóstico primário.
   const todasCondicoes = diagnostico?.conditions || [];
   const condicoes = todasCondicoes.filter(c => c.probability >= 0.15).slice(0, 3);
-  const condicaoPrincipal = condicoes[0];
+  const condicaoPrincipal = condicoes[0] || todasCondicoes[0];
+  const nomePrincipalPT = condicaoPrincipal ? traduzirNomeCondicao(condicaoPrincipal.common_name || condicaoPrincipal.name) : 'Condição em investigação';
+  const probPrincipal = condicaoPrincipal ? `${(condicaoPrincipal.probability * 100).toFixed(0)}%` : '';
 
   // Lista de sintomas traduzidos
   const sintomasFormatados = (evidencias || [])
     .map(e => traduzirNomeSintoma(e.name))
     .join(', ');
 
-  const textoSintomas = sintomasFormatados
-    ? `os sintomas: ${sintomasFormatados}`
-    : 'as queixas relatadas';
+  const textoSintomas = sintomasFormatados ? `os sintomas: ${sintomasFormatados}` : 'as queixas relatadas';
 
-  // Se a Infermedica não atingiu 15% em nenhuma hipótese, deduz possíveis causas clínicas pelas evidências relatadas
   let hipotesesAlternativas = [];
   let nomeFallback = 'Investigação Clínica com Médico';
 
@@ -383,19 +384,13 @@ export function formatarResultadoInfermedica(resultadoMedico) {
     ];
   }
 
-  const nomePrincipalPT = condicaoPrincipal ? traduzirNomeCondicao(condicaoPrincipal.common_name || condicaoPrincipal.name) : nomeFallback;
-  const probPrincipal = condicaoPrincipal ? `${(condicaoPrincipal.probability * 100).toFixed(0)}%` : '';
+  const nomePrincipalPTFinal = condicaoPrincipal ? traduzirNomeCondicao(condicaoPrincipal.common_name || condicaoPrincipal.name) : nomeFallback;
 
-  // Lista de hipóteses diagnósticas para mostrar ao paciente
   const listaHipoteses = condicoes.length > 0
-    ? condicoes
-        .map(c => `• ${traduzirNomeCondicao(c.common_name || c.name)} (${(c.probability * 100).toFixed(0)}%)`)
-        .join('\n')
+    ? condicoes.map(c => `• ${traduzirNomeCondicao(c.common_name || c.name)} (${(c.probability * 100).toFixed(0)}%)`).join('\n')
     : hipotesesAlternativas.join('\n');
 
-  const blocoHipoteses = listaHipoteses
-    ? `\n\nHipóteses clínicas e possíveis causas a investigar:\n${listaHipoteses}\n\n`
-    : '\n\n';
+  const blocoHipoteses = listaHipoteses ? `\n\nHipóteses clínicas e possíveis causas a investigar:\n${listaHipoteses}\n\n` : '\n\n';
 
   let mensagem = '';
   if (prioridade === 'Urgente') {
@@ -458,5 +453,65 @@ export async function fluxoCompleto(texto, dadosPaciente = {}) {
     diagnostico,
     triagem,
     sintomasEncontrados: true
+  };
+}
+
+/**
+ * Executa uma rodada do motor de diagnóstico interativo da Infermedica
+ * e avalia se o afunilamento atingiu as regras de parada.
+ */
+export async function executarPassoDiagnostico(evidencias, dadosPaciente = {}) {
+  const idade = dadosPaciente.idade || infermedicaConfig.defaultPatient.age;
+  const sexo = dadosPaciente.sexo || infermedicaConfig.defaultPatient.sex;
+
+  const res = await fetch(`${infermedicaConfig.baseUrl}/diagnosis`, {
+    method: 'POST',
+    headers: infermedicaConfig.headers,
+    body: JSON.stringify({
+      sex: sexo,
+      age: { value: idade },
+      evidence: sanitizarEvidencias(evidencias),
+      extras: {
+        disable_groups: infermedicaConfig.interviewRules.disableGroups
+      }
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Infermedica /diagnosis falhou: ${res.status} - ${err}`);
+  }
+
+  const data = await res.json();
+  const condicoes = data.conditions || [];
+  const top1 = condicoes[0];
+  const top2 = condicoes[1];
+
+  // Quantidade de perguntas respondidas na entrevista
+  const totalPerguntado = evidencias.filter(e => e.source !== 'initial').length;
+
+  const atingiuCerteza = top1 && top1.probability >= infermedicaConfig.interviewRules.confidenceThreshold;
+  const diferencaExpressiva = top1 && top2 && (top1.probability - top2.probability) >= infermedicaConfig.interviewRules.deltaThreshold;
+  const atingiuLimite = totalPerguntado >= infermedicaConfig.interviewRules.maxQuestions;
+  const semMaisPerguntas = !data.question;
+
+  const finalizado = Boolean(data.should_stop || atingiuCerteza || diferencaExpressiva || atingiuLimite || semMaisPerguntas);
+
+  let triagem = null;
+  if (finalizado) {
+    try {
+      triagem = await getTriagem(evidencias, idade, sexo);
+    } catch (errTriagem) {
+      console.warn('⚠️ Falha ao buscar triagem final:', errTriagem.message);
+    }
+  }
+
+  return {
+    finalizado,
+    condicoes: condicoes.slice(0, infermedicaConfig.interviewRules.topConditionsCount),
+    question: data.question || null,
+    triagem,
+    evidencias,
+    diagnostico: data
   };
 }
