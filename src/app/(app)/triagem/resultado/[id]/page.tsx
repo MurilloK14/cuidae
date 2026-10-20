@@ -99,15 +99,21 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
         {triagem.hipotesesDiagnosticas && triagem.hipotesesDiagnosticas.length > 0 && (
           <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200/70 dark:border-slate-700 space-y-2">
             <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
-              📊 Diagnóstico Diferencial (Motor Infermedica API):
+              📊 Diagnóstico Diferencial & Possíveis Causas:
             </span>
             <div className="flex flex-wrap gap-2">
               {triagem.hipotesesDiagnosticas.map((hip: any, idx: number) => (
                 <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-white dark:bg-slate-900 text-[#2b85ff] dark:text-blue-300 border border-blue-200/80 dark:border-blue-800">
                   <span>• {hip.nome}</span>
-                  <span className="bg-blue-100 dark:bg-blue-950 px-1.5 py-0.5 rounded text-[11px] text-blue-700 dark:text-blue-300 font-extrabold">
-                    {hip.probabilidade}%
-                  </span>
+                  {hip.probabilidade ? (
+                    <span className="bg-blue-100 dark:bg-blue-950 px-1.5 py-0.5 rounded text-[11px] text-blue-700 dark:text-blue-300 font-extrabold">
+                      {hip.probabilidade}%
+                    </span>
+                  ) : (
+                    <span className="bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.5 rounded text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold border border-emerald-200/60 dark:border-emerald-800/40">
+                      Possível causa
+                    </span>
+                  )}
                 </span>
               ))}
             </div>
@@ -214,20 +220,24 @@ export default async function TriagemResultadoPage({ params }: { params: { id: s
         </div>
       )}
 
-      {/* Teleconsulta CTA */}
+      {/* Teleconsulta / Teleatendimento SUS Gratuito */}
       {showTeleconsulta && (
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm mb-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            <h2 className="text-xl font-bold text-[#091426] dark:text-white mb-1">🩻 Agendar Teleconsulta</h2>
-            <p className="text-slate-600 dark:text-slate-300">Fale com um médico sem sair de casa.</p>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 mb-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Teleatendimento SUS • 100% Gratuito
+            </div>
+            <h2 className="text-xl font-bold text-[#091426] dark:text-white mb-1">🩻 Teleconsulta e Acolhimento Digital</h2>
+            <p className="text-slate-600 dark:text-slate-300 text-sm">Orientações com profissionais da rede básica sem precisar sair de casa.</p>
           </div>
           <div className="flex flex-col items-center sm:items-end gap-2 shrink-0">
-            <span className="text-2xl font-bold text-[#091426] dark:text-white">R$ 39,90</span>
+            <span className="text-sm font-bold text-emerald-700 dark:text-emerald-300">Acesso 100% Gratuito</span>
             <Link
-              href="/planos/checkout?plano=intermediaria&tipo=avulsa"
-              className="px-6 py-3 bg-[#091426] dark:bg-blue-600 hover:bg-[#1a2c4e] dark:hover:bg-blue-700 text-white font-medium rounded-full text-center transition-colors flex items-center gap-2"
+              href={`/agendamento?triagemId=${params.id}&sintomas=${encodeURIComponent(triagem.sintoma_principal || '')}&diagnostico=Teleconsulta%20Eletiva`}
+              className="px-6 py-3 bg-[#2b85ff] hover:bg-blue-600 text-white font-semibold rounded-xl text-center transition-colors flex items-center gap-2 text-sm shadow-xs"
             >
-              Agendar agora <ArrowRight className="w-4 h-4" />
+              Agendar Acolhimento <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>

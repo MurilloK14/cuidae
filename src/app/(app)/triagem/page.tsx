@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { submitTriagem } from '@/lib/triagem/actions'
-import { fetchBoasVindas, enviarSintomas, enviarImagem } from '@/services/api'
+import { fetchBoasVindas, enviarSintomas, enviarImagem, fetchHistoricoTriagens } from '@/services/api'
 import { 
   Thermometer, 
   Pill, 
@@ -28,10 +28,23 @@ import {
   CheckCircle2,
   FileText,
   Building2,
-  Calendar
+  Calendar,
+  Volume2,
+  VolumeX,
+  Mic,
+  MicOff,
+  Square,
+  MessageSquare,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Plus,
+  Trash2,
+  History,
+  Clock
 } from 'lucide-react'
 
 import Image from 'next/image'
+import { buildWhatsappUrl, formatarWhatsappTriagem } from '@/lib/whatsapp'
 
 interface ChatMessage {
   id: number
@@ -59,6 +72,70 @@ interface ChatMessage {
   timestamp?: string
 }
 
+export interface ChatSession {
+  id: string
+  titulo: string
+  timestamp: string
+  mensagens: ChatMessage[]
+  resultadoRecente?: ChatMessage['triagem'] | null
+  recorteId?: string | null
+  nivel_urgencia?: 'verde' | 'amarelo' | 'vermelho'
+}
+
+const STORAGE_KEY = 'cuidae_chat_sessions_v1'
+
+function carregarSessoesIniciais(): ChatSession[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed
+    }
+  } catch (e) {
+    console.error('Erro ao ler sessoes do localStorage:', e)
+  }
+  return []
+}
+
+function salvarSessoesNoStorage(sessoes: ChatSession[]) {
+  if (typeof window === 'undefined') return
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sessoes))
+  } catch (e) {
+    console.error('Erro ao salvar sessoes no localStorage:', e)
+  }
+}
+
+function formatarDataSessao(isoString?: string): string {
+  if (!isoString) return 'Hoje'
+  try {
+    const data = new Date(isoString)
+    const agora = new Date()
+    const diffMs = agora.getTime() - data.getTime()
+    const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+    if (diffDias === 0) {
+      return `Hoje às ${data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`
+    }
+    if (diffDias === 1) {
+      return `Ontem às ${data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`
+    }
+    return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
+  } catch {
+    return 'Recente'
+  }
+}
+
+function sanitizarTextoBot(texto?: string): string {
+  if (!texto) return '';
+  const limpo = texto
+    .replace(/^(olá|ola|oi|bom dia|boa tarde|boa noite|saudações)[!,\.\s\-]+/i, '')
+    .replace(/^(olá|ola|oi),?\s*(tudo bem|como vai|como você está|sou a cuidaê|sou o cuidaê)[!,\.\s\-?]+/i, '')
+    .trim();
+  return limpo ? limpo.charAt(0).toUpperCase() + limpo.slice(1) : texto;
+}
+
 let messageCounter = 1
 
 const SUGESTOES_SINTOMAS = [
@@ -71,12 +148,16 @@ const SUGESTOES_SINTOMAS = [
 ]
 
 const RESPOSTAS_RAPIDAS_ANAMNESE = [
-  { label: '⏱️ Começou hoje', valor: 'Começou hoje' },
-  { label: '⏱️ Há 2 a 3 dias', valor: 'Começou há 2 a 3 dias' },
+  { label: '⏱️ Começou hoje', valor: 'Começou hoje há poucas horas' },
+  { label: '⏱️ Há 2 a 3 dias', valor: 'Começou há cerca de 2 a 3 dias' },
   { label: '⏱️ Há mais de 1 semana', valor: 'Já sinto há mais de uma semana' },
+  { label: '⚡ Dor leve (1 a 4)', valor: 'A intensidade é leve a moderada, nota entre 1 e 4' },
+  { label: '💥 Dor forte (7 a 10)', valor: 'A dor é muito forte e intensa, nota entre 7 e 10' },
+  { label: '🫀 Aperto no peito', valor: 'Sinto uma sensação de aperto e peso no peito' },
+  { label: '💪 Piora ao mexer/apertar', valor: 'A dor piora quando aperto o músculo ou me movimento' },
   { label: '🌡️ Tenho febre', valor: 'Estou com febre' },
   { label: '❄️ Sem febre', valor: 'Não apresentei febre' },
-  { label: '😣 Sinto dor no corpo', valor: 'Também sinto dor no corpo e desânimo' },
+  { label: '😣 Dor no corpo', valor: 'Também sinto dor no corpo e desânimo' },
   { label: '✅ É apenas isso', valor: 'É apenas esse sintoma mesmo, sem outras queixas' },
 ]
 
@@ -86,7 +167,11 @@ export default function TriagemPage() {
   // Modo: 'chat' (Assistente de IA) ou 'formulario' (Passo a Passo)
   const [mode, setMode] = useState<'chat' | 'formulario'>('chat')
 
-  // Estado do Chat de IA
+  // Estado do Chat de IA e Sessões / Aba Lateral
+  const [sessoes, setSessoes] = useState<ChatSession[]>([])
+  const [sessaoAtivaId, setSessaoAtivaId] = useState<string>('')
+  const [sidebarAberta, setSidebarAberta] = useState<boolean>(true)
+
   const [mensagens, setMensagens] = useState<ChatMessage[]>([])
   const [inputTexto, setInputTexto] = useState('')
   const [isTyping, setIsTyping] = useState(false)
@@ -97,6 +182,106 @@ export default function TriagemPage() {
 
   const chatEndRef = useRef<HTMLDivElement>(null)
   const chatFileInputRef = useRef<HTMLInputElement>(null)
+
+  // Estados de Voz / Áudio da IA e Ditado
+  const [vozAtiva, setVozAtiva] = useState<boolean>(true)
+  const [mensagemFalandoId, setMensagemFalandoId] = useState<number | null>(null)
+  const [gravandoVoz, setGravandoVoz] = useState<boolean>(false)
+  const speechRecognitionRef = useRef<any>(null)
+
+  const pararVoz = () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel()
+    }
+    setMensagemFalandoId(null)
+  }
+
+  const falarMensagemIA = (texto: string, msgId?: number) => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
+
+    if (mensagemFalandoId === msgId) {
+      pararVoz()
+      return
+    }
+
+    pararVoz()
+
+    const textoLimpo = texto
+      .replace(/[*#_~`]/g, '')
+      .replace(/https?:\/\/\S+/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+
+    if (!textoLimpo) return
+
+    const utterance = new SpeechSynthesisUtterance(textoLimpo)
+    utterance.lang = 'pt-BR'
+    utterance.rate = 1.0
+    utterance.pitch = 1.0
+
+    if (msgId) setMensagemFalandoId(msgId)
+
+    utterance.onend = () => {
+      setMensagemFalandoId(null)
+    }
+
+    utterance.onerror = () => {
+      setMensagemFalandoId(null)
+    }
+
+    window.speechSynthesis.speak(utterance)
+  }
+
+  const alternarGravacaoVoz = () => {
+    if (typeof window === 'undefined') return
+
+    const SpeechRec = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (!SpeechRec) {
+      alert('Seu navegador não possui suporte ao reconhecimento de voz. Por favor, digite seus sintomas.')
+      return
+    }
+
+    if (gravandoVoz) {
+      speechRecognitionRef.current?.stop()
+      setGravandoVoz(false)
+      return
+    }
+
+    try {
+      pararVoz()
+      const recognition = new SpeechRec()
+      recognition.lang = 'pt-BR'
+      recognition.continuous = false
+      recognition.interimResults = true
+
+      recognition.onstart = () => {
+        setGravandoVoz(true)
+      }
+
+      recognition.onresult = (event: any) => {
+        let transcricao = ''
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          transcricao += event.results[i][0].transcript
+        }
+        if (transcricao) {
+          setInputTexto((prev) => (prev ? `${prev} ${transcricao}`.trim() : transcricao))
+        }
+      }
+
+      recognition.onerror = () => {
+        setGravandoVoz(false)
+      }
+
+      recognition.onend = () => {
+        setGravandoVoz(false)
+      }
+
+      speechRecognitionRef.current = recognition
+      recognition.start()
+    } catch {
+      setGravandoVoz(false)
+    }
+  }
 
   // Estado do Formulário Estruturado
   const [step, setStep] = useState(1)
@@ -137,39 +322,199 @@ export default function TriagemPage() {
     }
   }, [])
 
-  // Inicializar Chat
-  const iniciarChat = async () => {
-    setIsTyping(true)
+  // Cria uma nova sessão inicial com mensagem acolhedora
+  const criarSessaoInicial = () => {
+    const novoId = crypto.randomUUID()
+    const sessao: ChatSession = {
+      id: novoId,
+      titulo: 'Novo Atendimento',
+      timestamp: new Date().toISOString(),
+      resultadoRecente: null,
+      recorteId: null,
+      mensagens: [
+        {
+          id: messageCounter++,
+          remetente: 'bot',
+          texto: 'Olá! Sou a Cuidaê, sua assistente virtual de triagem médica do SUS. 😊\n\nMe conte com suas palavras o que você está sentindo — quanto mais detalhes, melhor consigo te orientar. Você também pode enviar uma foto de qualquer alteração física (pele, lesão, machucado).\n\nComo posso te ajudar hoje?',
+          timestamp: new Date().toISOString()
+        }
+      ]
+    }
+    setSessoes([sessao])
+    salvarSessoesNoStorage([sessao])
+    setSessaoAtivaId(novoId)
+    setMensagens(sessao.mensagens)
     setResultadoRecente(null)
     setRecorteId(null)
-    try {
-      const data = await fetchBoasVindas()
-      setMensagens([
+  }
+
+  // Iniciar nova consulta / atendimento
+  const iniciarNovaSessao = () => {
+    pararVoz()
+    const novoId = crypto.randomUUID()
+    const sessao: ChatSession = {
+      id: novoId,
+      titulo: 'Novo Atendimento',
+      timestamp: new Date().toISOString(),
+      resultadoRecente: null,
+      recorteId: null,
+      mensagens: [
         {
           id: messageCounter++,
           remetente: 'bot',
-          texto: data?.texto || 'Olá! Sou a Assistente Virtual de Triagem Cuidaê. Me conte detalhadamente o que você está sentindo hoje ou envie uma foto de alguma alteração física (pele, lesão, machucado) para receber orientação clínica imediata.',
+          texto: 'Olá! Sou a Cuidaê, sua assistente virtual de triagem médica do SUS. 😊\n\nMe conte com suas palavras o que você está sentindo — quanto mais detalhes, melhor consigo te orientar. Você também pode enviar uma foto de qualquer alteração física (pele, lesão, machucado).\n\nComo posso te ajudar hoje?',
           timestamp: new Date().toISOString()
         }
-      ])
-    } catch {
-      setMensagens([
-        {
-          id: messageCounter++,
-          remetente: 'bot',
-          texto: 'Olá! Sou a Assistente Virtual de Triagem Cuidaê. Me conte detalhadamente o que você está sentindo hoje ou envie uma foto de alguma alteração física para receber orientação clínica imediata.',
-          timestamp: new Date().toISOString()
-        }
-      ])
-    } finally {
-      setIsTyping(false)
+      ]
+    }
+    setSessoes((prev) => {
+      const atualizadas = [sessao, ...prev]
+      salvarSessoesNoStorage(atualizadas)
+      return atualizadas
+    })
+    setSessaoAtivaId(novoId)
+    setMensagens(sessao.mensagens)
+    setResultadoRecente(null)
+    setRecorteId(null)
+    setInputTexto('')
+
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setSidebarAberta(false)
     }
   }
 
-  useEffect(() => {
-    if (mensagens.length === 0) {
-      iniciarChat()
+  // Selecionar uma sessão existente do histórico
+  const selecionarSessao = (id: string) => {
+    pararVoz()
+    const match = sessoes.find((s) => s.id === id)
+    if (!match) return
+
+    setSessaoAtivaId(match.id)
+    setMensagens(match.mensagens || [])
+    setResultadoRecente(match.resultadoRecente || null)
+    setRecorteId(match.recorteId || null)
+    setInputTexto('')
+
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setSidebarAberta(false)
     }
+  }
+
+  // Excluir uma sessão do histórico
+  const excluirSessao = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    const confirmou = window.confirm('Deseja excluir esta conversa do seu histórico?')
+    if (!confirmou) return
+
+    pararVoz()
+    const restantes = sessoes.filter((s) => s.id !== id)
+    setSessoes(restantes)
+    salvarSessoesNoStorage(restantes)
+
+    if (sessaoAtivaId === id) {
+      if (restantes.length > 0) {
+        selecionarSessao(restantes[0].id)
+      } else {
+        criarSessaoInicial()
+      }
+    }
+  }
+
+  // Limpar todo histórico salvo
+  const limparTodasSessoes = () => {
+    const confirmou = window.confirm('Tem certeza que deseja apagar todo o histórico de consultas deste dispositivo?')
+    if (!confirmou) return
+
+    pararVoz()
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(STORAGE_KEY)
+    }
+    criarSessaoInicial()
+  }
+
+  // Inicializa sessões do localStorage e sincroniza com o banco de triagens
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setSidebarAberta(false)
+    }
+
+    const sessoesLocais = carregarSessoesIniciais()
+
+    fetchHistoricoTriagens()
+      .then((data) => {
+        const triagensDb = data?.triagens || []
+        const sessoesConvertidas: ChatSession[] = triagensDb.map((t: any) => ({
+          id: t.id,
+          titulo: t.sintoma_principal
+            ? (t.sintoma_principal.length > 36 ? t.sintoma_principal.slice(0, 36) + '...' : t.sintoma_principal)
+            : 'Atendimento de Triagem',
+          timestamp: t.created_at || new Date().toISOString(),
+          nivel_urgencia: t.nivel_urgencia,
+          recorteId: t.id,
+          resultadoRecente: {
+            id: t.id,
+            recomendacao: t.explicacao,
+            especialidade: t.especialidade,
+            prioridade: t.nivel_urgencia === 'vermelho' ? 'Urgente' : t.nivel_urgencia === 'amarelo' ? 'Média' : 'Normal',
+            orientacao: t.orientacao,
+            tipoUnidade: t.tipoUnidade,
+            nivel_urgencia: t.nivel_urgencia,
+            hipotesesDiagnosticas: t.hipotesesDiagnosticas,
+            sintomasInfermedica: t.sintomasInfermedica
+          },
+          mensagens: [
+            {
+              id: 1,
+              remetente: 'usuario',
+              texto: t.sintoma_principal,
+              timestamp: t.created_at
+            },
+            {
+              id: 2,
+              remetente: 'bot',
+              texto: t.explicacao || 'Triagem clínica concluída com sucesso.',
+              triagem: {
+                id: t.id,
+                recomendacao: t.explicacao,
+                especialidade: t.especialidade,
+                prioridade: t.nivel_urgencia === 'vermelho' ? 'Urgente' : t.nivel_urgencia === 'amarelo' ? 'Média' : 'Normal',
+                orientacao: t.orientacao,
+                tipoUnidade: t.tipoUnidade,
+                nivel_urgencia: t.nivel_urgencia,
+                hipotesesDiagnosticas: t.hipotesesDiagnosticas,
+                sintomasInfermedica: t.sintomasInfermedica
+              },
+              timestamp: t.created_at
+            }
+          ]
+        }))
+
+        const idsExistentes = new Set(sessoesLocais.map((s) => s.id))
+        const novasDoDb = sessoesConvertidas.filter((s) => !idsExistentes.has(s.id))
+        const unificadas = [...sessoesLocais, ...novasDoDb]
+
+        if (unificadas.length > 0) {
+          setSessoes(unificadas)
+          salvarSessoesNoStorage(unificadas)
+          setSessaoAtivaId(unificadas[0].id)
+          setMensagens(unificadas[0].mensagens || [])
+          setResultadoRecente(unificadas[0].resultadoRecente || null)
+          setRecorteId(unificadas[0].recorteId || null)
+        } else {
+          criarSessaoInicial()
+        }
+      })
+      .catch(() => {
+        if (sessoesLocais.length > 0) {
+          setSessoes(sessoesLocais)
+          setSessaoAtivaId(sessoesLocais[0].id)
+          setMensagens(sessoesLocais[0].mensagens || [])
+          setResultadoRecente(sessoesLocais[0].resultadoRecente || null)
+          setRecorteId(sessoesLocais[0].recorteId || null)
+        } else {
+          criarSessaoInicial()
+        }
+      })
   }, [])
 
   // Rolar para a última mensagem
@@ -192,36 +537,78 @@ export default function TriagemPage() {
       timestamp: new Date().toISOString()
     }
 
-    setMensagens((prev) => [...prev, novaMensagemUsuario])
+    const novasMsgsUsuario = [...mensagens, novaMensagemUsuario]
+    setMensagens(novasMsgsUsuario)
     setInputTexto('')
     setIsTyping(true)
 
     try {
       // Histórico anterior para dar contexto à IA
-      const historicoRecente = mensagens.slice(-6).map(m => ({
+      const historicoRecente = mensagens.slice(-6).map((m) => ({
         remetente: m.remetente,
         texto: m.texto || ''
       }))
 
       const data = await enviarSintomas(textoParaEnviar, 'Gratuito', localizacao, historicoRecente)
 
+      const botTextoSanitizado = sanitizarTextoBot(data.texto)
       const botMsgId = messageCounter++
       const novaMensagemBot: ChatMessage = {
         id: botMsgId,
         remetente: 'bot',
-        texto: data.texto,
+        texto: botTextoSanitizado,
         triagem: data.triagem || null,
         mapa: data.mapa || null,
         fonteIA: data.fonteIA || 'Google Gemini Flash',
         timestamp: data.timestamp || new Date().toISOString()
       }
 
-      setMensagens((prev) => [...prev, novaMensagemBot])
+      const msgsFinais = [...novasMsgsUsuario, novaMensagemBot]
+      setMensagens(msgsFinais)
+
+      if (vozAtiva && botTextoSanitizado) {
+        falarMensagemIA(botTextoSanitizado, botMsgId)
+      }
 
       if (data.triagem) {
         setResultadoRecente(data.triagem)
         if (data.id) setRecorteId(data.id)
       }
+
+      // Sincroniza a sessão ativa e persiste
+      setSessoes((prevSessoes) => {
+        const indice = prevSessoes.findIndex((s) => s.id === sessaoAtivaId)
+        const sessaoAtual = prevSessoes[indice]
+        const tituloAtual = sessaoAtual?.titulo
+        const novoTitulo =
+          !tituloAtual || tituloAtual === 'Novo Atendimento' || tituloAtual === 'Nova Consulta'
+            ? textoParaEnviar.length > 36
+              ? textoParaEnviar.slice(0, 36) + '...'
+              : textoParaEnviar
+            : tituloAtual
+
+        const sessaoAtualizada: ChatSession = {
+          ...(sessaoAtual || {
+            id: sessaoAtivaId || crypto.randomUUID(),
+            timestamp: new Date().toISOString()
+          }),
+          titulo: novoTitulo,
+          timestamp: new Date().toISOString(),
+          mensagens: msgsFinais,
+          resultadoRecente: data.triagem || sessaoAtual?.resultadoRecente || null,
+          recorteId: data.id || sessaoAtual?.recorteId || null,
+          nivel_urgencia: data.triagem?.nivel_urgencia || sessaoAtual?.nivel_urgencia
+        }
+
+        let listaNova: ChatSession[]
+        if (indice >= 0) {
+          listaNova = [sessaoAtualizada, ...prevSessoes.filter((_, i) => i !== indice)]
+        } else {
+          listaNova = [sessaoAtualizada, ...prevSessoes]
+        }
+        salvarSessoesNoStorage(listaNova)
+        return listaNova
+      })
     } catch (err: any) {
       setMensagens((prev) => [
         ...prev,
@@ -249,39 +636,65 @@ export default function TriagemPage() {
 
     const previewUrl = URL.createObjectURL(file)
 
-    setMensagens((prev) => [
-      ...prev,
-      {
-        id: messageCounter++,
-        remetente: 'usuario',
-        imagem: previewUrl,
-        texto: 'Enviou uma imagem para avaliação visual.',
-        timestamp: new Date().toISOString()
-      }
-    ])
+    const novaMsgUsuario: ChatMessage = {
+      id: messageCounter++,
+      remetente: 'usuario',
+      imagem: previewUrl,
+      texto: 'Enviou uma imagem para avaliação visual.',
+      timestamp: new Date().toISOString()
+    }
 
+    const msgsComFoto = [...mensagens, novaMsgUsuario]
+    setMensagens(msgsComFoto)
     setIsTyping(true)
 
     try {
       const data = await enviarImagem(file, 'Gratuito', localizacao)
 
-      setMensagens((prev) => [
-        ...prev,
-        {
-          id: messageCounter++,
-          remetente: 'bot',
-          texto: data.texto,
-          triagem: data.triagem || null,
-          mapa: data.mapa || null,
-          fonteIA: data.fonteIA || 'Google Gemini Vision',
-          timestamp: data.timestamp || new Date().toISOString()
-        }
-      ])
+      const botMsg: ChatMessage = {
+        id: messageCounter++,
+        remetente: 'bot',
+        texto: data.texto,
+        triagem: data.triagem || null,
+        mapa: data.mapa || null,
+        fonteIA: data.fonteIA || 'Google Gemini Vision',
+        timestamp: data.timestamp || new Date().toISOString()
+      }
+
+      const msgsFinais = [...msgsComFoto, botMsg]
+      setMensagens(msgsFinais)
 
       if (data.triagem) {
         setResultadoRecente(data.triagem)
         if (data.id) setRecorteId(data.id)
       }
+
+      // Sincroniza a sessão ativa
+      setSessoes((prevSessoes) => {
+        const indice = prevSessoes.findIndex((s) => s.id === sessaoAtivaId)
+        const sessaoAtual = prevSessoes[indice]
+        const sessaoAtualizada: ChatSession = {
+          ...(sessaoAtual || {
+            id: sessaoAtivaId || crypto.randomUUID(),
+            timestamp: new Date().toISOString()
+          }),
+          titulo: sessaoAtual?.titulo === 'Novo Atendimento' ? 'Análise de Imagem / Lesão' : (sessaoAtual?.titulo || 'Análise de Imagem'),
+          timestamp: new Date().toISOString(),
+          mensagens: msgsFinais,
+          resultadoRecente: data.triagem || sessaoAtual?.resultadoRecente || null,
+          recorteId: data.id || sessaoAtual?.recorteId || null,
+          nivel_urgencia: data.triagem?.nivel_urgencia || sessaoAtual?.nivel_urgencia
+        }
+
+        let listaNova: ChatSession[]
+        if (indice >= 0) {
+          listaNova = [sessaoAtualizada, ...prevSessoes.filter((_, i) => i !== indice)]
+        } else {
+          listaNova = [sessaoAtualizada, ...prevSessoes]
+        }
+        salvarSessoesNoStorage(listaNova)
+        return listaNova
+      })
     } catch (err: any) {
       setMensagens((prev) => [
         ...prev,
@@ -390,137 +803,284 @@ export default function TriagemPage() {
   const inputClass = "w-full rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2b85ff] focus:border-[#2b85ff] bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-colors"
   const radioLabelClass = "flex items-center gap-2 cursor-pointer p-3 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 text-slate-800 dark:text-slate-200 transition-colors"
 
-  return (
-    <div className="min-h-screen bg-slate-50/60 dark:bg-transparent py-6 sm:py-10 px-4 sm:px-6 lg:px-8 font-jakarta">
-      <div className="max-w-4xl mx-auto space-y-6">
+  // =========================================================================
+  // MODO 1: CHAT CONVERSACIONAL COM AGENTE DE IA (TELA CHEIA COM ABA LATERAL)
+  // =========================================================================
+  if (mode === 'chat') {
+    return (
+      <div className="h-[calc(100vh-4rem)] w-full flex overflow-hidden bg-slate-50 dark:bg-[#070b12] font-jakarta">
+        {/* Backdrop para telas mobile */}
+        {sidebarAberta && (
+          <div
+            className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-xs lg:hidden transition-opacity"
+            onClick={() => setSidebarAberta(false)}
+            aria-hidden="true"
+          />
+        )}
 
-        {/* Top Header & Mode Toggle */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="p-2 bg-blue-50 dark:bg-blue-950/60 text-[#2b85ff] dark:text-blue-400 rounded-xl border dark:border-blue-800/40">
-                <Stethoscope className="w-5 h-5" />
-              </span>
-              <h1 className="text-xl sm:text-2xl font-bold text-[#091426] dark:text-white">Triagem Médica Cuidaê</h1>
-            </div>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              Avaliação de sintomas com inteligência clínica e direcionamento para a rede de saúde.
-            </p>
-          </div>
-
-          {/* Segmented Control */}
-          <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl self-start sm:self-auto border border-slate-200/60 dark:border-slate-700">
-            <button
-              type="button"
-              onClick={() => setMode('chat')}
-              className={`flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all ${
-                mode === 'chat'
-                  ? 'bg-white dark:bg-slate-700 text-[#2b85ff] dark:text-blue-400 shadow-xs'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <Sparkles className="w-4 h-4 text-[#2b85ff] dark:text-blue-400" />
-              Conversar com IA
-              <span className="text-[10px] bg-blue-100 dark:bg-blue-950/80 text-[#2b85ff] dark:text-blue-300 px-1.5 py-0.5 rounded-full font-bold">
-                Novo
-              </span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode('formulario')}
-              className={`flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all ${
-                mode === 'formulario'
-                  ? 'bg-white dark:bg-slate-700 text-[#091426] dark:text-white shadow-xs'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <FileText className="w-4 h-4" />
-              Formulário Guiado
-            </button>
-          </div>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* MODO 1: CHAT CONVERSACIONAL COM AGENTE DE IA (PADRÃO)                     */}
-        {/* ========================================================================= */}
-        {mode === 'chat' && (
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs overflow-hidden flex flex-col h-[750px] max-h-[85vh] animate-fade-in-up">
-            
-            {/* Chat Bar Header */}
-            <div className="bg-gradient-to-r from-[#091426] to-[#122748] px-5 py-4 text-white flex items-center justify-between border-b border-slate-800">
-              <div className="flex items-center gap-3">
-                <div className="relative">
-                  <div className="w-10 h-10 rounded-full bg-[#2b85ff] flex items-center justify-center font-bold text-white shadow-md">
-                    <Bot className="w-6 h-6" />
-                  </div>
-                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-[#091426] rounded-full animate-pulse"></span>
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="font-semibold text-base sm:text-lg">Assistente Cuidaê AI</h2>
-                    <span className="bg-blue-500/20 text-blue-300 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border border-blue-500/40 flex items-center gap-1.5 shadow-xs">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                      Infermedica v3 + Gemini
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-300 flex items-center gap-1.5">
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                    Triagem clínica em tempo real
-                  </p>
-                </div>
+        {/* Sidebar Lateral de Histórico de Consultas (Estilo Chatbot de IA Nativo) */}
+        <aside
+          className={`
+            fixed lg:static inset-y-0 left-0 z-50 lg:z-10
+            ${sidebarAberta ? 'w-80 translate-x-0' : '-translate-x-full lg:w-0 lg:overflow-hidden lg:opacity-0'}
+            transition-all duration-300 ease-in-out shrink-0
+            bg-[#080e1b] border-r border-slate-800/80 text-slate-200
+            flex flex-col h-full shadow-2xl lg:shadow-none
+          `}
+        >
+          {/* Header da Sidebar */}
+          <div className="p-3.5 border-b border-slate-800/80 bg-[#060a14]/70 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#2b85ff] to-blue-700 text-white flex items-center justify-center font-bold shadow-sm shadow-blue-500/20">
+                <Sparkles className="w-4 h-4" />
               </div>
+              <div>
+                <h3 className="text-sm font-bold text-white flex items-center gap-1.5 tracking-tight">
+                  Consultas IA
+                  <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-blue-500/20 text-blue-300 border border-blue-400/30 font-medium">Histórico</span>
+                </h3>
+                <p className="text-[11px] text-slate-400">
+                  {sessoes.length} {sessoes.length === 1 ? 'conversa gravada' : 'conversas gravadas'}
+                </p>
+              </div>
+            </div>
 
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (navigator.geolocation) {
-                      setLocStatus('solicitando')
-                      navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                          setLocalizacao({ lat: pos.coords.latitude, lng: pos.coords.longitude })
-                          setLocStatus('ativa')
-                        },
-                        () => setLocStatus('negada')
-                      )
-                    }
-                  }}
-                  title={locStatus === 'ativa' ? 'Localização ativa para rotas de UBS/UPA' : 'Clique para ativar localização'}
-                  className="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-medium text-slate-200 flex items-center gap-1.5 transition-colors"
-                >
-                  <MapPin className={`w-3.5 h-3.5 ${locStatus === 'ativa' ? 'text-emerald-400' : 'text-amber-400'}`} />
-                  <span className="hidden sm:inline">
-                    {locStatus === 'ativa' ? 'Localização Ativa' : 'Ativar GPS'}
+            <button
+              type="button"
+              onClick={() => setSidebarAberta(false)}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition"
+              title="Fechar barra lateral"
+            >
+              <PanelLeftClose className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Botão + Nova Consulta */}
+          <div className="p-3">
+            <button
+              type="button"
+              onClick={iniciarNovaSessao}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#2b85ff] to-[#1c6fd8] hover:from-blue-600 hover:to-blue-700 text-white text-xs sm:text-sm font-semibold shadow-md shadow-blue-500/20 border border-blue-400/30 transition-all active:scale-[0.98]"
+            >
+              <Plus className="w-4 h-4" />
+              Nova Consulta com IA
+            </button>
+          </div>
+
+          {/* Lista de Sessões Anteriores */}
+          <div className="flex-1 overflow-y-auto p-2.5 space-y-1.5 no-scrollbar">
+            {sessoes.length === 0 ? (
+              <div className="text-center py-12 px-4 text-slate-400">
+                <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-40 text-blue-400" />
+                <p className="text-xs font-medium text-slate-300">Nenhuma consulta anterior.</p>
+                <p className="text-[11px] mt-1 text-slate-400">Inicie uma conversa para guardar seu histórico clínico de triagem.</p>
+              </div>
+            ) : (
+              sessoes.map((sessao) => {
+                const isAtiva = sessao.id === sessaoAtivaId
+                const dataFormatada = formatarDataSessao(sessao.timestamp)
+                return (
+                  <div
+                    key={sessao.id}
+                    onClick={() => selecionarSessao(sessao.id)}
+                    className={`group relative flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all border text-left ${
+                      isAtiva
+                        ? 'bg-gradient-to-r from-blue-950/70 to-[#0e213d] border-blue-500/50 shadow-sm ring-1 ring-blue-500/30 text-white'
+                        : 'hover:bg-white/5 border-transparent text-slate-300 hover:text-white hover:border-slate-800/60'
+                    }`}
+                  >
+                    <div className="flex items-start gap-2.5 min-w-0 flex-1">
+                      <div className="mt-1 shrink-0">
+                        {sessao.nivel_urgencia === 'vermelho' ? (
+                          <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block shadow-[0_0_8px_rgba(239,68,68,0.7)]" title="Prioridade Vermelha (Emergência)" />
+                        ) : sessao.nivel_urgencia === 'amarelo' ? (
+                          <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block shadow-[0_0_8px_rgba(245,158,11,0.7)]" title="Prioridade Amarela (Urgente)" />
+                        ) : sessao.nivel_urgencia === 'verde' ? (
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-[0_0_8px_rgba(16,185,129,0.7)]" title="Prioridade Verde (Pouco Urgente)" />
+                        ) : (
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#2b85ff] inline-block opacity-70" title="Em atendimento" />
+                        )}
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <p className={`text-xs truncate ${isAtiva ? 'font-semibold text-white' : 'font-medium text-slate-200'}`}>
+                          {sessao.titulo || 'Consulta de Triagem'}
+                        </p>
+                        <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-slate-400">
+                          <Clock className="w-3 h-3" />
+                          <span>{dataFormatada}</span>
+                          {sessao.mensagens?.length > 1 && (
+                            <>
+                              <span>•</span>
+                              <span>{sessao.mensagens.length} msgs</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={(e) => excluirSessao(sessao.id, e)}
+                      className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-950/60 transition-opacity ml-1 shrink-0"
+                      title="Excluir esta conversa"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )
+              })
+            )}
+          </div>
+
+          {/* Rodapé da Sidebar */}
+          <div className="p-3 border-t border-slate-800/80 bg-[#060a14]/80 text-[11px] text-slate-400 flex items-center justify-between">
+            <span className="flex items-center gap-1.5 font-medium">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              SUS • Triagem Segura
+            </span>
+            {sessoes.length > 0 && (
+              <button
+                type="button"
+                onClick={limparTodasSessoes}
+                className="text-xs text-slate-400 hover:text-red-400 transition-colors"
+                title="Apagar todo histórico clínico do dispositivo"
+              >
+                Limpar tudo
+              </button>
+            )}
+          </div>
+        </aside>
+
+        {/* Área Principal de Chat Fullscreen */}
+        <div className="flex-1 flex flex-col h-full min-w-0 bg-[#f8fafc]/50 dark:bg-slate-950/80 overflow-hidden relative">
+          
+          {/* Header Superior do Chat Fullscreen */}
+          <div className="bg-gradient-to-r from-[#091426] via-[#0d1d36] to-[#122748] px-4 sm:px-6 py-3 text-white flex items-center justify-between border-b border-slate-800 shrink-0 shadow-xs">
+            <div className="flex items-center gap-3 min-w-0">
+              <button
+                type="button"
+                onClick={() => setSidebarAberta(!sidebarAberta)}
+                title={sidebarAberta ? 'Ocultar barra lateral de conversas' : 'Ver conversas passadas'}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors shrink-0 flex items-center gap-1.5"
+              >
+                {sidebarAberta ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
+                <span className="hidden sm:inline text-xs font-semibold">
+                  {sidebarAberta ? 'Ocultar' : 'Histórico'}
+                </span>
+                {sessoes.length > 0 && !sidebarAberta && (
+                  <span className="px-1.5 py-0.2 rounded-full bg-[#2b85ff] text-[10px] font-bold">
+                    {sessoes.length}
                   </span>
-                </button>
+                )}
+              </button>
 
-                <button
-                  type="button"
-                  onClick={iniciarChat}
-                  title="Reiniciar conversa e iniciar nova consulta"
-                  className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                </button>
+              <div className="relative shrink-0">
+                <div className="w-9 h-9 rounded-full bg-[#2b85ff] flex items-center justify-center font-bold text-white shadow-md">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-[#091426] rounded-full animate-pulse" />
+              </div>
+
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <h2 className="font-semibold text-sm sm:text-base truncate">Assistente Cuidaê AI</h2>
+                  <span className="hidden md:inline-flex bg-blue-500/20 text-blue-300 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-blue-500/40 items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Infermedica v3 + Gemini
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-300 truncate">
+                  Triagem clínica com IA • SUS 100% Gratuito
+                </p>
               </div>
             </div>
 
-            {/* Chat Body - Mensagens */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 bg-[#f8fafc]/60 dark:bg-slate-950/70">
+            <div className="flex items-center gap-2 shrink-0">
+              {/* Botão para alternar para formulário guiado */}
+              <button
+                type="button"
+                onClick={() => setMode('formulario')}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-medium text-slate-200 hover:text-white transition-colors"
+                title="Alternar para o Formulário Passo a Passo"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>Formulário Guiado</span>
+              </button>
+
+              {/* Botão de Som / Voz da IA */}
+              <button
+                type="button"
+                onClick={() => {
+                  const novoStatus = !vozAtiva
+                  setVozAtiva(novoStatus)
+                  if (!novoStatus) pararVoz()
+                }}
+                title={vozAtiva ? 'Voz da IA ativada (clique para silenciar)' : 'Voz da IA desativada (clique para ativar som)'}
+                className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors border ${
+                  vozAtiva
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30'
+                    : 'bg-white/10 text-slate-400 border-white/10 hover:text-white'
+                }`}
+              >
+                {vozAtiva ? <Volume2 className="w-3.5 h-3.5 text-emerald-400" /> : <VolumeX className="w-3.5 h-3.5 text-slate-400" />}
+                <span className="hidden md:inline">{vozAtiva ? 'Voz Ligada' : 'Voz Mudo'}</span>
+              </button>
+
+              {/* GPS Localização */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (navigator.geolocation) {
+                    setLocStatus('solicitando')
+                    navigator.geolocation.getCurrentPosition(
+                      (pos) => {
+                        setLocalizacao({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+                        setLocStatus('ativa')
+                      },
+                      () => setLocStatus('negada')
+                    )
+                  }
+                }}
+                title={locStatus === 'ativa' ? 'Localização ativa para rotas de UBS/UPA' : 'Clique para ativar localização'}
+                className="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-medium text-slate-200 flex items-center gap-1.5 transition-colors"
+              >
+                <MapPin className={`w-3.5 h-3.5 ${locStatus === 'ativa' ? 'text-emerald-400' : 'text-amber-400'}`} />
+                <span className="hidden md:inline">
+                  {locStatus === 'ativa' ? 'GPS Ativo' : 'Ativar GPS'}
+                </span>
+              </button>
+
+              {/* + Nova Consulta Rápida */}
+              <button
+                type="button"
+                onClick={iniciarNovaSessao}
+                title="Iniciar nova consulta"
+                className="p-2 rounded-xl bg-blue-500/30 hover:bg-blue-500/50 text-blue-200 hover:text-white border border-blue-400/30 transition-colors flex items-center gap-1"
+              >
+                <Plus className="w-4 h-4" />
+                <span className="hidden lg:inline text-xs font-semibold">Novo</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Área de Mensagens com Rolagem Fluida (Tela Cheia Expandida) */}
+          <div className="flex-1 overflow-y-auto px-4 sm:px-8 lg:px-12 py-5 bg-[#f8fafc]/60 dark:bg-[#070b12] scroll-smooth">
+            <div className="w-full space-y-5">
               
               {/* Mensagens do Diálogo */}
               {mensagens.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex gap-3 ${msg.remetente === 'usuario' ? 'justify-end' : 'justify-start'}`}
+                  className={`flex gap-3.5 ${msg.remetente === 'usuario' ? 'justify-end' : 'justify-start'}`}
                 >
                   {msg.remetente === 'bot' && (
-                    <div className="w-8 h-8 rounded-full bg-[#2b85ff] text-white flex items-center justify-center shrink-0 mt-1 shadow-sm">
+                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#2b85ff] to-blue-700 text-white flex items-center justify-center shrink-0 mt-1 shadow-sm shadow-blue-500/20">
                       <Bot className="w-4 h-4" />
                     </div>
                   )}
 
-                  <div className={`max-w-[85%] sm:max-w-[75%] space-y-3`}>
+                  <div className={`space-y-3 ${msg.remetente === 'usuario' ? 'max-w-[85%] sm:max-w-[70%]' : 'max-w-full sm:max-w-[96%] flex-1'}`}>
                     
                     {/* Imagem enviada */}
                     {msg.imagem && (
@@ -540,14 +1100,44 @@ export default function TriagemPage() {
                       >
                         <p className="whitespace-pre-wrap">{msg.texto}</p>
                         
-                        {msg.timestamp && (
-                          <span
-                            className={`block text-[10px] mt-1.5 ${
-                              msg.remetente === 'usuario' ? 'text-blue-100 text-right' : 'text-slate-400 dark:text-slate-400'
-                            }`}
-                          >
-                            {new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                          </span>
+                        {/* Controles de Áudio da Resposta da IA */}
+                        {msg.remetente === 'bot' ? (
+                          <div className="flex items-center justify-between pt-2.5 border-t border-slate-100 dark:border-slate-700/60 mt-2.5">
+                            <button
+                              type="button"
+                              onClick={() => falarMensagemIA(msg.texto || '', msg.id)}
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
+                                mensagemFalandoId === msg.id
+                                  ? 'bg-red-50 dark:bg-red-950/70 text-red-600 dark:text-red-300 border border-red-200 dark:border-red-800/60'
+                                  : 'text-[#2b85ff] dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40'
+                              }`}
+                              title={mensagemFalandoId === msg.id ? 'Parar leitura de voz' : 'Ouvir resposta em voz alta'}
+                            >
+                              {mensagemFalandoId === msg.id ? (
+                                <>
+                                  <Square className="w-3 h-3 fill-current text-red-500" />
+                                  <span>Parar Áudio</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Volume2 className="w-3.5 h-3.5" />
+                                  <span>Ouvir</span>
+                                </>
+                              )}
+                            </button>
+
+                            {msg.timestamp && (
+                              <span className="text-[10px] text-slate-400 dark:text-slate-500">
+                                {new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          msg.timestamp && (
+                            <span className="block text-[10px] mt-1.5 text-blue-100 text-right">
+                              {new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          )
                         )}
                       </div>
                     )}
@@ -609,7 +1199,7 @@ export default function TriagemPage() {
                           {msg.triagem.hipotesesDiagnosticas && msg.triagem.hipotesesDiagnosticas.length > 0 && (
                             <div className="bg-slate-50 dark:bg-slate-800/80 p-3 rounded-xl border border-slate-200/70 dark:border-slate-700 space-y-2">
                               <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
-                                📊 Diagnóstico Diferencial (Motor Infermedica API):
+                                📊 Diagnóstico Diferencial & Possíveis Causas:
                               </span>
                               <div className="space-y-1.5">
                                 {msg.triagem.hipotesesDiagnosticas.map((hip, idx) => (
@@ -617,9 +1207,21 @@ export default function TriagemPage() {
                                     <span className="text-slate-800 dark:text-slate-200 font-medium">
                                       • {hip.nome}
                                     </span>
-                                    <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-blue-100 dark:bg-blue-950 text-[#2b85ff] dark:text-blue-300">
-                                      {hip.probabilidade}%
-                                    </span>
+                                    {hip.probabilidade ? (
+                                      <span
+                                        className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-blue-100 dark:bg-blue-950 text-[#2b85ff] dark:text-blue-300"
+                                        title="Probabilidade estimada pelo motor clínico"
+                                      >
+                                        {hip.probabilidade}%
+                                      </span>
+                                    ) : (
+                                      <span
+                                        className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40"
+                                        title="Possível causa identificada pela avaliação clínica"
+                                      >
+                                        Possível causa
+                                      </span>
+                                    )}
                                   </div>
                                 ))}
                               </div>
@@ -706,19 +1308,24 @@ export default function TriagemPage() {
 
                             {msg.triagem && (
                               <a
-                                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                                  `🏥 *Laudo de Triagem Cuidaê / SUS*\n\n` +
-                                  `📋 *Queixa / Hipótese:* ${msg.triagem.recomendacao || 'Sintomas avaliados'}\n` +
-                                  `🚦 *Prioridade:* ${msg.triagem.prioridade || 'Média'}\n` +
-                                  `👨‍⚕️ *Especialidade:* ${msg.triagem.especialidade || 'Clínico Geral'}\n` +
-                                  (msg.triagem.orientacao ? `💡 *Orientações:* ${msg.triagem.orientacao}\n` : '') +
-                                  `\nValidação Clínica: Infermedica API v3 + Google Gemini`
-                                )}`}
+                                href={buildWhatsappUrl(
+                                  formatarWhatsappTriagem({
+                                    id: msg.triagem.id,
+                                    sintoma_principal: msg.triagem.recomendacao || 'Sintomas relatados na triagem',
+                                    nivel_urgencia: msg.triagem.nivel_urgencia,
+                                    recomendacao: msg.triagem.recomendacao,
+                                    especialidade: msg.triagem.especialidade,
+                                    orientacao: msg.triagem.orientacao,
+                                    hipotesesDiagnosticas: msg.triagem.hipotesesDiagnosticas,
+                                    created_at: msg.timestamp,
+                                  })
+                                )}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-xs font-semibold rounded-xl transition-colors border border-emerald-200 dark:border-emerald-800/60"
-                                title="Enviar resumo no WhatsApp"
+                                title="Enviar laudo estruturado pelo WhatsApp gratuitamente"
                               >
+                                <MessageSquare className="w-3.5 h-3.5" />
                                 <span>WhatsApp</span>
                               </a>
                             )}
@@ -751,103 +1358,182 @@ export default function TriagemPage() {
 
               <div ref={chatEndRef} />
             </div>
+          </div>
 
-            {/* Chips de Sugestão de Sintomas ou Respostas Rápidas */}
-            {mensagens.length <= 1 ? (
-              <div className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 overflow-x-auto flex gap-2 no-scrollbar">
-                <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 self-center shrink-0">Sugestões:</span>
-                {SUGESTOES_SINTOMAS.map((chip, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => handleEnviarMensagem(chip)}
-                    disabled={isTyping}
-                    className="text-xs bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/60 hover:text-[#2b85ff] dark:hover:text-blue-400 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-xs whitespace-nowrap transition-colors"
-                  >
-                    {chip}
-                  </button>
-                ))}
-              </div>
-            ) : (
-              mensagens[mensagens.length - 1]?.remetente === 'bot' &&
-              !mensagens[mensagens.length - 1]?.triagem && (
-                <div className="px-4 py-2 bg-blue-50/60 dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 overflow-x-auto flex gap-2 no-scrollbar items-center">
-                  <span className="text-[11px] font-bold text-[#2b85ff] dark:text-blue-400 self-center shrink-0 flex items-center gap-1">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    Respostas rápidas:
-                  </span>
-                  {RESPOSTAS_RAPIDAS_ANAMNESE.map((item, i) => (
+          {/* Barra Inferior Fixa de Input (Tela Cheia Expandida) */}
+          <div className="bg-white/95 dark:bg-[#080e1b]/95 backdrop-blur-md border-t border-slate-200/80 dark:border-slate-800 shrink-0">
+            <div className="w-full px-4 sm:px-8 lg:px-12">
+
+              {/* Chips de Sugestão de Sintomas ou Respostas Rápidas */}
+              {mensagens.length <= 1 ? (
+                <div className="px-4 py-2.5 bg-slate-50/70 dark:bg-slate-900/70 border-b border-slate-200/80 dark:border-slate-800 overflow-x-auto flex gap-2 no-scrollbar">
+                  <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 self-center shrink-0">Sugestões:</span>
+                  {SUGESTOES_SINTOMAS.map((chip, i) => (
                     <button
                       key={i}
                       type="button"
-                      onClick={() => handleEnviarMensagem(item.valor)}
+                      onClick={() => handleEnviarMensagem(chip)}
                       disabled={isTyping}
-                      className="text-xs bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/60 hover:text-[#2b85ff] dark:hover:text-blue-400 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-full border border-blue-200/80 dark:border-slate-700 shadow-xs whitespace-nowrap transition-colors font-medium"
+                      className="text-xs bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/60 hover:text-[#2b85ff] dark:hover:text-blue-400 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-xs whitespace-nowrap transition-colors"
                     >
-                      {item.label}
+                      {chip}
                     </button>
                   ))}
                 </div>
-              )
-            )}
+              ) : (
+                mensagens[mensagens.length - 1]?.remetente === 'bot' &&
+                !mensagens[mensagens.length - 1]?.triagem && (
+                  <div className="px-4 py-2 bg-blue-50/60 dark:bg-slate-900/60 border-b border-slate-200/80 dark:border-slate-800 overflow-x-auto flex gap-2 no-scrollbar items-center">
+                    <span className="text-[11px] font-bold text-[#2b85ff] dark:text-blue-400 self-center shrink-0 flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      Respostas rápidas:
+                    </span>
+                    {RESPOSTAS_RAPIDAS_ANAMNESE.map((item, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => handleEnviarMensagem(item.valor)}
+                        disabled={isTyping}
+                        className="text-xs bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/60 hover:text-[#2b85ff] dark:hover:text-blue-400 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-full border border-blue-200/80 dark:border-slate-700 shadow-xs whitespace-nowrap transition-colors font-medium"
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                )
+              )}
 
-            {/* Chat Input Bar */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                handleEnviarMensagem()
-              }}
-              className="p-3 sm:p-4 bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 flex items-center gap-2"
-            >
-              <input
-                type="file"
-                ref={chatFileInputRef}
-                accept="image/*"
-                onChange={handleEnviarFotoChat}
-                className="hidden"
-              />
+              {/* Banner de Gravação de Voz Ativa */}
+              {gravandoVoz && (
+                <div className="bg-red-50 dark:bg-red-950/70 border-b border-red-200 dark:border-red-900/60 px-4 py-2.5 text-xs font-semibold text-red-700 dark:text-red-300 flex items-center justify-between animate-pulse">
+                  <span className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping" />
+                    🎙️ Ouvindo... Pode falar seus sintomas que a IA está transcrevendo
+                  </span>
+                  <button
+                    type="button"
+                    onClick={alternarGravacaoVoz}
+                    className="px-2.5 py-1 rounded-lg bg-red-600 text-white text-[11px] font-bold hover:bg-red-700 transition"
+                  >
+                    Concluir Fala
+                  </button>
+                </div>
+              )}
 
-              <button
-                type="button"
-                onClick={() => chatFileInputRef.current?.click()}
-                disabled={isTyping}
-                title="Enviar foto para análise dermatológica ou lesão"
-                className="p-3 text-slate-500 dark:text-slate-400 hover:text-[#2b85ff] dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 transition-colors shrink-0"
+              {/* Chat Input Bar */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  handleEnviarMensagem()
+                }}
+                className="p-3 sm:p-4 flex items-center gap-2"
               >
-                <Camera className="w-5 h-5" />
-              </button>
+                <input
+                  type="file"
+                  ref={chatFileInputRef}
+                  accept="image/*"
+                  onChange={handleEnviarFotoChat}
+                  className="hidden"
+                />
 
-              <input
-                type="text"
-                value={inputTexto}
-                onChange={(e) => setInputTexto(e.target.value)}
-                placeholder="Descreva o que está sentindo (ex: febre alta há 2 dias, dor no peito...)"
-                disabled={isTyping}
-                className="flex-1 bg-slate-50 dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2b85ff] focus:border-[#2b85ff] text-sm transition-all"
-              />
+                <button
+                  type="button"
+                  onClick={() => chatFileInputRef.current?.click()}
+                  disabled={isTyping}
+                  title="Enviar foto para análise dermatológica ou lesão"
+                  className="p-3 text-slate-500 dark:text-slate-400 hover:text-[#2b85ff] dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 transition-colors shrink-0"
+                >
+                  <Camera className="w-5 h-5" />
+                </button>
 
-              <button
-                type="submit"
-                disabled={!inputTexto.trim() || isTyping}
-                className="p-3 bg-[#2b85ff] hover:bg-blue-600 disabled:opacity-40 text-white rounded-2xl transition-all shadow-sm shrink-0 flex items-center justify-center"
-              >
-                <Send className="w-5 h-5" />
-              </button>
-            </form>
+                {/* Botão de Microfone / Mensagem por Voz */}
+                <button
+                  type="button"
+                  onClick={alternarGravacaoVoz}
+                  disabled={isTyping}
+                  title={gravandoVoz ? 'Clique para parar gravação de voz' : 'Falar sintomas por voz (Ditado por microfone)'}
+                  className={`p-3 rounded-2xl border transition-all shrink-0 flex items-center justify-center ${
+                    gravandoVoz
+                      ? 'bg-red-600 text-white border-red-700 animate-pulse shadow-md ring-2 ring-red-400'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-[#2b85ff] dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700'
+                  }`}
+                >
+                  {gravandoVoz ? <MicOff className="w-5 h-5 text-white" /> : <Mic className="w-5 h-5" />}
+                </button>
 
-            {/* Rodapé Informativo */}
-            <div className="bg-slate-50 dark:bg-slate-950 px-4 py-2 text-center text-[11px] text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800">
-              ⚠️ A triagem por IA é um auxílio informativo e não substitui consulta médica presencial. Em caso de dor no peito intensa, falta de ar severa ou desmaio, ligue <strong>192 (SAMU)</strong>.
+                <input
+                  type="text"
+                  value={inputTexto}
+                  onChange={(e) => setInputTexto(e.target.value)}
+                  placeholder="Descreva o que está sentindo (ex: febre alta há 2 dias, dor no peito...)"
+                  disabled={isTyping}
+                  className="flex-1 bg-slate-50 dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2b85ff] focus:border-[#2b85ff] text-sm transition-all"
+                />
+
+                <button
+                  type="submit"
+                  disabled={!inputTexto.trim() || isTyping}
+                  className="p-3 bg-[#2b85ff] hover:bg-blue-600 disabled:opacity-40 text-white rounded-2xl transition-all shadow-sm shrink-0 flex items-center justify-center"
+                >
+                  <Send className="w-5 h-5" />
+                </button>
+              </form>
+
+              {/* Rodapé Informativo */}
+              <div className="bg-slate-50/70 dark:bg-slate-950/70 px-4 py-2 text-center text-[11px] text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800">
+                ⚠️ A triagem por IA é um auxílio informativo e não substitui consulta médica presencial. Em caso de dor no peito intensa, falta de ar severa ou desmaio, ligue <strong>192 (SAMU)</strong>.
+              </div>
+
             </div>
-
           </div>
-        )}
 
-        {/* ========================================================================= */}
-        {/* MODO 2: FORMULÁRIO ESTRUTURADO PASSO A PASSO (WIZARD TRADICIONAL)         */}
-        {/* ========================================================================= */}
-        {mode === 'formulario' && (
-          <div className="animate-fade-in-up">
+        </div>
+      </div>
+    )
+  }
+
+  // =========================================================================
+  // MODO 2: FORMULÁRIO ESTRUTURADO PASSO A PASSO (WIZARD TRADICIONAL)
+  // =========================================================================
+  return (
+    <div className="min-h-[calc(100vh-4rem)] bg-slate-50/60 dark:bg-transparent py-6 sm:py-10 px-4 sm:px-6 lg:px-8 font-jakarta">
+      <div className="max-w-4xl mx-auto space-y-6">
+
+        {/* Top Header & Mode Toggle */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="p-2 bg-blue-50 dark:bg-blue-950/60 text-[#2b85ff] dark:text-blue-400 rounded-xl border dark:border-blue-800/40">
+                <Stethoscope className="w-5 h-5" />
+              </span>
+              <h1 className="text-xl sm:text-2xl font-bold text-[#091426] dark:text-white">Triagem Médica Cuidaê</h1>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+              Formulário guiado passo a passo para avaliação clínica na rede de saúde SUS.
+            </p>
+          </div>
+
+          <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl self-start sm:self-auto border border-slate-200/60 dark:border-slate-700">
+            <button
+              type="button"
+              onClick={() => setMode('chat')}
+              className="flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all"
+            >
+              <Sparkles className="w-4 h-4 text-[#2b85ff] dark:text-blue-400" />
+              Conversar com IA
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode('formulario')}
+              className="flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-white dark:bg-slate-700 text-[#091426] dark:text-white shadow-xs transition-all"
+            >
+              <FileText className="w-4 h-4" />
+              Formulário Guiado
+            </button>
+          </div>
+        </div>
+
+        <div className="animate-fade-in-up">
             {/* Progress Bar */}
             <div className="mb-6">
               <div className="flex justify-between text-sm font-medium text-slate-500 mb-2">
@@ -1198,9 +1884,8 @@ export default function TriagemPage() {
 
             </div>
           </div>
-        )}
 
+        </div>
       </div>
-    </div>
   )
 }
