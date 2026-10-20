@@ -177,6 +177,7 @@ router.post('/symptoms', async (req, res) => {
         id: salvaNoBanco.id,
         remetente: 'bot',
         finalizado: true,
+        prontoParaDiagnostico: true,
         texto: direto.mensagem,
         triagem: {
           id: salvaNoBanco.id,
@@ -249,6 +250,7 @@ router.post('/symptoms', async (req, res) => {
         id: salvaNoBanco.id,
         remetente: 'bot',
         finalizado: true,
+        prontoParaDiagnostico: true,
         texto: formatado.mensagem,
         triagem: {
           id: salvaNoBanco.id,
@@ -277,6 +279,7 @@ router.post('/symptoms', async (req, res) => {
     return res.json({
       remetente: 'bot',
       finalizado: false,
+      prontoParaDiagnostico: false,
       texto: perguntaGemini.perguntaHumanizada,
       explicacao: perguntaGemini.explicacaoBreve,
       opcoes: perguntaGemini.opcoesRapidas || ['Sim', 'Não', 'Não tenho certeza'],
@@ -412,6 +415,7 @@ router.post('/reply', async (req, res) => {
         id: salvaNoBanco.id,
         remetente: 'bot',
         finalizado: true,
+        prontoParaDiagnostico: true,
         texto: formatado.mensagem,
         triagem: {
           id: salvaNoBanco.id,
@@ -440,6 +444,7 @@ router.post('/reply', async (req, res) => {
     return res.json({
       remetente: 'bot',
       finalizado: false,
+      prontoParaDiagnostico: false,
       texto: perguntaGemini.perguntaHumanizada,
       explicacao: perguntaGemini.explicacaoBreve,
       opcoes: perguntaGemini.opcoesRapidas || ['Sim', 'Não', 'Não tenho certeza'],
@@ -542,6 +547,7 @@ router.post('/image', upload.single('imagem'), async (req, res) => {
       id: salvaNoBanco.id,
       remetente: 'bot',
       finalizado: true,
+        prontoParaDiagnostico: true,
       texto: formatado.mensagem,
       triagem: {
         id: salvaNoBanco.id,

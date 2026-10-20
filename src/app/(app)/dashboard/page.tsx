@@ -15,7 +15,8 @@ import {
   Calendar,
   Building2,
   ShieldCheck,
-  Plus
+  Plus,
+  Pill
 } from 'lucide-react';
 
 // Color mappings for urgency levels with proper dark mode contrast & subtle borders
@@ -139,7 +140,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick Actions Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Quick Action 1: Start Triage */}
         <Link
           href="/triagem"
@@ -189,6 +190,23 @@ export default async function DashboardPage() {
             </p>
           </div>
           <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+        </Link>
+
+        {/* Quick Action 4: Medicamentos */}
+        <Link
+          href="/medicamentos"
+          className="group flex items-center gap-3.5 p-5 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl text-slate-900 dark:text-white shadow-xs hover:border-purple-500/50 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+        >
+          <div className="w-11 h-11 rounded-xl bg-purple-50 dark:bg-purple-950/60 border border-purple-100 dark:border-purple-800/50 flex items-center justify-center shrink-0 text-purple-600 dark:text-purple-400">
+            <Pill className="w-5 h-5" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h2 className="text-sm sm:text-base font-bold text-[#091426] dark:text-white truncate">Medicamentos</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+              Onde retirar remédios no SUS
+            </p>
+          </div>
+          <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-purple-600 group-hover:translate-x-0.5 transition-all" />
         </Link>
       </div>
 

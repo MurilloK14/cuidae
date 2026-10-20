@@ -377,3 +377,58 @@ export interface ResultadoScanVacinas {
   recomendacoes_pni: string[]
 }
 
+
+
+// ----- Consulta de Medicamentos & Farmácia SUS (RENAME / Farmácia Popular) -----
+
+export type CategoriaMedicamento =
+  | 'Hipertensão'
+  | 'Diabetes'
+  | 'Dor e Febre'
+  | 'Antibióticos'
+  | 'Asma e Respiratório'
+  | 'Saúde Mental'
+  | 'Gástrico'
+  | 'Colesterol'
+  | 'Anti-inflamatórios'
+  | 'Outros'
+
+export type ProgramaDispensacao =
+  | 'Farmácia Básica SUS (100% Gratuito)'
+  | 'Farmácia Popular (Gratuito)'
+  | 'Componente Especializado (Alto Custo)'
+
+export type TipoReceitaMedicamento =
+  | 'Receita Simples (Validade 30 dias)'
+  | 'Receita de Uso Contínuo (Validade 180 dias)'
+  | 'Receita de Controle Especial (Branca 2 vias)'
+  | 'Receita Notificação B (Azul)'
+
+export interface UnidadeDispensacao {
+  id: string
+  nome: string
+  tipo: 'Farmácia Central' | 'UBS' | 'Farmácia Popular Conveniada'
+  bairro: string
+  endereco: string
+  telefone?: string
+  horario: string
+  status_estoque: 'Disponível' | 'Estoque Baixo' | 'Sob Consulta'
+  latitude?: number
+  longitude?: number
+  distancia_km?: number
+}
+
+export interface MedicamentoItem {
+  id: string
+  nome: string
+  principio_ativo: string
+  concentracao: string
+  forma_farmaceutica: string
+  categoria: CategoriaMedicamento
+  programa: ProgramaDispensacao
+  tipo_receita: TipoReceitaMedicamento
+  indicacao: string
+  documentos_exigidos: string[]
+  orientacao_uso: string
+  unidades_disponiveis: UnidadeDispensacao[]
+}

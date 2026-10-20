@@ -7,8 +7,9 @@ import './unit/unidadesService.test.mjs';
 import './unit/infermedica.test.mjs';
 import './unit/hospitalStores.test.mjs';
 import './unit/vacinasStore.test.mjs';
+import './unit/medicamentosStore.test.mjs';
 import './integration/serverApi.test.mjs';
 import './integration/nextApi.test.mjs';
 import './integration/vacinasApi.test.mjs';
+import './integration/medicamentosApi.test.mjs';
 import './integration/aiTriage.test.mjs';
-

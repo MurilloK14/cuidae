@@ -1,0 +1,701 @@
+[
+  {
+    "id": "med-001",
+    "nome": "Losartana Potássica 50mg",
+    "principio_ativo": "Losartana Potássica",
+    "concentracao": "50mg",
+    "forma_farmaceutica": "Comprimido Revestido",
+    "categoria": "Hipertensão",
+    "programa": "Farmácia Básica SUS (100% Gratuito)",
+    "tipo_receita": "Receita de Uso Contínuo (Validade 180 dias)",
+    "indicacao": "Tratamento de hipertensão arterial (pressão alta) e insuficiência cardíaca.",
+    "documentos_exigidos": [
+      "Receita médica válida (SUS ou Particular)",
+      "Cartão Nacional do SUS (CNS)",
+      "Documento oficial com foto (RG ou CNH)",
+      "Comprovante de residência no município"
+    ],
+    "orientacao_uso": "Tomar 1 comprimido 1 vez ao dia no mesmo horário, ou conforme orientação médica. Não interromper o tratamento mesmo se a pressão estiver normal.",
+    "unidades_disponiveis": [
+      {
+        "id": "disp-001",
+        "nome": "Farmácia Central Municipal de Garanhuns",
+        "tipo": "Farmácia Central",
+        "bairro": "Centro",
+        "endereco": "Rua Dantas Barreto, s/n, Centro, Garanhuns - PE",
+        "telefone": "(87) 3762-7050",
+        "horario": "Segunda a Sexta: 07:30 às 17:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8902,
+        "longitude": -36.4925,
+        "distancia_km": 0.8
+      },
+      {
+        "id": "disp-002",
+        "nome": "UBS Boa Vista",
+        "tipo": "UBS",
+        "bairro": "Boa Vista",
+        "endereco": "Av. Caruaru, s/n, Boa Vista, Garanhuns - PE",
+        "telefone": "(87) 3762-7080",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8835,
+        "longitude": -36.4715,
+        "distancia_km": 1.4
+      },
+      {
+        "id": "disp-003",
+        "nome": "UBS Heliópolis",
+        "tipo": "UBS",
+        "bairro": "Heliópolis",
+        "endereco": "Av. Simôa Gomes, s/n, Heliópolis, Garanhuns - PE",
+        "telefone": "(87) 3762-7060",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8858,
+        "longitude": -36.4802,
+        "distancia_km": 1.1
+      },
+      {
+        "id": "disp-004",
+        "nome": "Drogasil Centro (Farmácia Popular)",
+        "tipo": "Farmácia Popular Conveniada",
+        "bairro": "Centro",
+        "endereco": "Av. Santo Antônio, 340, Centro, Garanhuns - PE",
+        "telefone": "(87) 3761-1290",
+        "horario": "Segunda a Sábado: 07:00 às 22:00, Domingo: 08:00 às 20:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8912,
+        "longitude": -36.4941,
+        "distancia_km": 0.9
+      }
+    ]
+  },
+  {
+    "id": "med-002",
+    "nome": "Metformina Cloridrato 850mg",
+    "principio_ativo": "Cloridrato de Metformina",
+    "concentracao": "850mg",
+    "forma_farmaceutica": "Comprimido",
+    "categoria": "Diabetes",
+    "programa": "Farmácia Básica SUS (100% Gratuito)",
+    "tipo_receita": "Receita de Uso Contínuo (Validade 180 dias)",
+    "indicacao": "Tratamento de diabetes mellitus tipo 2, especialmente em pacientes com sobrepeso.",
+    "documentos_exigidos": [
+      "Receita médica com validade de até 180 dias",
+      "Cartão do SUS",
+      "Documento de identificação com foto",
+      "CPF"
+    ],
+    "orientacao_uso": "Ingerir durante ou após as refeições para evitar desconforto gástrico. Tomar com um copo cheio de água.",
+    "unidades_disponiveis": [
+      {
+        "id": "disp-001",
+        "nome": "Farmácia Central Municipal de Garanhuns",
+        "tipo": "Farmácia Central",
+        "bairro": "Centro",
+        "endereco": "Rua Dantas Barreto, s/n, Centro, Garanhuns - PE",
+        "telefone": "(87) 3762-7050",
+        "horario": "Segunda a Sexta: 07:30 às 17:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8902,
+        "longitude": -36.4925,
+        "distancia_km": 0.8
+      },
+      {
+        "id": "disp-005",
+        "nome": "UBS Magano",
+        "tipo": "UBS",
+        "bairro": "Magano",
+        "endereco": "Rua Julião Cavalcante, s/n, Magano, Garanhuns - PE",
+        "telefone": "(87) 3762-7070",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8945,
+        "longitude": -36.4880,
+        "distancia_km": 1.2
+      },
+      {
+        "id": "disp-006",
+        "nome": "Pague Menos Heliópolis (Farmácia Popular)",
+        "tipo": "Farmácia Popular Conveniada",
+        "bairro": "Heliópolis",
+        "endereco": "Rua Quinze de Novembro, 120, Heliópolis, Garanhuns - PE",
+        "telefone": "(87) 3761-4450",
+        "horario": "Todos os dias: 07:00 às 23:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8865,
+        "longitude": -36.4815,
+        "distancia_km": 1.0
+      }
+    ]
+  },
+  {
+    "id": "med-003",
+    "nome": "Insulina NPH Humana 100 UI/ml",
+    "principio_ativo": "Insulina Humana NPH (DNA Recombinante)",
+    "concentracao": "100 UI/ml (Frasco 10ml)",
+    "forma_farmaceutica": "Suspensão Injetável",
+    "categoria": "Diabetes",
+    "programa": "Farmácia Básica SUS (100% Gratuito)",
+    "tipo_receita": "Receita de Uso Contínuo (Validade 180 dias)",
+    "indicacao": "Tratamento de diabetes mellitus tipo 1 e tipo 2 insulino-dependente.",
+    "documentos_exigidos": [
+      "Receita médica atualizada com dosagem exata",
+      "Cartão Nacional do SUS",
+      "Documento oficial com foto",
+      "Recipiente térmico com gelo para transporte"
+    ],
+    "orientacao_uso": "Manter refrigerado entre 2°C e 8°C. Após aberto, pode ficar em temperatura ambiente (até 30°C) por 28 dias. Homogeneizar suavemente antes de aplicar.",
+    "unidades_disponiveis": [
+      {
+        "id": "disp-001",
+        "nome": "Farmácia Central Municipal de Garanhuns",
+        "tipo": "Farmácia Central",
+        "bairro": "Centro",
+        "endereco": "Rua Dantas Barreto, s/n, Centro, Garanhuns - PE",
+        "telefone": "(87) 3762-7050",
+        "horario": "Segunda a Sexta: 07:30 às 17:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8902,
+        "longitude": -36.4925,
+        "distancia_km": 0.8
+      },
+      {
+        "id": "disp-003",
+        "nome": "UBS Heliópolis",
+        "tipo": "UBS",
+        "bairro": "Heliópolis",
+        "endereco": "Av. Simôa Gomes, s/n, Heliópolis, Garanhuns - PE",
+        "telefone": "(87) 3762-7060",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8858,
+        "longitude": -36.4802,
+        "distancia_km": 1.1
+      },
+      {
+        "id": "disp-007",
+        "nome": "UBS Cohab II",
+        "tipo": "UBS",
+        "bairro": "Cohab II",
+        "endereco": "Rua Francisco Paes de Melo, s/n, Cohab II, Garanhuns - PE",
+        "telefone": "(87) 3762-7090",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Estoque Baixo",
+        "latitude": -8.9050,
+        "longitude": -36.5010,
+        "distancia_km": 2.5
+      }
+    ]
+  },
+  {
+    "id": "med-004",
+    "nome": "Dipirona Monoidratada 500mg",
+    "principio_ativo": "Dipirona Monoidratada",
+    "concentracao": "500mg",
+    "forma_farmaceutica": "Comprimido",
+    "categoria": "Dor e Febre",
+    "programa": "Farmácia Básica SUS (100% Gratuito)",
+    "tipo_receita": "Receita Simples (Validade 30 dias)",
+    "indicacao": "Alívio da dor aguda ou crônica e redução da febre.",
+    "documentos_exigidos": [
+      "Receita médica ou odontológica do SUS",
+      "Cartão do SUS",
+      "Documento de identidade com foto"
+    ],
+    "orientacao_uso": "Tomar 1 a 2 comprimidos a cada 6 ou 8 horas se dor ou febre, respeitando o limite máximo de 4 doses ao dia.",
+    "unidades_disponiveis": [
+      {
+        "id": "disp-001",
+        "nome": "Farmácia Central Municipal de Garanhuns",
+        "tipo": "Farmácia Central",
+        "bairro": "Centro",
+        "endereco": "Rua Dantas Barreto, s/n, Centro, Garanhuns - PE",
+        "telefone": "(87) 3762-7050",
+        "horario": "Segunda a Sexta: 07:30 às 17:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8902,
+        "longitude": -36.4925,
+        "distancia_km": 0.8
+      },
+      {
+        "id": "disp-002",
+        "nome": "UBS Boa Vista",
+        "tipo": "UBS",
+        "bairro": "Boa Vista",
+        "endereco": "Av. Caruaru, s/n, Boa Vista, Garanhuns - PE",
+        "telefone": "(87) 3762-7080",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8835,
+        "longitude": -36.4715,
+        "distancia_km": 1.4
+      },
+      {
+        "id": "disp-005",
+        "nome": "UBS Magano",
+        "tipo": "UBS",
+        "bairro": "Magano",
+        "endereco": "Rua Julião Cavalcante, s/n, Magano, Garanhuns - PE",
+        "telefone": "(87) 3762-7070",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8945,
+        "longitude": -36.4880,
+        "distancia_km": 1.2
+      },
+      {
+        "id": "disp-008",
+        "nome": "UBS Indiano",
+        "tipo": "UBS",
+        "bairro": "Indiano",
+        "endereco": "Rua Pedro Rocha, s/n, Indiano, Garanhuns - PE",
+        "telefone": "(87) 3762-7040",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8812,
+        "longitude": -36.4890,
+        "distancia_km": 1.6
+      }
+    ]
+  },
+  {
+    "id": "med-005",
+    "nome": "Amoxicilina 500mg",
+    "principio_ativo": "Amoxicilina Tri-hidratada",
+    "concentracao": "500mg",
+    "forma_farmaceutica": "Cápsula",
+    "categoria": "Antibióticos",
+    "programa": "Farmácia Básica SUS (100% Gratuito)",
+    "tipo_receita": "Receita de Controle Especial (Branca 2 vias)",
+    "indicacao": "Tratamento de infecções bacterianas das vias aéreas superiores, amigdalite, sinusite e infecções urinárias.",
+    "documentos_exigidos": [
+      "Receita médica em 2 vias dentro do prazo de 10 dias da emissão",
+      "Documento de identificação com foto",
+      "Cartão do SUS do paciente"
+    ],
+    "orientacao_uso": "Tomar rigorosamente a cada 8 horas pelo número exato de dias prescritos. Não interromper o tratamento mesmo após melhora dos sintomas.",
+    "unidades_disponiveis": [
+      {
+        "id": "disp-001",
+        "nome": "Farmácia Central Municipal de Garanhuns",
+        "tipo": "Farmácia Central",
+        "bairro": "Centro",
+        "endereco": "Rua Dantas Barreto, s/n, Centro, Garanhuns - PE",
+        "telefone": "(87) 3762-7050",
+        "horario": "Segunda a Sexta: 07:30 às 17:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8902,
+        "longitude": -36.4925,
+        "distancia_km": 0.8
+      },
+      {
+        "id": "disp-003",
+        "nome": "UBS Heliópolis",
+        "tipo": "UBS",
+        "bairro": "Heliópolis",
+        "endereco": "Av. Simôa Gomes, s/n, Heliópolis, Garanhuns - PE",
+        "telefone": "(87) 3762-7060",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8858,
+        "longitude": -36.4802,
+        "distancia_km": 1.1
+      },
+      {
+        "id": "disp-007",
+        "nome": "UBS Cohab II",
+        "tipo": "UBS",
+        "bairro": "Cohab II",
+        "endereco": "Rua Francisco Paes de Melo, s/n, Cohab II, Garanhuns - PE",
+        "telefone": "(87) 3762-7090",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.9050,
+        "longitude": -36.5010,
+        "distancia_km": 2.5
+      }
+    ]
+  },
+  {
+    "id": "med-006",
+    "nome": "Salbutamol Spray Inalatório 100mcg",
+    "principio_ativo": "Sulfato de Salbutamol",
+    "concentracao": "100mcg/dose (200 doses)",
+    "forma_farmaceutica": "Aerossol Inalatório (Bombinha)",
+    "categoria": "Asma e Respiratório",
+    "programa": "Farmácia Popular (Gratuito)",
+    "tipo_receita": "Receita de Uso Contínuo (Validade 180 dias)",
+    "indicacao": "Alívio rápido do broncoespasmo na asma, bronquite crônica e enfisema pulmonar.",
+    "documentos_exigidos": [
+      "Receita médica SUS ou Particular com validade de até 180 dias",
+      "Documento oficial com foto e CPF",
+      "Cartão do SUS"
+    ],
+    "orientacao_uso": "Agitar antes de usar. Realizar 1 a 2 jatos inalatórios durante crises de falta de ar ou antes de esforço físico.",
+    "unidades_disponiveis": [
+      {
+        "id": "disp-001",
+        "nome": "Farmácia Central Municipal de Garanhuns",
+        "tipo": "Farmácia Central",
+        "bairro": "Centro",
+        "endereco": "Rua Dantas Barreto, s/n, Centro, Garanhuns - PE",
+        "telefone": "(87) 3762-7050",
+        "horario": "Segunda a Sexta: 07:30 às 17:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8902,
+        "longitude": -36.4925,
+        "distancia_km": 0.8
+      },
+      {
+        "id": "disp-004",
+        "nome": "Drogasil Centro (Farmácia Popular)",
+        "tipo": "Farmácia Popular Conveniada",
+        "bairro": "Centro",
+        "endereco": "Av. Santo Antônio, 340, Centro, Garanhuns - PE",
+        "telefone": "(87) 3761-1290",
+        "horario": "Segunda a Sábado: 07:00 às 22:00, Domingo: 08:00 às 20:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8912,
+        "longitude": -36.4941,
+        "distancia_km": 0.9
+      },
+      {
+        "id": "disp-006",
+        "nome": "Pague Menos Heliópolis (Farmácia Popular)",
+        "tipo": "Farmácia Popular Conveniada",
+        "bairro": "Heliópolis",
+        "endereco": "Rua Quinze de Novembro, 120, Heliópolis, Garanhuns - PE",
+        "telefone": "(87) 3761-4450",
+        "horario": "Todos os dias: 07:00 às 23:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8865,
+        "longitude": -36.4815,
+        "distancia_km": 1.0
+      }
+    ]
+  },
+  {
+    "id": "med-007",
+    "nome": "Omeprazol 20mg",
+    "principio_ativo": "Omeprazol",
+    "concentracao": "20mg",
+    "forma_farmaceutica": "Cápsula com Grânulos Gastrorresistentes",
+    "categoria": "Gástrico",
+    "programa": "Farmácia Básica SUS (100% Gratuito)",
+    "tipo_receita": "Receita Simples (Validade 30 dias)",
+    "indicacao": "Tratamento de gastrite, úlcera péptica, refluxo gastroesofágico e azia frequente.",
+    "documentos_exigidos": [
+      "Receita médica",
+      "Cartão do SUS",
+      "Documento de identificação com foto"
+    ],
+    "orientacao_uso": "Ingerir 1 cápsula pela manhã, em jejum, pelo menos 30 minutos antes do café da manhã. Engolir inteira sem mastigar.",
+    "unidades_disponiveis": [
+      {
+        "id": "disp-001",
+        "nome": "Farmácia Central Municipal de Garanhuns",
+        "tipo": "Farmácia Central",
+        "bairro": "Centro",
+        "endereco": "Rua Dantas Barreto, s/n, Centro, Garanhuns - PE",
+        "telefone": "(87) 3762-7050",
+        "horario": "Segunda a Sexta: 07:30 às 17:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8902,
+        "longitude": -36.4925,
+        "distancia_km": 0.8
+      },
+      {
+        "id": "disp-002",
+        "nome": "UBS Boa Vista",
+        "tipo": "UBS",
+        "bairro": "Boa Vista",
+        "endereco": "Av. Caruaru, s/n, Boa Vista, Garanhuns - PE",
+        "telefone": "(87) 3762-7080",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8835,
+        "longitude": -36.4715,
+        "distancia_km": 1.4
+      },
+      {
+        "id": "disp-005",
+        "nome": "UBS Magano",
+        "tipo": "UBS",
+        "bairro": "Magano",
+        "endereco": "Rua Julião Cavalcante, s/n, Magano, Garanhuns - PE",
+        "telefone": "(87) 3762-7070",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8945,
+        "longitude": -36.4880,
+        "distancia_km": 1.2
+      }
+    ]
+  },
+  {
+    "id": "med-008",
+    "nome": "Fluoxetina Cloridrato 20mg",
+    "principio_ativo": "Cloridrato de Fluoxetina",
+    "concentracao": "20mg",
+    "forma_farmaceutica": "Cápsula",
+    "categoria": "Saúde Mental",
+    "programa": "Farmácia Básica SUS (100% Gratuito)",
+    "tipo_receita": "Receita de Controle Especial (Branca 2 vias)",
+    "indicacao": "Tratamento de depressão, transtorno obsessivo-compulsivo (TOC), ansiedade e bulimia.",
+    "documentos_exigidos": [
+      "Receita médica de Controle Especial (branca em 2 vias, validade 30 dias)",
+      "Cartão do SUS",
+      "Documento de identificação oficial do paciente ou procurador legal"
+    ],
+    "orientacao_uso": "Tomar pela manhã com ou sem alimentos. Os efeitos terapêuticos completos levam de 2 a 4 semanas para se consolidarem.",
+    "unidades_disponiveis": [
+      {
+        "id": "disp-001",
+        "nome": "Farmácia Central Municipal de Garanhuns",
+        "tipo": "Farmácia Central",
+        "bairro": "Centro",
+        "endereco": "Rua Dantas Barreto, s/n, Centro, Garanhuns - PE",
+        "telefone": "(87) 3762-7050",
+        "horario": "Segunda a Sexta: 07:30 às 17:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8902,
+        "longitude": -36.4925,
+        "distancia_km": 0.8
+      },
+      {
+        "id": "disp-003",
+        "nome": "UBS Heliópolis",
+        "tipo": "UBS",
+        "bairro": "Heliópolis",
+        "endereco": "Av. Simôa Gomes, s/n, Heliópolis, Garanhuns - PE",
+        "telefone": "(87) 3762-7060",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Estoque Baixo",
+        "latitude": -8.8858,
+        "longitude": -36.4802,
+        "distancia_km": 1.1
+      }
+    ]
+  },
+  {
+    "id": "med-009",
+    "nome": "Sinvastatina 20mg",
+    "principio_ativo": "Sinvastatina",
+    "concentracao": "20mg",
+    "forma_farmaceutica": "Comprimido Revestido",
+    "categoria": "Colesterol",
+    "programa": "Farmácia Popular (Gratuito)",
+    "tipo_receita": "Receita de Uso Contínuo (Validade 180 dias)",
+    "indicacao": "Redução dos níveis elevados de colesterol total, LDL-colesterol e triglicerídeos.",
+    "documentos_exigidos": [
+      "Receita médica com validade de 180 dias",
+      "Documento de identidade com foto e CPF",
+      "Cartão do SUS"
+    ],
+    "orientacao_uso": "Tomar 1 comprimido à noite, após o jantar ou ao deitar, pois a síntese hepática de colesterol é maior durante o período noturno.",
+    "unidades_disponiveis": [
+      {
+        "id": "disp-001",
+        "nome": "Farmácia Central Municipal de Garanhuns",
+        "tipo": "Farmácia Central",
+        "bairro": "Centro",
+        "endereco": "Rua Dantas Barreto, s/n, Centro, Garanhuns - PE",
+        "telefone": "(87) 3762-7050",
+        "horario": "Segunda a Sexta: 07:30 às 17:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8902,
+        "longitude": -36.4925,
+        "distancia_km": 0.8
+      },
+      {
+        "id": "disp-004",
+        "nome": "Drogasil Centro (Farmácia Popular)",
+        "tipo": "Farmácia Popular Conveniada",
+        "bairro": "Centro",
+        "endereco": "Av. Santo Antônio, 340, Centro, Garanhuns - PE",
+        "telefone": "(87) 3761-1290",
+        "horario": "Segunda a Sábado: 07:00 às 22:00, Domingo: 08:00 às 20:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8912,
+        "longitude": -36.4941,
+        "distancia_km": 0.9
+      },
+      {
+        "id": "disp-006",
+        "nome": "Pague Menos Heliópolis (Farmácia Popular)",
+        "tipo": "Farmácia Popular Conveniada",
+        "bairro": "Heliópolis",
+        "endereco": "Rua Quinze de Novembro, 120, Heliópolis, Garanhuns - PE",
+        "telefone": "(87) 3761-4450",
+        "horario": "Todos os dias: 07:00 às 23:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8865,
+        "longitude": -36.4815,
+        "distancia_km": 1.0
+      }
+    ]
+  },
+  {
+    "id": "med-010",
+    "nome": "Ibuprofeno 600mg",
+    "principio_ativo": "Ibuprofeno",
+    "concentracao": "600mg",
+    "forma_farmaceutica": "Comprimido Revestido",
+    "categoria": "Anti-inflamatórios",
+    "programa": "Farmácia Básica SUS (100% Gratuito)",
+    "tipo_receita": "Receita Simples (Validade 30 dias)",
+    "indicacao": "Tratamento de processos inflamatórios, dores articulares, musculares e odontológicas.",
+    "documentos_exigidos": [
+      "Receita médica ou odontológica",
+      "Cartão do SUS",
+      "Documento de identificação com foto"
+    ],
+    "orientacao_uso": "Ingerir após as refeições. Não tomar em jejum. Uso restrito pelo período prescrito para evitar lesão da mucosa gástrica e renal.",
+    "unidades_disponiveis": [
+      {
+        "id": "disp-001",
+        "nome": "Farmácia Central Municipal de Garanhuns",
+        "tipo": "Farmácia Central",
+        "bairro": "Centro",
+        "endereco": "Rua Dantas Barreto, s/n, Centro, Garanhuns - PE",
+        "telefone": "(87) 3762-7050",
+        "horario": "Segunda a Sexta: 07:30 às 17:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8902,
+        "longitude": -36.4925,
+        "distancia_km": 0.8
+      },
+      {
+        "id": "disp-002",
+        "nome": "UBS Boa Vista",
+        "tipo": "UBS",
+        "bairro": "Boa Vista",
+        "endereco": "Av. Caruaru, s/n, Boa Vista, Garanhuns - PE",
+        "telefone": "(87) 3762-7080",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8835,
+        "longitude": -36.4715,
+        "distancia_km": 1.4
+      },
+      {
+        "id": "disp-008",
+        "nome": "UBS Indiano",
+        "tipo": "UBS",
+        "bairro": "Indiano",
+        "endereco": "Rua Pedro Rocha, s/n, Indiano, Garanhuns - PE",
+        "telefone": "(87) 3762-7040",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8812,
+        "longitude": -36.4890,
+        "distancia_km": 1.6
+      }
+    ]
+  },
+  {
+    "id": "med-011",
+    "nome": "Atenolol 50mg",
+    "principio_ativo": "Atenolol",
+    "concentracao": "50mg",
+    "forma_farmaceutica": "Comprimido",
+    "categoria": "Hipertensão",
+    "programa": "Farmácia Popular (Gratuito)",
+    "tipo_receita": "Receita de Uso Contínuo (Validade 180 dias)",
+    "indicacao": "Controle da hipertensão arterial, arritmias cardíacas e prevenção de angina pectoris.",
+    "documentos_exigidos": [
+      "Receita médica válida (SUS ou Particular)",
+      "Cartão do SUS",
+      "Documento de identificação com foto e CPF"
+    ],
+    "orientacao_uso": "Tomar 1 comprimido pela manhã. Não suspender o medicamento bruscamente sem orientação do cardiologista.",
+    "unidades_disponiveis": [
+      {
+        "id": "disp-001",
+        "nome": "Farmácia Central Municipal de Garanhuns",
+        "tipo": "Farmácia Central",
+        "bairro": "Centro",
+        "endereco": "Rua Dantas Barreto, s/n, Centro, Garanhuns - PE",
+        "telefone": "(87) 3762-7050",
+        "horario": "Segunda a Sexta: 07:30 às 17:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8902,
+        "longitude": -36.4925,
+        "distancia_km": 0.8
+      },
+      {
+        "id": "disp-004",
+        "nome": "Drogasil Centro (Farmácia Popular)",
+        "tipo": "Farmácia Popular Conveniada",
+        "bairro": "Centro",
+        "endereco": "Av. Santo Antônio, 340, Centro, Garanhuns - PE",
+        "telefone": "(87) 3761-1290",
+        "horario": "Segunda a Sábado: 07:00 às 22:00, Domingo: 08:00 às 20:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8912,
+        "longitude": -36.4941,
+        "distancia_km": 0.9
+      }
+    ]
+  },
+  {
+    "id": "med-012",
+    "nome": "Sulfato Ferroso 40mg",
+    "principio_ativo": "Sulfato Ferroso (Ferro Elementar)",
+    "concentracao": "40mg de Fe elementar",
+    "forma_farmaceutica": "Comprimido Revestido",
+    "categoria": "Outros",
+    "programa": "Farmácia Básica SUS (100% Gratuito)",
+    "tipo_receita": "Receita Simples (Validade 30 dias)",
+    "indicacao": "Prevenção e tratamento de anemia ferropriva (carência de ferro), especialmente em gestantes e lactantes.",
+    "documentos_exigidos": [
+      "Receita médica ou de enfermagem obstétrica",
+      "Cartão do SUS",
+      "Documento de identificação com foto"
+    ],
+    "orientacao_uso": "Tomar preferencialmente 1 hora antes ou 2 horas após as refeições, acompanhado de suco cítrico (vitamina C) para melhor absorção.",
+    "unidades_disponiveis": [
+      {
+        "id": "disp-001",
+        "nome": "Farmácia Central Municipal de Garanhuns",
+        "tipo": "Farmácia Central",
+        "bairro": "Centro",
+        "endereco": "Rua Dantas Barreto, s/n, Centro, Garanhuns - PE",
+        "telefone": "(87) 3762-7050",
+        "horario": "Segunda a Sexta: 07:30 às 17:00",
+        "status_estoque": "Disponível",
+        "latitude": -8.8902,
+        "longitude": -36.4925,
+        "distancia_km": 0.8
+      },
+      {
+        "id": "disp-003",
+        "nome": "UBS Heliópolis",
+        "tipo": "UBS",
+        "bairro": "Heliópolis",
+        "endereco": "Av. Simôa Gomes, s/n, Heliópolis, Garanhuns - PE",
+        "telefone": "(87) 3762-7060",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8858,
+        "longitude": -36.4802,
+        "distancia_km": 1.1
+      },
+      {
+        "id": "disp-005",
+        "nome": "UBS Magano",
+        "tipo": "UBS",
+        "bairro": "Magano",
+        "endereco": "Rua Julião Cavalcante, s/n, Magano, Garanhuns - PE",
+        "telefone": "(87) 3762-7070",
+        "horario": "Segunda a Sexta: 08:00 às 16:30",
+        "status_estoque": "Disponível",
+        "latitude": -8.8945,
+        "longitude": -36.4880,
+        "distancia_km": 1.2
+      }
+    ]
+  }
+]

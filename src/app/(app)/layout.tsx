@@ -34,6 +34,7 @@ export default async function AppLayout({
     { label: 'Dashboard', href: '/dashboard', icon: '📊' },
     { label: 'Nova Triagem', href: '/triagem', icon: '🩺' },
     { label: 'Vacinas', href: '/vacinas', icon: '💉' },
+    { label: 'Medicamentos', href: '/medicamentos', icon: '💊' },
     { label: 'Agendamentos', href: '/agendamento/meus-agendamentos', icon: '🗓️' },
     { label: 'Unidades', href: '/unidades', icon: '🏥' },
     { label: 'Configurações', href: '/configuracoes', icon: '⚙️' },
