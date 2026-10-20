@@ -391,6 +391,7 @@ export type CategoriaMedicamento =
   | 'Gástrico'
   | 'Colesterol'
   | 'Anti-inflamatórios'
+  | 'Saúde da Mulher'
   | 'Outros'
 
 export type ProgramaDispensacao =

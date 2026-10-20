@@ -36,6 +36,7 @@ const CATEGORIAS: Array<{ label: string; valor: CategoriaMedicamento | 'Todos'; 
   { label: 'Estômago e Azia', valor: 'Gástrico', icon: '🥣' },
   { label: 'Colesterol', valor: 'Colesterol', icon: '🫀' },
   { label: 'Anti-inflamatórios', valor: 'Anti-inflamatórios', icon: '🩹' },
+  { label: 'Saúde da Mulher', valor: 'Saúde da Mulher', icon: '🌸' },
   { label: 'Outros', valor: 'Outros', icon: '📦' }
 ];
 
