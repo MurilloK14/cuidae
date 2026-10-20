@@ -1,5 +1,42 @@
 [
   {
+    "id": "b50af6c7-2123-4fda-9713-8d6a798cb449",
+    "user_id": "anonimo",
+    "sintoma_principal": "🤕 Dor de cabeça forte persistente",
+    "duracao": "Recente",
+    "intensidade": 9,
+    "respostas": [],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Infectologia / Emergência Médica",
+    "explicacao": "Olá, sou o Cuidaê, assistente clínico do SUS, e compreendo que você está enfrentando sintomas muito intensos e preocupantes, como febre alta de 40 graus, dor de cabeça súbita e severa, além de náuseas e vômitos. Com base no seu relato e na avaliação clínica, a principal hipótese a ser investigada com máxima urgência é a meningite bacteriana, uma infecção grave das membranas que envolvem o cérebro e a medula espinhal. Outras condições neurológicas agudas e infecções sistêmicas graves também devem ser descartadas prontamente por uma equipe médica especializada. Devido à gravidade e à rapidez com que os sintomas se instalaram, o caso exige atendimento médico de emergência imediato através do acionamento de uma ambulância. Não espere os sintomas passarem em casa e evite automedicação enquanto aguarda o socorro especializado.",
+    "orientacao": "Acione o SAMU (192) imediatamente ou dirija-se à emergência hospitalar mais próxima. Fique em um ambiente calmo e arejado, sem tentar se automedicar. Fique atento a sinais de alerta como confusão mental, rigidez na nuca, manchas roxas na pele ou convulsões.",
+    "tipoUnidade": "SAMU",
+    "mapa": {
+      "label": "🚑 Ligue SAMU: 192",
+      "url": "tel:192",
+      "tipo": "telefone"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (Anamnese) + Infermedica v3",
+    "hipotesesDiagnosticas": [
+      {
+        "nome": "Bacterial meningitis",
+        "probabilidade": 55
+      }
+    ],
+    "sintomasInfermedica": [
+      "Febre (38°C a 40°C)",
+      "Feeling sick or queasy",
+      "Sudden extremely severe headache reaching maximum intensity within 1 minute",
+      "Fever higher than 104°F or 40°C",
+      "Vômito"
+    ],
+    "created_at": "2026-10-20T03:44:08.564Z"
+  },
+  {
     "id": "1bb9be98-3a95-4142-9ad6-1d5b19c3e092",
     "user_id": "user_teste_store_1",
     "sintoma_principal": "Cefaleia e náuseas",
