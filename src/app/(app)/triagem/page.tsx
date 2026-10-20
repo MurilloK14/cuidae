@@ -45,6 +45,7 @@ import {
 
 import Image from 'next/image'
 import { buildWhatsappUrl, formatarWhatsappTriagem } from '@/lib/whatsapp'
+import { falarTexto } from '@/lib/utils/speech'
 
 interface ChatMessage {
   id: number
@@ -206,30 +207,12 @@ export default function TriagemPage() {
 
     pararVoz()
 
-    const textoLimpo = texto
-      .replace(/[*#_~`]/g, '')
-      .replace(/https?:\/\/\S+/g, '')
-      .replace(/\s+/g, ' ')
-      .trim()
-
-    if (!textoLimpo) return
-
-    const utterance = new SpeechSynthesisUtterance(textoLimpo)
-    utterance.lang = 'pt-BR'
-    utterance.rate = 1.0
-    utterance.pitch = 1.0
-
     if (msgId) setMensagemFalandoId(msgId)
 
-    utterance.onend = () => {
-      setMensagemFalandoId(null)
-    }
-
-    utterance.onerror = () => {
-      setMensagemFalandoId(null)
-    }
-
-    window.speechSynthesis.speak(utterance)
+    falarTexto(texto, {
+      onEnd: () => setMensagemFalandoId(null),
+      onError: () => setMensagemFalandoId(null)
+    })
   }
 
   const alternarGravacaoVoz = () => {

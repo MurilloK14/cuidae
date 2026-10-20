@@ -1,4 +1,5 @@
 'use client'
+import { falarTexto } from '@/lib/utils/speech'
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -301,10 +302,7 @@ export default function PainelHospitalPage() {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel()
       const texto = `Atenção. Paciente ${ag.paciente_nome}, comparecer ao ${consultorioAtivo}. Triagem prioridade ${ag.nivel_urgencia}.`
-      const utterance = new SpeechSynthesisUtterance(texto)
-      utterance.lang = 'pt-BR'
-      utterance.rate = 0.95
-      window.speechSynthesis.speak(utterance)
+      falarTexto(texto, { rate: 0.96, pitch: 1.02 })
     }
   }
 

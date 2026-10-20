@@ -1,4 +1,5 @@
 'use client'
+import { falarTexto } from '@/lib/utils/speech'
 
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
@@ -102,11 +103,7 @@ export default function HospitalTVPage() {
         window.speechSynthesis.cancel()
         const sala = ag.sala_atendimento || 'Recepção e Triagem'
         const texto = `Atenção. Paciente ${ag.paciente_nome}, comparecer ao ${sala}.`
-        const utterance = new SpeechSynthesisUtterance(texto)
-        utterance.lang = 'pt-BR'
-        utterance.rate = 0.92
-        utterance.pitch = 1.05
-        window.speechSynthesis.speak(utterance)
+        falarTexto(texto, { rate: 0.96, pitch: 1.02 })
       }
     }, 700)
   }
