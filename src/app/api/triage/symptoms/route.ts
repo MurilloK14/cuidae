@@ -207,12 +207,22 @@ export async function POST(request: Request) {
     const linkMaps = gerarLinkMaps(lat || null, lng || null, tipoUnidade);
     const mapeamento = mapearUrgencia(formatado.prioridade || 'Alta');
 
-    const hipotesesDiagnosticas = resultadoInfermedica?.diagnostico?.conditions
-      ? (resultadoInfermedica.diagnostico.conditions as any[]).slice(0, 3).map((c: any) => ({
-          nome: traduzirNomeCondicao(c.common_name || c.name),
-          probabilidade: Math.round(c.probability * 100)
-        }))
+    let hipotesesDiagnosticas = resultadoInfermedica?.diagnostico?.conditions
+      ? (resultadoInfermedica.diagnostico.conditions as any[])
+          .filter((c: any) => c.probability >= 0.15)
+          .slice(0, 3)
+          .map((c: any) => ({
+            nome: traduzirNomeCondicao(c.common_name || c.name),
+            probabilidade: Math.round(c.probability * 100)
+          }))
       : [];
+
+    if (hipotesesDiagnosticas.length === 0 && Array.isArray(formatado?.hipotesesClinicas) && formatado.hipotesesClinicas.length > 0) {
+      hipotesesDiagnosticas = formatado.hipotesesClinicas.map((nomeHip: string) => ({
+        nome: nomeHip,
+        probabilidade: null
+      }));
+    }
 
     const sintomasInfermedica = resultadoInfermedica?.evidencias
       ? (resultadoInfermedica.evidencias as any[]).map((e: any) => traduzirNomeSintoma(e.name))

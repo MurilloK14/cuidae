@@ -40,8 +40,8 @@ export const DICIONARIO_PT_EN: Array<{ pt: RegExp; en: string }> = [
   { pt: /\bcoceira\b|\bprurido\b/gi, en: 'itching' },
 
   // Dores e corpo
-  { pt: /\bdores?\s+(?:no|pelo)\s+corpo\b|\bdor\s+muscular\b|\bmialgia\b/gi, en: 'generalized body aches' },
-  { pt: /\bdores?\s+nas?\s+articula[cç][oõ]es\b|\bdor\s+nas?\s+juntas\b|\bartralgia\b/gi, en: 'joint pain' },
+  { pt: /\bdor(?:es)?\s+(?:no|pelo)\s+corpo\b|\bdor\s+muscular\b|\bmialgia\b/gi, en: 'generalized body aches' },
+  { pt: /\bdor(?:es)?\s+nas?\s+articula[cç][oõ]es\b|\bdor(?:es)?\s+nas?\s+juntas\b|\bartralgia\b/gi, en: 'joint pain' },
   { pt: /\bdor\s+de\s+cabe[cç]a\s+forte\b|\benxaqueca\b/gi, en: 'severe headache' },
   { pt: /\bdor\s+de\s+cabe[cç]a\b|\bcefaleia\b/gi, en: 'headache' },
   { pt: /\bdor\s+no\s+peito\s+(?:muito\s+forte|intensa|apertando)\b|\bdor\s+tor[aá]cica\s+grave\b/gi, en: 'severe crushing chest pain' },
@@ -65,28 +65,88 @@ export const DICIONARIO_PT_EN: Array<{ pt: RegExp; en: string }> = [
 ];
 
 export const NOMES_CONDICOES_PT: Record<string, string> = {
+  // Dores no peito e cardiovasculares
+  'Non-specific chest pain': 'Dor torácica a esclarecer (Dor no peito)',
+  'Chest pain, non-specific': 'Dor no peito a esclarecer',
+  'Atypical chest pain': 'Dor torácica atípica',
+  'Costochondritis': 'Costocondrite (Dor articular/muscular no peito)',
+  'Angina pectoris': 'Angina de Peito',
+  'Unstable angina': 'Angina Instável',
+  'Heart attack': 'Infarto Agudo do Miocárdio',
+  'Myocardial infarction': 'Infarto Agudo do Miocárdio',
+  'Pericarditis': 'Pericardite (Inflamação no coração)',
+  'Arrhythmia': 'Arritmia Cardíaca',
+  'Tachycardia': 'Taquicardia (Coração acelerado)',
+  'Palpitations': 'Palpitações Cardíacas',
+  'Hypertension': 'Hipertensão Arterial',
+  'Hypertensive crisis': 'Crise Hipertensiva',
+  'Hypotension': 'Hipotensão (Pressão Baixa)',
+  'Syncope': 'Síncope (Desmaio)',
+
+  // Dores musculares e esqueléticas
+  'Muscle strain': 'Distensão ou Tensão Muscular',
+  'Intercostal muscle strain': 'Tensão muscular intercostal (entre as costelas)',
+  'Musculoskeletal pain': 'Dor Musculoesquelética',
+  'Low back pain': 'Dor Lombar (Lombalgia)',
+  'Lumbago': 'Lombalgia',
+  'Neck pain': 'Dor no Pescoço (Cervicalgia)',
+  'Sciatica': 'Dor Ciática (Ciatalgia)',
+  'Fibromyalgia': 'Fibromialgia',
+
+  // Gastrointestinal
+  'Gastroesophageal reflux disease': 'Refluxo Gastroesofágico (DRGE)',
+  'GERD': 'Refluxo Gastroesofágico',
+  'Gastritis': 'Gastrite',
+  'Acute gastritis': 'Gastrite Aguda',
+  'Peptic ulcer disease': 'Úlcera Péptica',
+  'Dyspepsia': 'Dispepsia (Indigestão)',
+  'Gastroenteritis': 'Gastroenterite',
+  'Viral gastroenteritis': 'Virose Gastrointestinal',
+  'Bacterial gastroenteritis': 'Infecção Gastrointestinal Bacteriana',
+  'Food poisoning': 'Intoxicação Alimentar',
+  'Appendicitis': 'Apendicite',
+  'Cholecystitis': 'Colecistite (Inflamação na Vesícula)',
+  'Pancreatitis': 'Pancreatite',
+
+  // Respiratório e infecciosas
   'Common cold': 'Resfriado Comum',
   'Influenza': 'Gripe (Influenza)',
+  'Acute bronchitis': 'Bronquite Aguda',
+  'Bronchitis': 'Bronquite',
+  'Pneumonia': 'Pneumonia',
+  'Asthma': 'Asma',
+  'Asthma exacerbation': 'Crise de Asma',
+  'Chronic obstructive pulmonary disease': 'DPOC (Doença Pulmonar Obstrutiva Crônica)',
+  'Acute sinusitis': 'Sinusite Aguda',
+  'Sinusitis': 'Sinusite',
+  'Pharyngitis': 'Faringite',
+  'Acute pharyngitis': 'Faringite Aguda',
+  'Tonsillitis': 'Amigdalite',
+  'COVID-19': 'COVID-19',
   'Dengue': 'Dengue',
   'Dengue fever': 'Dengue',
   'Chikungunya': 'Chikungunya',
   'Zika fever': 'Febre Zika',
-  'COVID-19': 'COVID-19',
-  'Gastroenteritis': 'Gastroenterite',
-  'Viral gastroenteritis': 'Virose Gastrointestinal',
-  'Bacterial gastroenteritis': 'Infecção Gastrointestinal Bacteriana',
+  'Urinary tract infection': 'Infecção Urinária (ITU)',
+  'Cystitis': 'Cistite',
+
+  // Neurológico e saúde mental
   'Migraine': 'Enxaqueca',
   'Tension headache': 'Cefaleia Tensional',
-  'Acute sinusitis': 'Sinusite Aguda',
-  'Pneumonia': 'Pneumonia',
-  'Heart attack': 'Infarto Agudo do Miocárdio',
-  'Myocardial infarction': 'Infarto Agudo do Miocárdio',
-  'Angina pectoris': 'Angina de Peito',
-  'Asthma exacerbation': 'Crise de Asma',
+  'Panic attack': 'Ataque de Pânico / Ansiedade',
+  'Panic disorder': 'Transtorno de Pânico',
+  'Generalized anxiety disorder': 'Ansiedade Generalizada',
+  'Vertigo': 'Vertigem / Labirintite',
+
+  // Alergias e pele
+  'Allergic reaction': 'Reação Alérgica',
+  'Allergic rhinitis': 'Rinite Alérgica',
+  'Contact dermatitis': 'Dermatite de Contato',
+  'Atopic dermatitis': 'Dermatite Atópica',
+  'Urticaria': 'Urticária',
   'Measles': 'Sarampo',
   'Rubella': 'Rubéola',
-  'Chickenpox': 'Varicela (Catapora)',
-  'Allergic reaction': 'Reação Alérgica'
+  'Chickenpox': 'Varicela (Catapora)'
 };
 
 export const NOMES_SINTOMAS_PT: Record<string, string> = {
@@ -128,7 +188,38 @@ export function traduzirParaInglesClinico(texto: string): string {
 }
 
 export function traduzirNomeCondicao(nome: string): string {
-  return NOMES_CONDICOES_PT[nome] || nome;
+  if (!nome) return 'Condição em investigação';
+  if (NOMES_CONDICOES_PT[nome]) return NOMES_CONDICOES_PT[nome];
+
+  const chaveInsensivel = Object.keys(NOMES_CONDICOES_PT).find(
+    (k) => k.toLowerCase() === nome.toLowerCase()
+  );
+  if (chaveInsensivel) return NOMES_CONDICOES_PT[chaveInsensivel];
+
+  // Tradução heurística para termos médicos compostos em inglês
+  let traduzido = nome;
+  const termos: [RegExp, string][] = [
+    [/\bnon-specific chest pain\b/gi, 'Dor torácica a esclarecer (Dor no peito)'],
+    [/\bchest pain\b/gi, 'Dor no peito'],
+    [/\bnon-specific\b/gi, 'inespecífica(o)'],
+    [/\babdominal pain\b/gi, 'dor abdominal'],
+    [/\bheadache\b/gi, 'dor de cabeça'],
+    [/\bmuscle strain\b/gi, 'distensão/tensão muscular'],
+    [/\bback pain\b/gi, 'dor nas costas'],
+    [/\bacute\b/gi, 'agudo(a)'],
+    [/\bchronic\b/gi, 'crônico(a)'],
+    [/\binfection\b/gi, 'infecção'],
+    [/\binflammation\b/gi, 'inflamação'],
+    [/\bsyndrome\b/gi, 'síndrome'],
+    [/\bdisease\b/gi, 'doença'],
+    [/\bdisorder\b/gi, 'transtorno']
+  ];
+
+  for (const [regex, sub] of termos) {
+    traduzido = traduzido.replace(regex, sub);
+  }
+
+  return traduzido;
 }
 
 export function traduzirNomeSintoma(nome: string): string {
@@ -243,12 +334,12 @@ export function formatarResultadoInfermedica(resultadoMedico: any): FormattedInf
   const prioridade = mapaPrioridade[triagem?.triage_level] || 'Normal';
   const tipoUnidade = mapaUnidade[triagem?.triage_level] || 'UBS';
 
-  const condicoes = (diagnostico?.conditions || []).slice(0, 3);
+  // Filtra hipóteses com probabilidade estatística clinicamente relevante (>= 15%).
+  // Hipóteses residuais abaixo de 15% (ex: 7% de Resfriado Comum para mancha isolada)
+  // são ruído bayesiano da Infermedica e não devem ser apresentadas como diagnóstico primário.
+  const todasCondicoes = diagnostico?.conditions || [];
+  const condicoes = todasCondicoes.filter((c: any) => c.probability >= 0.15).slice(0, 3);
   const condicaoPrincipal = condicoes[0];
-  const nomePrincipalPT = condicaoPrincipal
-    ? traduzirNomeCondicao(condicaoPrincipal.common_name || condicaoPrincipal.name)
-    : 'Condição em investigação';
-  const probPrincipal = condicaoPrincipal ? `${(condicaoPrincipal.probability * 100).toFixed(0)}%` : '';
 
   const sintomasFormatados = (evidencias || [])
     .map((e: any) => traduzirNomeSintoma(e.name))
@@ -258,12 +349,53 @@ export function formatarResultadoInfermedica(resultadoMedico: any): FormattedInf
     ? `os sintomas: ${sintomasFormatados}`
     : 'as queixas relatadas';
 
-  const listaHipoteses = condicoes
-    .map((c: any) => `• ${traduzirNomeCondicao(c.common_name || c.name)} (${(c.probability * 100).toFixed(0)}%)`)
-    .join('\n');
+  // Se a Infermedica não atingiu 15% em nenhuma hipótese, deduz possíveis causas clínicas pelas evidências relatadas
+  let hipotesesAlternativas: string[] = [];
+  let nomeFallback = 'Investigação Clínica com Médico';
+
+  const evNomes = (evidencias || []).map((e: any) => (e.name || '').toLowerCase());
+  if (evNomes.some((n: string) => n.includes('skin') || n.includes('rash') || n.includes('itch') || n.includes('pele'))) {
+    nomeFallback = 'Dermatite de Contato / Reação Alérgica Cutânea';
+    hipotesesAlternativas = [
+      '• Dermatite de Contato (Possível causa)',
+      '• Reação Alérgica / Farmacodermia (Possível causa)',
+      '• Micose superficial / Pitiríase (Possível causa)'
+    ];
+  } else if (evNomes.some((n: string) => n.includes('chest') || n.includes('peito'))) {
+    nomeFallback = 'Dor Torácica Musculoesquelética / Refluxo';
+    hipotesesAlternativas = [
+      '• Dor Musculoesquelética / Costocondrite (Possível causa)',
+      '• Refluxo Gastroesofágico (Possível causa)',
+      '• Ansiedade / Tensão física (Possível causa)'
+    ];
+  } else if (evNomes.some((n: string) => n.includes('headache') || n.includes('cabeça'))) {
+    nomeFallback = 'Cefaleia Tensional / Enxaqueca';
+    hipotesesAlternativas = [
+      '• Cefaleia Tensional (Possível causa)',
+      '• Enxaqueca (Possível causa)',
+      '• Cefaleia por estresse / cansaço visual (Possível causa)'
+    ];
+  } else if (evNomes.some((n: string) => n.includes('abdominal') || n.includes('stomach') || n.includes('estômago'))) {
+    nomeFallback = 'Desconforto Gastrointestinal / Dispepsia';
+    hipotesesAlternativas = [
+      '• Gastrite / Dispepsia funcional (Possível causa)',
+      '• Espasmo intestinal / Gastroenterite leve (Possível causa)'
+    ];
+  }
+
+  const nomePrincipalPT = condicaoPrincipal
+    ? traduzirNomeCondicao(condicaoPrincipal.common_name || condicaoPrincipal.name)
+    : nomeFallback;
+  const probPrincipal = condicaoPrincipal ? `${(condicaoPrincipal.probability * 100).toFixed(0)}%` : '';
+
+  const listaHipoteses = condicoes.length > 0
+    ? condicoes
+        .map((c: any) => `• ${traduzirNomeCondicao(c.common_name || c.name)} (${(c.probability * 100).toFixed(0)}%)`)
+        .join('\n')
+    : hipotesesAlternativas.join('\n');
 
   const blocoHipoteses = listaHipoteses
-    ? `\n\nHipóteses diagnósticas avaliadas:\n${listaHipoteses}\n\n`
+    ? `\n\nHipóteses clínicas e possíveis causas a investigar:\n${listaHipoteses}\n\n`
     : '\n\n';
 
   let mensagem = '';
@@ -291,7 +423,7 @@ export function formatarResultadoInfermedica(resultadoMedico: any): FormattedInf
 
   return {
     mensagem,
-    recomendacao: `Avaliação clínica para ${nomePrincipalPT} (${probPrincipal})`,
+    recomendacao: probPrincipal ? `Avaliação clínica para ${nomePrincipalPT} (${probPrincipal})` : `Avaliação clínica para ${nomePrincipalPT}`,
     especialidade: tipoUnidade === 'SAMU' || tipoUnidade === 'UPA' ? 'Clínica Médica / Emergencista' : 'Clínico Geral / Medicina da Família',
     prioridade,
     orientacao,

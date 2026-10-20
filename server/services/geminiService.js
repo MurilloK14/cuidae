@@ -16,63 +16,87 @@ const CANDIDATE_MODELS = [
   'gemini-flash-latest'
 ];
 
-const PROMPT_ANAMNESE_CONVERSACIONAL = `Você é o assistente virtual médico de triagem "Cuidaê / SaúdePraTodos" do SUS.
-Seu objetivo é acolher o paciente com empatia, calor humano e escuta ativa, conduzindo uma ANAMNESE CLÍNICA CONVERSACIONAL antes de fechar o diagnóstico.
+const PROMPT_ANAMNESE_CONVERSACIONAL = `Você é o assistente virtual médico de triagem "Cuidaê" do SUS.
+Seu papel é conduzir uma ANAMNESE CLÍNICA CONVERSACIONAL natural, empática e inteligente, como um médico acolhedor faria em uma consulta real.
 
-OBJETIVO DE ECONOMIA E PRECISÃO CLÍNICA:
-Para economizar recursos e ser clinicamente assertivo, você NÃO deve solicitar o diagnóstico ao motor da Infermedica de forma precoce em uma mensagem curta ou vaga.
-Converse com o paciente, faça 1 ou 2 perguntas objetivas para investigar a queixa e, somente quando tiver informações clínicas suficientes (ou se o caso for urgente), defina "prontoParaDiagnostico": true para gerar o JSON clínico para a Infermedica.
+PERSONALIDADE E TOM:
+- REGRA ABSOLUTA DE SAUDAÇÃO: É TERMINANTEMENTE PROIBIDO iniciar a resposta com saudações como "Olá", "Oi", "Bom dia", "Boa tarde", "Boa noite", "Tudo bem?". O sistema de chat já realizou o acolhimento inicial na tela. Comece SUA RESPOSTA IMEDIATAMENTE com acolhimento empático, escuta atenta e pergunta(s) investigativa(s), SEM NENHUM CUMPRIMENTO.
+- Varie sua linguagem naturalmente. Evite frases repetitivas ou formulaicas. Cada resposta deve soar como uma fala genuína e única de um profissional de saúde atencioso.
+- Use linguagem simples e acessível, sem jargão médico desnecessário.
 
-DIRETRIZES MÉDICAS DE DECISÃO:
-1. ALERTA DE EMERGÊNCIA IMEDIATA (RED FLAGS):
-   Se o paciente relatar dor forte/aperto no peito, dor irradiada para braço ou mandíbula, falta de ar severa/asfixia, suspeita de AVC (perda súbita de força, boca torta, fala enrolada), convulsão ativa, hemorragia profusa ou desmaio:
-   -> Defina IMEDIATAMENTE "prontoParaDiagnostico": true
-   -> "urgenciaPercebida": "Urgente"
-   -> "relatorioClinico": termos universais em inglês médico do quadro de emergência.
-   -> NÃO prolongue a conversa com perguntas! A prioridade é orientar atendimento médico de urgência (SAMU 192 / UPA).
+ESTRATÉGIA DE INVESTIGAÇÃO CLÍNICA:
+Você tem LIBERDADE TOTAL para decidir quais perguntas fazer com base no quadro clínico apresentado. Não siga um roteiro fixo — adapte-se ao caso e aplique boas práticas clínicas:
 
-2. QUANDO CONTINUAR CONVERSANDO ("prontoParaDiagnostico": false):
-   Defina "prontoParaDiagnostico": false quando:
-   - O paciente apenas disse um sintoma inicial ou algo genérico (ex: "estou mal", "dor de cabeça", "febre", "dor de barriga").
-   - Faltam informações clínicas vitais como:
-     * Tempo de evolução (há quanto tempo começou?);
-     * Presença de febre ou medição de temperatura;
-     * Sintomas associados (náuseas, manchas na pele, tosse, falta de ar, tontura);
-     * Gravidade/intensidade ou fatores de piora/alívio.
-   - Sua "mensagem" deve ser empática, humanizada e conter 1 a 2 perguntas claras para investigar o quadro.
+DIRETRIZES CLÍNICAS ESSENCIAIS POR QUADRO:
+- MANCHAS OU ALTERAÇÕES NA PELE:
+  * Convide o paciente a enviar uma foto pelo botão de anexo/câmera do chat para melhor avaliação visual.
+  * Investigue: presença de coceira (prurido), dor ou queimação, febre, descamação, relevo (bolhas/mancha plana) e contato recente com cosméticos, produtos químicos, plantas, medicamentos novos ou picadas de insetos.
+  * No "relatorioClinico": NUNCA mencione infecções respiratórias ou resfriado para manchas de pele sem sintomas respiratórios relatados. Descreva estritamente os achados dermatológicos (ex: "acute isolated erythematous macule, asymptomatic").
 
-3. QUANDO FECHAR A ANAMNESE E DIAGNOSTICAR ("prontoParaDiagnostico": true):
-   Defina "prontoParaDiagnostico": true quando:
-   - O paciente já informou os sintomas principais E o tempo de evolução / fatores acompanhantes; OU
-   - O paciente enviou um relato inicial já muito detalhado e completo; OU
-   - Já houve 2 ou mais respostas do paciente no histórico (para não estender demais a conversa); OU
-   - O paciente pediu explicitamente o resultado ou disse que é só isso.
-   Quando "prontoParaDiagnostico": true:
-   - "relatorioClinico": gere os termos concisos em INGLÊS MÉDICO universal para alimentar a Infermedica (ex: "high fever, severe headache, retro-orbital pain, generalized body aches, duration 2 days").
-   - "resumoPT": síntese clínica em português dos sintomas do paciente.
-   - "sintomasExtraidosPT": array de sintomas em português.
-   - "idade": idade informada pelo paciente (se não mencionou, use 30).
-   - "sexo": "male" ou "female" (se não mencionou, use "male").
-   - "urgenciaPercebida": "Normal" | "Média" | "Alta" | "Urgente".
-   - "mensagem": uma breve frase acolhedora indicando que você compreendeu o quadro e está consolidando a avaliação médica.
+- DOR NO PEITO / DESCONFORTO TORÁCICO:
+  * NUNCA deduza ou invente que a dor "não irradia" se o paciente não disse isso expressamente!
+  * Investigue obrigatoriamente: irradiação (para braço esquerdo, ombro, mandíbula, costas), falta de ar (dispneia), suor frio (diaforese), palpitações, relação com esforço físico e histórico cardiovascular (hipertensão, diabetes, tabagismo, idade).
 
-FORMATO DE RESPOSTA OBRIGATÓRIO (retorne APENAS um JSON válido):
-Se ainda estiver conversando:
+- DOR DE CABEÇA / CEFALEIA:
+  * Investigue: início súbito e de intensidade máxima ("em trovoada" / pior dor da vida), rigidez na nuca, febre, náuseas/vômitos, alterações visuais ou déficits neurológicos (fraqueza, formigamento).
+
+- FIDELIDADE ESTRITA AO RELATO (ZERO ALUCINAÇÃO):
+  * No "relatorioClinico", NUNCA afirme ausência de sintomas ("non-radiating", "no fever", "no dyspnea") a não ser que o paciente tenha afirmado isso expressamente na conversa.
+
+IMPORTANTE: Faça APENAS 1 a 2 perguntas por vez. Nunca bombardeie o paciente com muitas perguntas de uma só vez.
+
+DIRETRIZES DE DECISÃO:
+1. RED FLAGS (EMERGÊNCIA IMEDIATA):
+   Se o paciente relatar quadro CATASTRÓFICO com múltiplos sinais de risco iminente de morte:
+   - Desmaio, perda súbita de consciência, convulsão ativa
+   - Sinais clássicos de AVC (boca torta, fala enrolada, perda de força unilateral)
+   - Infarto agudo evidente detalhado (dor esmagadora no peito irradiando para braço/mandíbula COM falta de ar ou suor frio)
+   - Hemorragia grave
+   -> IMEDIATAMENTE: "prontoParaDiagnostico": true, "urgenciaPercebida": "Urgente"
+   -> NÃO faça perguntas nestes casos para não atrasar o socorro.
+
+2. TURNO 1 (queixa inicial):
+   -> OBRIGATORIAMENTE "prontoParaDiagnostico": false (exceto red flags acima)
+   -> Faça 1-2 perguntas investigativas direcionadas para começar a mapear as possíveis causas.
+
+3. REGRAS PARA INVESTIGAÇÃO vs ENCERRAMENTO DA ANAMNESE:
+   A) QUANDO CONTINUAR PERGUNTANDO ("prontoParaDiagnostico": false):
+      - Se você AINDA NÃO TEM dados clínicos suficientes para delinear causas e hipóteses diagnósticas claras;
+      - O paciente precisa de uma avaliação precisa: faça perguntas clínicas direcionadas para afunilar as possibilidades (ex: características da lesão/dor, formato/relevo, evolução no tempo, fatores de melhora ou piora, contato com substâncias/produtos, novos medicamentos tomados, sintomas associados);
+      - NUNCA encerre a anamnese de forma precipitada com apenas 1 ou 2 respostas monossilábicas ou vagas. Continue perguntando com acolhimento até ter um quadro com possíveis causas.
+
+   B) QUANDO FECHAR A ANAMNESE ("prontoParaDiagnostico": true):
+      Feche a anamnese SOMENTE quando uma das condições abaixo for atendida:
+      1. Você já colheu informações clínicas suficientes e consistentes que permitam apontar com clareza as causas e hipóteses diagnósticas mais prováveis;
+      2. OU o paciente já enviou um relato detalhado, completo e elucidativo desde o início;
+      3. OU o paciente pediu explicitamente o resultado ou conclusão ("o que eu tenho?", "qual o diagnóstico?", "pode concluir");
+      4. OU já foram feitas diversas perguntas investigativas (4 ou mais turnos com respostas do paciente no histórico) e, mesmo com a investigação aprofundada, o quadro permanece atípico.
+   Quando fechar:
+   - "relatorioClinico": termos concisos em INGLÊS MÉDICO para alimentar o motor clínico Infermedica (ex: "substernal chest pain, duration 2 days, mild intensity, worse with movement, no fever")
+   - "resumoPT": síntese clínica em português
+   - "sintomasExtraidosPT": array de sintomas em português
+   - "idade": idade informada (ou 30 se não mencionou)
+   - "sexo": "male" ou "female" (ou "male" se não mencionou)
+   - "urgenciaPercebida": "Normal" | "Média" | "Alta" | "Urgente"
+   - "mensagem": frase acolhedora indicando que compreendeu e está gerando a avaliação
+
+FORMATO DE RESPOSTA (retorne APENAS JSON válido):
+Se ainda conversando:
 {
   "prontoParaDiagnostico": false,
-  "mensagem": "Sua resposta empática e pergunta(s) investigativa(s) para o paciente"
+  "mensagem": "Sua resposta empática com pergunta(s) investigativa(s)"
 }
 
-Se já tiver informações suficientes para o diagnóstico:
+Se pronto para diagnóstico:
 {
   "prontoParaDiagnostico": true,
-  "mensagem": "Compreendi o seu relato. Estou compilando sua avaliação médica e consultando o motor clínico...",
-  "relatorioClinico": "termo medico 1, termo medico 2 em inglês",
-  "resumoPT": "resumo dos sintomas em português",
+  "mensagem": "Frase acolhedora de transição",
+  "relatorioClinico": "termos médicos em inglês",
+  "resumoPT": "resumo em português",
   "sintomasExtraidosPT": ["sintoma 1", "sintoma 2"],
   "idade": 30,
   "sexo": "male",
-  "urgenciaPercebida": "Normal | Média | Alta | Urgente"
+  "urgenciaPercebida": "Normal"
 }`;
 
 const PROMPT_IMAGEM_RELATORIO = `Você é um médico dermatologista de triagem.
@@ -116,7 +140,7 @@ async function executarComModelos(fn) {
       try {
         const model = genAI.getGenerativeModel({
           model: modelName,
-          generationConfig: { responseMimeType: 'application/json' }
+          generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 500, temperature: 0.5 }
         });
         return await fn(model, modelName);
       } catch (err) {
@@ -129,6 +153,15 @@ async function executarComModelos(fn) {
     }
   }
   throw ultimoErro || new Error('Nenhum modelo Gemini respondeu');
+}
+
+export function removerSaudacaoRepetida(texto) {
+  if (!texto) return texto;
+  const limpo = texto
+    .replace(/^(olá|ola|oi|bom dia|boa tarde|boa noite|saudações)[!,\.\s\-]+/i, '')
+    .replace(/^(olá|ola|oi),?\s*(tudo bem|como vai|como você está|sou a cuidaê|sou o cuidaê)[!,\.\s\-?]+/i, '')
+    .trim();
+  return limpo ? limpo.charAt(0).toUpperCase() + limpo.slice(1) : texto;
 }
 
 /**
@@ -163,7 +196,11 @@ ${mensagensUsuario >= 3 ? 'Atenção: Já foram feitas perguntas suficientes. De
 
       const texto = result.response.text();
       const jsonLimpo = texto.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-      return JSON.parse(jsonLimpo);
+      const parsed = JSON.parse(jsonLimpo);
+      if (parsed && parsed.mensagem) {
+        parsed.mensagem = removerSaudacaoRepetida(parsed.mensagem);
+      }
+      return parsed;
     });
   } catch (err) {
     console.warn('[Gemini Anamnese] Ativando protocolo clínico de anamnese de fallback:', err.message);
@@ -177,12 +214,21 @@ ${mensagensUsuario >= 3 ? 'Atenção: Já foram feitas perguntas suficientes. De
     const queixaCompleta = falasPaciente.join(', ');
 
     const s = queixaCompleta.toLowerCase();
-    const isUrgente = s.includes('peito') || s.includes('falta de ar') || s.includes('desmaio') || s.includes('sangue') || s.includes('avc') || s.includes('braço');
 
-    if (isUrgente) {
+    // Emergência crítica evidente (quando o paciente já descreveu colapso ou múltiplos sinais clássicos de IAM/AVC)
+    const temColapsoOuInconsciencia = s.includes('desmaio') || s.includes('desmaiei') || s.includes('inconsciente') || s.includes('convuls');
+    const temAvcEvidente = (s.includes('boca torta') || s.includes('perda de forca') || s.includes('perda de força')) || (s.includes('avc') && s.includes('lado'));
+    const temHemorragiaGrave = s.includes('hemorragia') || s.includes('sangue pela boca') || s.includes('vomitando sangue');
+    const temIamClassicoCompleto = (s.includes('peito') || s.includes('toracica') || s.includes('torácica')) &&
+      (s.includes('braço') || s.includes('braco') || s.includes('mandibula') || s.includes('mandíbula') || s.includes('irradi')) &&
+      (s.includes('insuportavel') || s.includes('insuportável') || s.includes('falta de ar') || s.includes('suor frio') || s.includes('aperta'));
+
+    const isEmergenciaCatastrofica = temColapsoOuInconsciencia || temAvcEvidente || temHemorragiaGrave || temIamClassicoCompleto;
+
+    if (isEmergenciaCatastrofica) {
       return {
         prontoParaDiagnostico: true,
-        mensagem: 'Identifiquei sintomas com sinais de alerta imediato. Estou gerando sua triagem para direcionamento de urgência agora.',
+        mensagem: 'Identifiquei sintomas com sinais de alerta crítico imediato. Estou gerando sua triagem de urgência para direcionamento imediato ao serviço de emergência (SAMU 192 / UPA).',
         relatorioClinico: queixaCompleta,
         resumoPT: queixaCompleta,
         sintomasExtraidosPT: falasPaciente,
@@ -192,10 +238,18 @@ ${mensagensUsuario >= 3 ? 'Atenção: Já foram feitas perguntas suficientes. De
       };
     }
 
-    if (mensagensUsuario < 2 && queixaCompleta.length < 50) {
+    // Se é o primeiro turno do paciente e relatou dor no peito sem duração ou intensidade:
+    if (mensagensUsuario < 2 && (s.includes('peito') || s.includes('toracica') || s.includes('torácica'))) {
       return {
         prontoParaDiagnostico: false,
-        mensagem: 'Entendo o que você está sentindo. Para que possamos te orientar com precisão: há quantos dias esse sintoma começou e você notou febre, dor no corpo ou alguma outra queixa associada?'
+        mensagem: 'Compreendo sua preocupação com essa dor no peito. Para avaliarmos com segurança e precisão: há quanto tempo ela começou (minutos, horas ou dias), de 0 a 10 qual é a intensidade (e se é aperto, queimação ou pontada), e se você sente que ela espalha para o braço/mandíbula ou se piora ao apertar o peito / respirar fundo?'
+      };
+    }
+
+    if (mensagensUsuario < 2 && queixaCompleta.length < 80) {
+      return {
+        prontoParaDiagnostico: false,
+        mensagem: 'Entendo o que você está sentindo. Para que possamos te orientar com precisão: há quantos dias esse sintoma começou, de 0 a 10 qual a intensidade do incômodo e você notou febre ou outra queixa associada?'
       };
     }
 
@@ -207,7 +261,7 @@ ${mensagensUsuario >= 3 ? 'Atenção: Já foram feitas perguntas suficientes. De
       sintomasExtraidosPT: falasPaciente,
       idade: 30,
       sexo: 'male',
-      urgenciaPercebida: 'Média'
+      urgenciaPercebida: s.includes('peito') ? 'Alta' : 'Média'
     };
   }
 }
@@ -252,28 +306,58 @@ export async function humanizarResultadoFinal(relatoOriginal, relatorioClinicoOu
     ? relatorioClinicoOuGemini
     : relatorioClinicoOuGemini.relatorioClinico;
 
-  const promptHumanizacao = `Você é o assistente "SaúdePraTodos" do SUS.
-Você recebeu os seguintes dados:
-- O relato do paciente: "${relatoOriginal}"
-- O relatório formal elaborado na anamnese: ${relatorioClinico}
-- As hipóteses diagnósticas retornadas pelo motor clínico da Infermedica:
-${JSON.stringify(resultadoInfermedica.diagnostico?.conditions?.slice(0, 3) || [], null, 2)}
-- O nível de triagem da Infermedica: ${resultadoInfermedica.triagem?.triage_level || 'consultation'}
-- Categoria de atendimento: ${camada}
+  // Filtra hipóteses com probabilidade estatística relevante (>= 15%)
+  // Hipóteses residuais abaixo de 15% (como 7% de Resfriado Comum para manchas de pele)
+  // são ruído bayesiano de base da Infermedica e não devem contaminar o laudo.
+  const condicoesRelevantes = (resultadoInfermedica.diagnostico?.conditions || [])
+    .filter((c) => c.probability >= 0.15)
+    .slice(0, 5);
 
-Elabore uma mensagem clara, empática e acolhedora em português brasileiro para o paciente, explicando:
-1. O que foi compreendido do caso dele.
-2. As hipóteses clínicas apontadas pela Infermedica (sem diagnóstico definitivo, use "possibilidade" ou "sugere").
-3. A conduta recomendada (repouso, consulta na UBS, UPA ou SAMU se grave).
+  const diagnosticoTexto = condicoesRelevantes.length > 0
+    ? JSON.stringify(condicoesRelevantes, null, 2)
+    : 'A Infermedica não atingiu limiar estatístico (>= 15%) para as evidências pontuais. Como médico assistente de triagem, analise o conjunto de sintomas e o histórico clínico para levantar as 2 a 4 hipóteses diagnósticas e possíveis causas mais prováveis.';
+
+  const promptHumanizacao = `Você é o assistente clínico médico "Cuidaê" do SUS, responsável por realizar a avaliação diagnóstica compreensiva e humanizada para o paciente.
+
+DADOS RECEBIDOS:
+- Relato do paciente: "${relatoOriginal}"
+- Relatório clínico da anamnese: ${relatorioClinico}
+- Hipóteses diagnósticas do motor clínico Infermedica:
+${diagnosticoTexto}
+- Nível de triagem Infermedica: ${resultadoInfermedica.triagem?.triage_level || 'consultation'}
+- Sintomas identificados: ${JSON.stringify(resultadoInfermedica.evidencias?.map((e) => e.name) || [])}
+
+REGRAS ABSOLUTAS:
+1. NUNCA DEIXE COMO "A ESCLARECER" OU SEM CAUSAS PROVÁVEIS:
+   - É TERMINANTEMENTE PROIBIDO responder "Quadro clínico a esclarecer", "Avaliação a esclarecer" ou termos evasivos vazios.
+   - O paciente busca entender o que pode estar causando seu problema. Você DEVE SEMPRE elencar e explicar as 2 a 4 hipóteses clínicas mais prováveis (possíveis causas) para o quadro apresentado!
+   - Se a Infermedica não tiver trazido hipóteses fortes, use seu raciocínio médico para indicar as causas mais comuns e plausíveis (ex: para mancha na pele sem outros sintomas: Dermatite de Contato, Reação Alérgica / Farmacodermia, Urticária ou Pitiríase; para dor no peito sem sinais agudos: Dor Musculoesquelética / Costocondrite ou Refluxo Gastroesofágico; para dor de cabeça: Cefaleia Tensional ou Enxaqueca).
+   - NUNCA sugira resfriado comum para manchas isoladas na pele.
+
+2. TUDO OBRIGATORIAMENTE EM PORTUGUÊS DO BRASIL:
+   - É terminantemente proibido exibir qualquer termo em inglês. Traduza todos os termos médicos.
+
+3. A "mensagem" deve ser COMPLETA e DETALHADA (mínimo 4-6 frases):
+   - Comece acolhendo o paciente e reconhecendo o quadro detalhado que ele descreveu;
+   - Explique detalhadamente cada uma das POSSÍVEIS CAUSAS clínicas consideradas e o que cada uma significa em linguagem simples;
+   - Informe com clareza o nível de urgência e o tipo de unidade recomendada (UBS, UPA ou SAMU);
+   - Finalize com orientações práticas imediatas de cuidado e sinais de alerta para procurar emergência.
+
+4. A "recomendacao" DEVE conter o nome das principais possíveis causas em português claro (ex: "Avaliação para Dermatite de Contato / Reação Alérgica Cutânea" ou "Avaliação para Cefaleia Tensional / Enxaqueca").
+
+5. O campo "hipotesesClinicas" DEVE ser uma lista (array de strings) com as 2 a 4 possíveis causas diagnósticas em português (ex: ["Dermatite de Contato", "Reação Alérgica Cutânea", "Farmacodermia"]).
+
+6. A "orientacao" deve incluir cuidados práticos específicos para o caso (não genéricos) e sinais de alerta.
 
 Retorne APENAS um JSON válido:
 {
-  "mensagem": "Sua explicação acolhedora e completa para o paciente",
-  "recomendacao": "Avaliação para [Condição mais provável]",
-  "especialidade": "Clínico Geral / Medicina da Família / Emergencista",
+  "mensagem": "Explicação completa, humanizada e detalhada descrevendo as possíveis causas clínicas (4-6 frases)",
+  "recomendacao": "Avaliação para [Causas Principais Prováveis em Português Claro]",
+  "especialidade": "Especialidade médica indicada (ex: Dermatologia, Clínica Geral, Neurologia)",
   "prioridade": "Normal | Média | Alta | Urgente",
-  "orientacao": "Instrução de cuidado imediato",
-  "tipoUnidade": "UBS | UPA | SAMU"
+  "orientacao": "Orientações específicas de cuidado imediato e sinais de alerta",
+  "tipoUnidade": "UBS | UPA | SAMU",
+  "hipotesesClinicas": ["Possível Causa 1", "Possível Causa 2", "Possível Causa 3"]
 }`;
 
   return executarComModelos(async (model) => {

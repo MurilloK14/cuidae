@@ -45,16 +45,15 @@ export function getLocal(camada, prioridade, tipoUnidade) {
  * @returns {object} - { url, label } ou null se não aplicável
  */
 export function gerarLinkMaps(lat, lng, tipoUnidade) {
-  const termo = TERMOS_BUSCA[tipoUnidade] || TERMOS_BUSCA['UBS'];
-  
-  // Se for SAMU, não tem link de mapa
-  if (!termo) {
+  if (tipoUnidade === 'SAMU' || TERMOS_BUSCA[tipoUnidade] === null) {
     return {
       label: '🚑 Ligue SAMU: 192',
       url: 'tel:192',
       tipo: 'telefone'
     };
   }
+
+  const termo = TERMOS_BUSCA[tipoUnidade] || TERMOS_BUSCA['UBS'];
 
   const termoEncoded = encodeURIComponent(termo);
   const url = (lat && lng)

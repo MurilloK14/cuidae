@@ -47,5 +47,293 @@
       "prontuario",
       "recepcao"
     ]
+  },
+  {
+    "id": "hosp-solicitacao-1792384832555",
+    "email": "hospital.teste.1792384832554@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792384832555",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "44774355/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792420763340",
+    "email": "hospital.teste.1792420763339@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792420763340",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "83781724/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792423923771",
+    "email": "hospital.teste.1792423923771@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792423923771",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "78890143/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792425799232",
+    "email": "hospital.teste.1792425799232@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792425799232",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "10547933/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792426858527",
+    "email": "hospital.teste.1792426858527@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792426858527",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "94471071/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792427455587",
+    "email": "hospital.teste.1792427455586@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792427455587",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "31200634/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792427712294",
+    "email": "hospital.teste.1792427712293@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792427712294",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "50475442/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792428958868",
+    "email": "hospital.teste.1792428958868@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792428958868",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "86246735/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792429048758",
+    "email": "hospital.teste.1792429048758@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792429048758",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "69463703/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792429840911",
+    "email": "hospital.teste.1792429840910@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792429840911",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "33289825/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792430046933",
+    "email": "hospital.teste.1792430046933@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792430046933",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "44007000/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792430784958",
+    "email": "hospital.teste.1792430784957@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792430784958",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "41224914/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792430861259",
+    "email": "hospital.teste.1792430861259@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792430861259",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "35512975/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792435693548",
+    "email": "hospital.teste.1792435693547@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792435693548",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "38620415/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792435811111",
+    "email": "hospital.teste.1792435811110@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792435811111",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "49818509/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
+  },
+  {
+    "id": "hosp-solicitacao-1792439820738",
+    "email": "hospital.teste.1792439820737@cuidae.med.br",
+    "senha_hash": "Hospital@2026",
+    "hospital_id": "hosp-custom-1792439820738",
+    "hospital_nome": "Hospital Geral de Teste",
+    "hospital_cidade": "Garanhuns",
+    "hospital_uf": "PE",
+    "cnpj": "69681804/0001-99",
+    "responsavel_nome": "Dr. Testador",
+    "cargo": "Diretor Clínico",
+    "telefone": "(87) 99999-0000",
+    "aprovado": false,
+    "permissoes": [
+      "triagem",
+      "recepcao"
+    ]
   }
 ]

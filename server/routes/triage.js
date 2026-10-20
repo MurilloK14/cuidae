@@ -76,7 +76,7 @@ function mapearUrgencia(prioridade) {
  */
 router.get('/welcome', (_req, res) => {
   res.json({
-    texto: "Olá! Sou o assistente de triagem médica do SaúdePraTodos. Descreva com suas palavras o que você está sentindo ou envie uma foto, e nosso sistema médico (Gemini + Infermedica) fará sua triagem completa!"
+    texto: "Olá! Sou a Cuidaê, sua assistente virtual de triagem médica do SUS. 😊\n\nMe conte com suas palavras o que você está sentindo — quanto mais detalhes, melhor consigo te orientar. Você também pode enviar uma foto de qualquer alteração física (pele, lesão, machucado).\n\nComo posso te ajudar hoje?"
   });
 });
 
@@ -199,11 +199,12 @@ router.post('/symptoms', async (req, res) => {
 
     let formatado = null;
     let fonteIA = 'Gemini 3.5 Flash + Infermedica v3';
+    let resultadoInfermedica = null;
 
     if (INFERMEDICA_ATIVA) {
       try {
         console.log('2. [Infermedica] Consultando motor clínico com os dados JSON...');
-        const resultadoInfermedica = await fluxoCompleto(relatorioClinico, { idade, sexo });
+        resultadoInfermedica = await fluxoCompleto(relatorioClinico, { idade, sexo });
 
         try {
           console.log('3. [Gemini] Humanizando diagnóstico final para o paciente...');
@@ -248,12 +249,22 @@ router.post('/symptoms', async (req, res) => {
       uf_snapshot: req.body.uf || 'SP'
     });
 
-    const hipotesesDiagnosticas = resultadoInfermedica?.diagnostico?.conditions
-      ? resultadoInfermedica.diagnostico.conditions.slice(0, 3).map((c) => ({
-          nome: traduzirNomeCondicao(c.common_name || c.name),
-          probabilidade: Math.round(c.probability * 100)
-        }))
+    let hipotesesDiagnosticas = resultadoInfermedica?.diagnostico?.conditions
+      ? resultadoInfermedica.diagnostico.conditions
+          .filter((c) => c.probability >= 0.15)
+          .slice(0, 3)
+          .map((c) => ({
+            nome: traduzirNomeCondicao(c.common_name || c.name),
+            probabilidade: Math.round(c.probability * 100)
+          }))
       : [];
+
+    if (hipotesesDiagnosticas.length === 0 && Array.isArray(formatado?.hipotesesClinicas) && formatado.hipotesesClinicas.length > 0) {
+      hipotesesDiagnosticas = formatado.hipotesesClinicas.map((nomeHip) => ({
+        nome: nomeHip,
+        probabilidade: null
+      }));
+    }
 
     const sintomasInfermedica = resultadoInfermedica?.evidencias
       ? resultadoInfermedica.evidencias.map((e) => traduzirNomeSintoma(e.name))

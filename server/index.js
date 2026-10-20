@@ -32,6 +32,11 @@ app.use((err, _req, res, _next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`🏥 SaúdePraTodos API rodando em http://localhost:${PORT}`);
-});
+export default app;
+export { app };
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`🏥 SaúdePraTodos API rodando em http://localhost:${PORT}`);
+  });
+}

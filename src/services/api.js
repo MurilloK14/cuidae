@@ -53,3 +53,15 @@ export async function enviarImagem(arquivo, camada, localizacao) {
   }
   return res.json();
 }
+
+/**
+ * Busca histórico de triagens realizadas pelo paciente.
+ */
+export async function fetchHistoricoTriagens() {
+  const res = await fetch(`${API_BASE}/triage/history`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Erro ao carregar histórico');
+  }
+  return res.json();
+}

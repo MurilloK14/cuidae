@@ -1,5 +1,838 @@
 [
   {
+    "id": "1bb9be98-3a95-4142-9ad6-1d5b19c3e092",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T19:57:00.877Z"
+  },
+  {
+    "id": "4e67b85a-a1dc-4d49-801f-428d30f7c381",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T18:50:11.244Z"
+  },
+  {
+    "id": "009dfb45-8307-4b4c-b67a-b3809dd229ad",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T18:48:13.680Z"
+  },
+  {
+    "id": "b720843c-c7d3-4b19-bfd2-0cfa3e9ab984",
+    "user_id": "anonimo",
+    "sintoma_principal": "estou com dor no peito",
+    "duracao": "Recente",
+    "intensidade": 4,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínica Médica / Cardiologia",
+    "explicacao": "Olá! Compreendo que você esteja sentindo essa dor no peito que vai e volta há alguns dias, o que pode gerar preocupação, mas estou aqui para te ajudar. A avaliação clínica inicial indica que você apresenta um quadro de dor que vem e vai, sem irradiação para outros locais. A principal hipótese levantada é de dor torácica a esclarecer, que significa que a dor no peito não apresenta sinais típicos de gravidade imediata, mas ainda precisa ser investigada com calma por um profissional de saúde. Como a prioridade para o seu caso é moderada, recomendamos que você busque atendimento médico nas próximas 24 horas. Enquanto aguarda a consulta, evite esforços físicos intensos e repouse, mas fique atento a sinais de alerta como falta de ar súbita, desmaios ou suor frio, que exigem ida imediata à emergência.",
+    "orientacao": "Evite esforços físicos intensos, pratique repouso relativo e evite alimentos muito pesados ou gordurosos que possam simular desconfortos. Fique atento a sinais de alerta como falta de ar intensa, tontura forte, suor frio ou dor que piora muito, devendo procurar a emergência imediatamente caso isso ocorra.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (Anamnese) + Infermedica v3",
+    "hipotesesDiagnosticas": [
+      {
+        "nome": "Dor torácica a esclarecer (Dor no peito)",
+        "probabilidade": 15
+      }
+    ],
+    "sintomasInfermedica": [
+      "Recurrent chest pain"
+    ],
+    "created_at": "2026-10-19T17:50:28.691Z"
+  },
+  {
+    "id": "bea47bd0-0e08-44d3-88e8-a7b44902d3b1",
+    "user_id": "anonimo",
+    "sintoma_principal": "tenho uma mancha na pele",
+    "duracao": "Recente",
+    "intensidade": 4,
+    "respostas": [],
+    "nivel_urgencia": "verde",
+    "recomendacao": "teleconsulta",
+    "especialidade": "Clínica Geral / Dermatologia",
+    "explicacao": "Olá! Compreendo que você notou o surgimento de uma mancha na pele hoje, que apareceu de repente e não está causando nenhum incômodo ou dor. A nossa avaliação clínica inicial identificou que se trata de uma alteração recente na pele do tipo mancha, que costuma ser benigna e passageira na grande maioria dos casos. Entre as hipóteses avaliadas pelo sistema, consideramos a possibilidade de quadros virais leves que podem se manifestar com pequenas alterações na pele, embora o risco seja baixo. O nível de cuidado indicado para o seu caso é o autocuidado, o que significa que você pode monitorar a evolução da mancha com tranquilidade na sua própria casa. Fique atento a qualquer mudança rápida, como coceira intensa, dor, febre ou disseminação das manchas pelo corpo.",
+    "orientacao": "Evite aplicar produtos químicos, cremes fortes ou receitas caseiras sobre a mancha sem orientação médica para não irritar a pele. Mantenha a região limpa e seca, e proteja-a da exposição direta ao sol. Se a mancha começar a coçar, doer, aumentar rapidamente de tamanho ou se surgirem novos sintomas como febre, procure atendimento na unidade de saúde. Você pode retornar ou buscar avaliação presencial caso a mancha não comece a desaparecer nos próximos dias.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (Anamnese) + Infermedica v3",
+    "hipotesesDiagnosticas": [
+      {
+        "nome": "Resfriado Comum",
+        "probabilidade": 7
+      }
+    ],
+    "sintomasInfermedica": [
+      "Alterações na pele"
+    ],
+    "created_at": "2026-10-19T17:47:03.471Z"
+  },
+  {
+    "id": "572c73bb-a087-4336-93b5-eb7375325a04",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com dor de cabeça",
+    "duracao": "Recente",
+    "intensidade": 4,
+    "respostas": [],
+    "nivel_urgencia": "verde",
+    "recomendacao": "teleconsulta",
+    "especialidade": "Clínica Geral",
+    "explicacao": "Olá! Compreendo que você esteja sentindo essa sensação de pressão na cabeça há dois ou três dias, sem outros sintomas associados. A nossa avaliação clínica sugere que você pode estar lidando com uma Cefaleia Tensional (dor de cabeça por tensão), que geralmente é causada pelo estresse do dia a dia ou pela contração muscular na região do pescoço e da cabeça. Essa condição é bastante comum e costuma melhorar com medidas simples de descanso e autocuidado em casa. Como o nível de urgência é considerado leve, não há necessidade de procurar um pronto-socorro neste momento. Aconselho que você descanse em um ambiente calmo, evite telas em excesso e mantenha-se bem hidratado.",
+    "orientacao": "Para aliviar os sintomas, tente descansar em um local escuro e silencioso, aplique compressas mornas na testa ou no pescoço e evite o consumo excessivo de café ou o uso prolongado de telas. Caso a dor persista por mais dias, aumente de intensidade ou venha acompanhada de febre, confusão mental ou fraqueza, procure atendimento médico imediatamente.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (Anamnese) + Infermedica v3",
+    "hipotesesDiagnosticas": [
+      {
+        "nome": "Tension headaches",
+        "probabilidade": 16
+      }
+    ],
+    "sintomasInfermedica": [
+      "Pressing or squeezing headache",
+      "Symptoms related to recent injury"
+    ],
+    "created_at": "2026-10-19T17:44:15.138Z"
+  },
+  {
+    "id": "12aacd8f-ed50-43e6-9738-bcf808d7dc95",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T17:27:41.421Z"
+  },
+  {
+    "id": "5314e97b-f619-4c23-8952-b61d09acdc2e",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T17:26:25.109Z"
+  },
+  {
+    "id": "75c3c0d3-625b-40a2-9936-77ee67aff33e",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com dor de cabeça",
+    "duracao": "Recente",
+    "intensidade": 4,
+    "respostas": [],
+    "nivel_urgencia": "verde",
+    "recomendacao": "teleconsulta",
+    "especialidade": "Clínica Médica / Atenção Primária",
+    "explicacao": "Olá! Sou o Cuidaê, seu assistente de saúde do SUS, e analisei o seu relato sobre a dor de cabeça que tem durado entre 2 a 3 dias com intensidade leve a moderada, sem outros sintomas como enjoos ou sensibilidade à luz. Com base nas informações fornecidas, a principal hipótese para o seu quadro é a cefaleia tensional, que é um tipo de dor de cabeça muito comum relacionada à tensão muscular e ao estresse diário. Outra possibilidade menos provável avaliada foi a enxaqueca, além de condições passageiras de pressão ou sinusite. A boa notícia é que o nível de atendimento indicado para o seu caso é o autocuidado supervisionado, significando que você pode se cuidar em casa com segurança. Caso os sintomas piorem ou persistam por muito tempo, procure orientação na sua Unidade Básica de Saúde.",
+    "orientacao": "Para aliviar a dor em casa, procure descansar em um ambiente tranquilo, evite telas em excesso e mantenha-se bem hidratado. Você pode utilizar analgésicos comuns prescritos pelo seu médico ou farmacêutico se a dor persistir. Fique atento a sinais de alerta, como dor de cabeça súbita e extremamente forte, febre alta acompanhada de rigidez no pescoço, confusão mental ou fraqueza, e caso esses sintomas apareçam, procure imediatamente uma UPA.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (Anamnese) + Infermedica v3",
+    "hipotesesDiagnosticas": [
+      {
+        "nome": "Tension headaches",
+        "probabilidade": 34
+      },
+      {
+        "nome": "Enxaqueca",
+        "probabilidade": 11
+      },
+      {
+        "nome": "Hipotensão (Pressão Baixa)",
+        "probabilidade": 4
+      }
+    ],
+    "sintomasInfermedica": [
+      "Feeling sick or queasy",
+      "Mild headache",
+      "Dizzy",
+      "Eyes sensitive to light"
+    ],
+    "created_at": "2026-10-19T17:17:46.845Z"
+  },
+  {
+    "id": "23f80625-0fc5-4f6c-90bd-749db53df805",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T17:14:07.063Z"
+  },
+  {
+    "id": "d1655556-c967-452f-b931-c806040ae70c",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T17:10:41.028Z"
+  },
+  {
+    "id": "e3602136-b13d-4fa5-954e-b6815b301a2c",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com dor de cabeça",
+    "duracao": "Recente",
+    "intensidade": 4,
+    "respostas": [],
+    "nivel_urgencia": "verde",
+    "recomendacao": "teleconsulta",
+    "especialidade": "Clínico Geral / Medicina da Família",
+    "explicacao": "Olá! Sou o assistente Cuidaê do SUS. Compreendi pelo seu relato que você está sentindo dor de cabeça há 2 dias, com intensidade moderada e sem outros sintomas associados. Com base nessas informações, a principal hipótese para o seu caso é de cefaleia tensional (dor de cabeça relacionada a tensão). Como o seu quadro indica a necessidade de cuidados em casa (autocuidado), recomendamos repouso e monitoramento dos sintomas. Caso a dor persista ou piore, procure uma Unidade Básica de Saúde (UBS).",
+    "orientacao": "Faça repouso em um ambiente calmo, mantenha-se hidratado e evite o estresse. Se os sintomas piorarem, procure atendimento.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (Anamnese) + Infermedica v3",
+    "hipotesesDiagnosticas": [
+      {
+        "nome": "Tension headaches",
+        "probabilidade": 19
+      }
+    ],
+    "sintomasInfermedica": [
+      "Moderate headache",
+      "Symptoms related to recent injury"
+    ],
+    "created_at": "2026-10-19T17:02:33.249Z"
+  },
+  {
+    "id": "701f5406-d8f8-4886-b635-33d573445876",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com dor no peito",
+    "duracao": "Recente",
+    "intensidade": 7,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Emergencista / Clínico Geral",
+    "explicacao": "Olá! Compreendo que você está sentindo uma dor no peito com intensidade 7, o que merece atenção e cuidado. Pelas informações avaliadas, trata-se de uma dor no peito a esclarecer. Como a intensidade é moderada/alta, é importante que você procure uma Unidade de Pronto Atendimento (UPA) para uma avaliação médica detalhada e segura.",
+    "orientacao": "Procure a UPA mais próxima imediatamente para realizar exames e receber o atendimento adequado. Caso sinta falta de ar intensa, tontura forte ou desmaio, ligue para o SAMU (192).",
+    "tipoUnidade": "UPA",
+    "mapa": {
+      "label": "📍 Ver UPA mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UPA%20Unidade%20de%20Pronto%20Atendimento",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (Anamnese) + Infermedica v3",
+    "hipotesesDiagnosticas": [
+      {
+        "nome": "Dor torácica a esclarecer (Dor no peito)",
+        "probabilidade": 3
+      }
+    ],
+    "sintomasInfermedica": [
+      "Dor no peito"
+    ],
+    "created_at": "2026-10-19T16:59:48.775Z"
+  },
+  {
+    "id": "40aff8d5-5920-4a22-b818-3c04d1c250f4",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com dor no peito",
+    "duracao": "Recente",
+    "intensidade": 9,
+    "respostas": [],
+    "nivel_urgencia": "vermelho",
+    "recomendacao": "upa",
+    "especialidade": "Emergencista / Clínico Geral",
+    "explicacao": "Olá! Compreendo que você está sentindo dor no peito com intensidade 7 e acompanhada de suor frio. Embora nossa triagem inicial sugira a possibilidade de um resfriado comum, a presença de dor no peito e suor frio exige muito cuidado e atenção. Para a sua segurança e para descartar qualquer condição mais grave, é fundamental que você procure atendimento médico imediato.",
+    "orientacao": "Procure atendimento médico de urgência imediatamente. Não espere os sintomas passarem sozinhos.",
+    "tipoUnidade": "UPA",
+    "mapa": {
+      "label": "📍 Ver UPA mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UPA%20Unidade%20de%20Pronto%20Atendimento",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (Anamnese) + Infermedica v3",
+    "hipotesesDiagnosticas": [
+      {
+        "nome": "Resfriado Comum",
+        "probabilidade": 9
+      }
+    ],
+    "sintomasInfermedica": [
+      "Heavy sweating",
+      "Dor no peito"
+    ],
+    "created_at": "2026-10-19T16:58:53.695Z"
+  },
+  {
+    "id": "ec2ea574-3c16-4275-94c6-eb781651df4f",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T16:57:28.878Z"
+  },
+  {
+    "id": "66565296-ed59-4532-9d04-aa666aa95f29",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com muita febre alta e dores pelo corpo há 2 dias",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Estou com muita febre alta e dores pelo corpo há 2 dias"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral / Medicina da Família",
+    "explicacao": "Olá! Aqui é o assistente SaúdePraTodos do SUS. Compreendemos que você está sentindo muita febre alta e dores pelo corpo há 2 dias. Com base nos seus sintomas, o nosso sistema de triagem sugere a possibilidade de uma faringite estreptocócica aguda, embora isso não seja um diagnóstico definitivo. Recomendamos que você descanse e busque atendimento em uma Unidade Básica de Saúde (UBS) para uma avaliação médica adequada e gratuita. Caso os sintomas piorem muito de repente, procure uma UPA ou ligue para o SAMU.",
+    "orientacao": "Repouso e busca por atendimento médico em unidade de saúde",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.8826,-36.4966,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Gemini 3.5 Flash + Infermedica v3",
+    "created_at": "2026-10-19T16:56:49.092Z"
+  },
+  {
+    "id": "32f525fe-0827-4066-b4e0-ce942f4069ef",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T16:55:58.962Z"
+  },
+  {
+    "id": "ae4de837-1b88-4b9a-81c7-8ae4f3a04278",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T16:35:12.360Z"
+  },
+  {
+    "id": "3e15b38e-3d25-42d7-b2c1-1fbcf41d71a7",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com muita febre alta e dores pelo corpo há 2 dias",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Estou com muita febre alta e dores pelo corpo há 2 dias"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral / Medicina da Família",
+    "explicacao": "Olá! Aqui é o assistente SaúdePraTodos do SUS. Entendemos que você está com febre alta e dores pelo corpo há 2 dias. Com base no seu relato, nosso sistema de triagem sugere a possibilidade de faringite aguda estreptocócica. Lembramos que esta é apenas uma hipótese e não substitui a avaliação médica. Recomendamos que você descanse e procure atendimento em uma Unidade Básica de Saúde (UBS) para uma avaliação detalhada e gratuita. Caso os sintomas piorem de forma intensa, procure uma UPA ou ligue para o SAMU (192).",
+    "orientacao": "Fazer repouso, manter-se hidratado e buscar atendimento médico em uma UBS nas próximas 24 horas.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.8826,-36.4966,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Gemini 3.5 Flash + Infermedica v3",
+    "created_at": "2026-10-19T16:32:06.723Z"
+  },
+  {
+    "id": "0e3cba32-08d6-43ec-b402-dc003e880d9b",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T16:30:55.651Z"
+  },
+  {
+    "id": "9724c80c-8edb-4449-a49c-069c6cb8959a",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com muita febre alta e dores pelo corpo há 2 dias",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Estou com muita febre alta e dores pelo corpo há 2 dias"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral / Medicina da Família",
+    "explicacao": "Olá! Aqui é o assistente SaúdePraTodos do SUS. Compreendemos que você está sentindo muita febre alta e dores pelo corpo há 2 dias. Com base nos seus sintomas, o sistema sugere como possibilidade uma faringite estreptocócica aguda, mas lembre-se de que isso não substitui um diagnóstico médico definitivo. Recomendamos que você descanse e procure atendimento em uma Unidade Básica de Saúde (UBS) para uma avaliação detalhada e gratuita. Caso os sintomas se agravem, procure uma UPA imediatamente.",
+    "orientacao": "Manter repouso, hidratação adequada e procurar a UBS para avaliação médica",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.8826,-36.4966,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Gemini 3.5 Flash + Infermedica v3",
+    "created_at": "2026-10-19T16:21:54.525Z"
+  },
+  {
+    "id": "7c64f8fe-346d-4d7c-9a59-52f0c0779627",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T16:20:58.599Z"
+  },
+  {
+    "id": "438d5354-9638-45bb-919c-232f93de28ef",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com dor no peito",
+    "duracao": "Recente",
+    "intensidade": 7,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Emergencista / Clínico Geral",
+    "explicacao": "Olá! Aqui é do SaúdePraTodos / Cuidaê, o seu assistente no SUS. Compreendemos que você está sentindo dor no peito. É muito importante dar atenção a esse sintoma. De acordo com a nossa avaliação inicial, o sistema sugere a possibilidade de dor torácica não especificada, mas lembre-se de que isso não é um diagnóstico definitivo. Como a dor no peito requer cuidado, recomendamos que você procure uma Unidade de Pronto Atendimento (UPA) para uma avaliação médica adequada e segura. Caso os sintomas piorem de repente, como falta de ar intensa ou desmaio, não hesite em chamar o SAMU (192).",
+    "orientacao": "Procure atendimento médico em até 24 horas ou busque uma UPA imediatamente se os sintomas se intensificarem.",
+    "tipoUnidade": "UPA",
+    "mapa": {
+      "label": "📍 Ver UPA mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UPA%20Unidade%20de%20Pronto%20Atendimento",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini (Anamnese) + Infermedica v3",
+    "hipotesesDiagnosticas": [
+      {
+        "nome": "Non-specific chest pain",
+        "probabilidade": 3
+      }
+    ],
+    "sintomasInfermedica": [
+      "Dor no peito"
+    ],
+    "created_at": "2026-10-19T16:13:01.755Z"
+  },
+  {
+    "id": "5322d0f6-4740-4c44-969e-061c01a19d5e",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com muita febre alta e dores pelo corpo há 2 dias",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Estou com muita febre alta e dores pelo corpo há 2 dias"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral / Medicina da Família",
+    "explicacao": "Olá! Aqui é o assistente SaúdePraTodos do SUS. Compreendemos que você está sentindo muita febre alta e dores pelo corpo há 2 dias. Com base nos seus sintomas, o sistema sugere que pode se tratar de uma possibilidade como faringite estreptocócica aguda, mas lembre-se de que isso não é um diagnóstico definitivo. Recomendamos que você descanse e procure atendimento médico em uma Unidade Básica de Saúde (UBS) para uma avaliação adequada. Caso os sintomas piorem muito de repente, procure a UPA mais próxima ou ligue para o SAMU (192). Estamos aqui para cuidar de você de forma gratuita!",
+    "orientacao": "Repouso e busca por atendimento médico em unidade de saúde",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.8826,-36.4966,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Gemini 3.5 Flash + Infermedica v3",
+    "created_at": "2026-10-19T16:04:46.642Z"
+  },
+  {
+    "id": "fc7622e6-821c-491d-8ebf-abe510a6386b",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T16:03:19.302Z"
+  },
+  {
+    "id": "b546e0ac-c3b7-4f06-97d9-7ad0be218803",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com muita febre alta e dores pelo corpo há 2 dias",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Estou com muita febre alta e dores pelo corpo há 2 dias"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral / Medicina da Família",
+    "explicacao": "Olá! Aqui é o assistente SaúdePraTodos do SUS. Entendemos que você está passando por um momento delicado, sentindo febre alta e dores pelo corpo há 2 dias. Com base nos sintomas informados, nossa triagem sugere a possibilidade de condições como faringitis aguda streptocócica, mas lembre-se de que isso não é um diagnóstico definitivo. Para a sua segurança e bem-estar, recomendamos que você descanse bastante, mantenha-se hidratado e procure atendimento em uma Unidade Básica de Saúde (UBS) para uma avaliação médica adequada e gratuita. Caso os sintomas se agravem, procure uma UPA ou ligue para o SAMU (192). Estamos aqui para cuidar de você!",
+    "orientacao": "Procurar atendimento médico com consulta agendada ou em até 24 horas",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.8826,-36.4966,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Gemini 3.5 Flash + Infermedica v3",
+    "created_at": "2026-10-19T15:32:33.793Z"
+  },
+  {
+    "id": "7c308dd9-2132-4785-b5d4-37f130efeb3b",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T15:32:03.820Z"
+  },
+  {
+    "id": "6dc47080-b36e-4ef5-a085-9c0b5d38a828",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com muita febre alta e dores pelo corpo há 2 dias",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Estou com muita febre alta e dores pelo corpo há 2 dias"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral / Medicina da Família",
+    "explicacao": "Olá! Aqui é o assistente SaúdePraTodos do SUS. Compreendemos que você está sentindo muita febre alta e dores pelo corpo há 2 dias. Com base nos seus sintomas, o sistema sugere como possibilidade uma faringitis estreptocócica aguda. Lembre-se de que isso não é um diagnóstico definitivo. Recomendamos que você descanse e busque atendimento em uma Unidade Básica de Saúde (UBS) para uma avaliação adequada. Caso os sintomas piorem muito, procure uma UPA ou ligue para o SAMU.",
+    "orientacao": "Procure atendimento médico em até 24 horas e mantenha repouso e hidratação.",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.8826,-36.4966,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Gemini 3.5 Flash + Infermedica v3",
+    "created_at": "2026-10-19T14:39:37.027Z"
+  },
+  {
+    "id": "5775de35-032b-4798-8c10-eb72508f18d7",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T14:39:23.454Z"
+  },
+  {
+    "id": "1232976a-816d-4d57-b111-9cbe0eada817",
+    "user_id": "anonimo",
+    "sintoma_principal": "Estou com muita febre alta e dores pelo corpo há 2 dias",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [
+      {
+        "pergunta": "sintoma_principal",
+        "resposta": "Estou com muita febre alta e dores pelo corpo há 2 dias"
+      }
+    ],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral / Medicina da Família",
+    "explicacao": "Olá! Aqui é o assistente SaúdePraTodos do SUS. Compreendemos que você está sentindo muita febre alta e dores pelo corpo há 2 dias. Com base nos seus sintomas, o nosso sistema auxiliar sugere que pode ser uma possibilidade como faringite estreptocócica aguda, mas lembre-se de que isso não é um diagnóstico definitivo. Recomendamos que você descanse bastante, hidrate-se e procure atendimento em uma Unidade Básica de Saúde (UBS) para uma avaliação médica adequada. Caso os sintomas piorem muito ou sinta falta de ar, procure uma UPA ou ligue para o SAMU (192).",
+    "orientacao": "Manter repouso, hidratação adequada e buscar atendimento médico na UBS",
+    "tipoUnidade": "UBS",
+    "mapa": {
+      "label": "📍 Ver UBS mais próxima no Google Maps",
+      "url": "https://www.google.com/maps/search/UBS%20Unidade%20B%C3%A1sica%20de%20Sa%C3%BAde/@-8.8826,-36.4966,14z",
+      "tipo": "mapa"
+    },
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Gemini 3.5 Flash + Infermedica v3",
+    "created_at": "2026-10-19T04:40:40.982Z"
+  },
+  {
+    "id": "6693097a-79a8-4863-88f4-9d254754d35b",
+    "user_id": "user_teste_store_1",
+    "sintoma_principal": "Cefaleia e náuseas",
+    "duracao": "Não informada",
+    "intensidade": 5,
+    "respostas": [],
+    "nivel_urgencia": "amarelo",
+    "recomendacao": "ubs",
+    "especialidade": "Clínico Geral",
+    "explicacao": "Quadro sugestivo de enxaqueca",
+    "orientacao": "",
+    "tipoUnidade": "UBS",
+    "mapa": null,
+    "foto_storage_path": null,
+    "cidade_snapshot": "São Paulo",
+    "uf_snapshot": "SP",
+    "fonteIA": "Google Gemini Flash",
+    "hipotesesDiagnosticas": [],
+    "sintomasInfermedica": [],
+    "created_at": "2026-10-19T04:40:32.607Z"
+  },
+  {
     "id": "fdad0c0c-f9ad-4abc-b9d3-5b28280699c2",
     "user_id": "anonimo",
     "sintoma_principal": "🤕 Dor de cabeça forte persistente",

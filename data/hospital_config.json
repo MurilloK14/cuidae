@@ -8,23 +8,125 @@
       "plantao_urgencia": true
     },
     "horarios": [
-      { "id": "h-0800", "horario": "08:00", "turno": "manha", "vagas": 3, "ativo": true },
-      { "id": "h-0830", "horario": "08:30", "turno": "manha", "vagas": 3, "ativo": true },
-      { "id": "h-0900", "horario": "09:00", "turno": "manha", "vagas": 4, "ativo": true },
-      { "id": "h-0930", "horario": "09:30", "turno": "manha", "vagas": 4, "ativo": true },
-      { "id": "h-1000", "horario": "10:00", "turno": "manha", "vagas": 4, "ativo": true },
-      { "id": "h-1030", "horario": "10:30", "turno": "manha", "vagas": 3, "ativo": true },
-      { "id": "h-1100", "horario": "11:00", "turno": "manha", "vagas": 3, "ativo": true },
-      { "id": "h-1130", "horario": "11:30", "turno": "manha", "vagas": 2, "ativo": true },
-      { "id": "h-1330", "horario": "13:30", "turno": "tarde", "vagas": 3, "ativo": true },
-      { "id": "h-1400", "horario": "14:00", "turno": "tarde", "vagas": 4, "ativo": true },
-      { "id": "h-1430", "horario": "14:30", "turno": "tarde", "vagas": 4, "ativo": true },
-      { "id": "h-1500", "horario": "15:00", "turno": "tarde", "vagas": 4, "ativo": true },
-      { "id": "h-1530", "horario": "15:30", "turno": "tarde", "vagas": 3, "ativo": true },
-      { "id": "h-1600", "horario": "16:00", "turno": "tarde", "vagas": 3, "ativo": true },
-      { "id": "h-1630", "horario": "16:30", "turno": "tarde", "vagas": 2, "ativo": true },
-      { "id": "h-1700", "horario": "17:00", "turno": "tarde", "vagas": 2, "ativo": true },
-      { "id": "h-plantao", "horario": "Plantão 24h Imediato", "turno": "plantao_urgencia", "vagas": 10, "ativo": true }
+      {
+        "id": "h-0800",
+        "horario": "08:00",
+        "turno": "manha",
+        "vagas": 3,
+        "ativo": true
+      },
+      {
+        "id": "h-0830",
+        "horario": "08:30",
+        "turno": "manha",
+        "vagas": 3,
+        "ativo": true
+      },
+      {
+        "id": "h-0900",
+        "horario": "09:00",
+        "turno": "manha",
+        "vagas": 4,
+        "ativo": true
+      },
+      {
+        "id": "h-0930",
+        "horario": "09:30",
+        "turno": "manha",
+        "vagas": 4,
+        "ativo": true
+      },
+      {
+        "id": "h-1000",
+        "horario": "10:00",
+        "turno": "manha",
+        "vagas": 4,
+        "ativo": true
+      },
+      {
+        "id": "h-1030",
+        "horario": "10:30",
+        "turno": "manha",
+        "vagas": 3,
+        "ativo": true
+      },
+      {
+        "id": "h-1100",
+        "horario": "11:00",
+        "turno": "manha",
+        "vagas": 3,
+        "ativo": true
+      },
+      {
+        "id": "h-1130",
+        "horario": "11:30",
+        "turno": "manha",
+        "vagas": 2,
+        "ativo": true
+      },
+      {
+        "id": "h-1330",
+        "horario": "13:30",
+        "turno": "tarde",
+        "vagas": 3,
+        "ativo": true
+      },
+      {
+        "id": "h-1400",
+        "horario": "14:00",
+        "turno": "tarde",
+        "vagas": 4,
+        "ativo": true
+      },
+      {
+        "id": "h-1430",
+        "horario": "14:30",
+        "turno": "tarde",
+        "vagas": 4,
+        "ativo": true
+      },
+      {
+        "id": "h-1500",
+        "horario": "15:00",
+        "turno": "tarde",
+        "vagas": 4,
+        "ativo": true
+      },
+      {
+        "id": "h-1530",
+        "horario": "15:30",
+        "turno": "tarde",
+        "vagas": 3,
+        "ativo": true
+      },
+      {
+        "id": "h-1600",
+        "horario": "16:00",
+        "turno": "tarde",
+        "vagas": 3,
+        "ativo": true
+      },
+      {
+        "id": "h-1630",
+        "horario": "16:30",
+        "turno": "tarde",
+        "vagas": 2,
+        "ativo": true
+      },
+      {
+        "id": "h-1700",
+        "horario": "17:00",
+        "turno": "tarde",
+        "vagas": 2,
+        "ativo": true
+      },
+      {
+        "id": "h-plantao",
+        "horario": "Plantão 24h Imediato",
+        "turno": "plantao_urgencia",
+        "vagas": 10,
+        "ativo": true
+      }
     ],
     "consultorios": [
       "Consultório 1 - Acolhimento",
@@ -33,7 +135,7 @@
       "Consultório 4 - Emergência",
       "Recepção Central - Guichê 1"
     ],
-    "tempo_medio_consulta_minutos": 20,
+    "tempo_medio_consulta_minutos": 25,
     "chamador_voz_padrao": true,
     "modo_noturno_recepcao": false,
     "notificacoes_urgencia_sonora": true,
