@@ -170,6 +170,32 @@ create table if not exists public.agendamentos_hospitalares (
 
 
 -- ------------------------------------------------------------------------------
+-- 9c. TABELA: VACINAS_PACIENTE (Carteira de Vacinação Meu SUS Digital + Caderneta)
+-- ------------------------------------------------------------------------------
+create table if not exists public.vacinas_paciente (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references public.profiles(id) on delete cascade,
+  nome_vacina text not null,
+  dose text not null,
+  data_aplicacao date not null,
+  data_proxima_dose date,
+  lote text,
+  fabricante text,
+  local_aplicacao text,
+  origem_dado text default 'manual' not null,
+  autenticado_sus boolean default false not null,
+  comprovante_url text,
+  observacoes text,
+  created_at timestamptz default now() not null
+);
+
+alter table public.vacinas_paciente enable row level security;
+
+create policy "Pacientes gerenciam apenas suas próprias vacinas"
+  on public.vacinas_paciente for all
+  using (auth.uid() = user_id);
+
+-- ------------------------------------------------------------------------------
 -- 10. TABELA: ASSINATURAS (Camada Premium vinculada a clínicas/planos parceiros)
 -- ------------------------------------------------------------------------------
 create table public.assinaturas (

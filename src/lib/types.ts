@@ -338,3 +338,42 @@ export interface SessaoHospital {
   cargo: string
   criado_em: string
 }
+
+// ----- Registro de Vacinas & Carteira de Imunização -----
+
+export type OrigemVacina = 'meu_sus_digital' | 'caderneta_papel' | 'manual'
+
+export interface VacinaRecord {
+  id: string
+  user_id: string
+  nome_vacina: string
+  dose: string
+  data_aplicacao: string
+  data_proxima_dose?: string | null
+  lote?: string
+  fabricante?: string
+  local_aplicacao?: string
+  origem_dado: OrigemVacina
+  autenticado_sus: boolean
+  comprovante_url?: string
+  observacoes?: string
+  created_at: string
+}
+
+export interface ResultadoScanVacinas {
+  tipo_documento_detectado: 'meu_sus_digital' | 'caderneta_papel' | 'desconhecido'
+  confianca_leitura: number
+  qr_code_sus_detectado: boolean
+  vacinas_extraidas: Array<{
+    nome_vacina: string
+    dose: string
+    data_aplicacao: string
+    data_proxima_dose?: string | null
+    lote?: string
+    fabricante?: string
+    local_aplicacao?: string
+  }>
+  resumo_clinico: string
+  recomendacoes_pni: string[]
+}
+

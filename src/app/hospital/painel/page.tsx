@@ -627,6 +627,16 @@ export default function PainelHospitalPage() {
         <div className="flex items-center gap-3 text-xs">
           <ThemeToggle />
 
+          <Link
+            href="/hospital/tv"
+            target="_blank"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 transition font-semibold"
+            title="Abrir tela de TV para sala de espera de pacientes"
+          >
+            <span>📺</span>
+            <span className="hidden sm:inline">Modo TV Sala de Espera</span>
+          </Link>
+
           <button
             onClick={() => setVozAtiva(!vozAtiva)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition ${
